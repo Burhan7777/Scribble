@@ -1,20 +1,22 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.screens
-
+package com.pzbdownloaders.scribble.archive_notes_feature.screen
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.archive_notes_feature.components.MainStructureArchiveScreen
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.presentation.components.MainStructureMainScreen
 
 @Composable
-fun NotesScreen(
+fun ArchiveNotesScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity
 ) {
-
-
-    MainStructureMainScreen(navHostController, viewModel, activity)
+    MainStructureArchiveScreen(
+        navHostController = navHostController,
+        viewModel = viewModel,
+        activity = activity
+    )
 }
-

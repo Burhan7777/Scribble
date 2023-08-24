@@ -2,17 +2,16 @@ package com.pzbdownloaders.scribble.di
 
 import android.content.Context
 import androidx.room.Room
-import com.pzbdownloaders.scribble.add_note_screen.data.repository.InsertNoteRepository
-import com.pzbdownloaders.scribble.add_note_screen.domain.AddNoteUseCase
+import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
+import com.pzbdownloaders.scribble.add_note_feature.domain.AddNoteUseCase
+import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbdownloaders.scribble.common.data.data_source.NoteDatabase
-import com.pzbdownloaders.scribble.edit_screen.data.repository.EditNoteRepository
-import com.pzbdownloaders.scribble.edit_screen.domain.usecase.DeleteNoteUseCase
-import com.pzbdownloaders.scribble.edit_screen.domain.usecase.EditNoteUseCase
-import com.pzbdownloaders.scribble.edit_screen.domain.usecase.UpdateNoteUseCase
-import com.pzbdownloaders.scribble.login_and_signup.domain.usecase.AuthenticationSignInUseCase
-import com.pzbdownloaders.scribble.login_and_signup.domain.usecase.AuthenticationSignUpUseCase
-import com.pzbdownloaders.scribble.login_and_signup.domain.usecase.SignInUserCase
-import com.pzbdownloaders.scribble.login_and_signup.domain.usecase.SignUpUserCase
+import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
+import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.*
+import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.AuthenticationSignInUseCase
+import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.AuthenticationSignUpUseCase
+import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignInUserCase
+import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignUpUserCase
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
 import dagger.Module
@@ -72,5 +71,14 @@ class AppModule {
 
     @Provides
     fun deleteNoteUseCase() = DeleteNoteUseCase()
+
+    @Provides
+    fun getArchivedNoteUseCase() = GetArchiveNotesUseCase()
+
+    @Provides
+    fun archiveNotesUseCase() = ArchiveNoteUseCase()
+
+    @Provides
+    fun unArchiveNotesUseCase() = UnArchiveNoteUseCase()
 
 }

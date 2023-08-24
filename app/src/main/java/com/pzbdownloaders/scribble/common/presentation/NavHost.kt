@@ -1,16 +1,8 @@
 package com.pzbdownloaders.scribble.common.presentation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.pzbdownloaders.scribble.add_note_screen.presentation.screens.AddNoteScreen
-import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
-import com.pzbdownloaders.scribble.common.presentation.Screens
-import com.pzbdownloaders.scribble.edit_screen.presentation.screens.EditNoteScreen
-import com.pzbdownloaders.scribble.login_and_signup.authGraph
+import com.pzbdownloaders.scribble.login_and_signup_feature.authGraph
 
 @Composable
 fun NavHost(

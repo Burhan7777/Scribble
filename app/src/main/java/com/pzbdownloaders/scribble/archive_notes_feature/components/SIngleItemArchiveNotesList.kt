@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.archive_notes_feature.components
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -46,7 +46,7 @@ fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
                 navHostController.navigate(
                     Screens.EditNoteScreen.editNoteWithId(
                         note.noteId,
-                        Constant.HOME
+                        Constant.ARCHIVE
                     )
                 )
                 Log.i("title", note.title)

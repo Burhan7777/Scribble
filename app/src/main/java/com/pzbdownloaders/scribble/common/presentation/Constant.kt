@@ -12,4 +12,6 @@ object Constant {
     const val USER_KEY = "LoggedInUser"
     const val USER_VALUE = "User"
     const val SHARED_PREP_NAME = "rememberUser"
+    const val ARCHIVE = "archive"
+    const val HOME = "home"
 }

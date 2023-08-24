@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.domain.usecase
+package com.pzbdownloaders.scribble.archive_notes_feature.domain
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -11,18 +11,17 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import kotlinx.coroutines.tasks.await
 
-class GetNotesUseCase {
+class GetArchiveNotesUseCase {
 
-    suspend fun getNotes(): Pair<MutableLiveData<GetResult>, SnapshotStateList<AddNote>> {
+    suspend fun getArchivedNotes(): Pair<MutableLiveData<GetResult>, SnapshotStateList<AddNote>> {
         var notes: AddNote?
         val listOfNote = mutableStateListOf<AddNote>()
-        val listOfNotes = SnapshotStateList<AddNote>()
         val getResult = MutableLiveData<GetResult>()
         val firebaseStore = Firebase.firestore
         val querySnapshot =
             firebaseStore.collection("Notes")
                 .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid)
-                .whereEqualTo("archived", false).get()
+                .whereEqualTo("archived", true).get()
                 .addOnSuccessListener {
                     getResult.value = GetResult.Success
 
@@ -37,10 +36,7 @@ class GetNotesUseCase {
             Log.i("notes", listOfNote[0].toString())
         }
 
-        //    listOfNotes.add(listOfNote)
-//        Log.i("size", listOfNotes.value?.get(0).toString())
         return Pair(getResult, listOfNote)
     }
 
 }
-

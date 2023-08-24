@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.archive_notes_feature.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -29,9 +29,10 @@ fun Notes(
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
-    viewModel.getNotesToShow()
+    viewModel.getArchivedNotes()
     val listOfNotes: SnapshotStateList<AddNote>? =
-        viewModel.getListOfNotesToShow.observeAsState().value
+        viewModel.getArchivedNotes.observeAsState().value
+
 
 
     Log.i("list", listOfNotes.toString())
@@ -43,7 +44,7 @@ fun Notes(
         modifier = Modifier.padding(horizontal = 10.dp)
     )
     Text(
-        text = "Notes",
+        text = "Archive",
         fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
         color = MaterialTheme.colors.onPrimary,
         modifier = Modifier.padding(horizontal = 10.dp)

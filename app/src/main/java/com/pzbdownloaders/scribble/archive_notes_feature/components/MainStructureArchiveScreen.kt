@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.archive_notes_feature.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,7 +37,7 @@ data class NavigationItems(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainStructureMainScreen(
+fun MainStructureArchiveScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity
@@ -66,6 +66,7 @@ fun MainStructureMainScreen(
         DrawerValue.Closed
     )
     var coroutineScope = rememberCoroutineScope()
+
     var selectedItem by remember {
         mutableStateOf(0)
     }
@@ -88,14 +89,12 @@ fun MainStructureMainScreen(
                                 color = MaterialTheme.colors.onPrimary
                             )
                         },
-                        selected = indexed == selectedItem,
                         onClick = {
                             selectedItem = indexed
                             coroutineScope.launch {
                                 drawerState.close()
                             }
                             if (selectedItem == 0) {
-                                navHostController.popBackStack()
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.HomeScreen.route)
                             } else if (selectedItem == 1) {
@@ -105,14 +104,15 @@ fun MainStructureMainScreen(
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             }
                         },
+                        selected = selectedItem == indexed,
                         icon = {
                             if (selectedItem == indexed) Icon(
                                 imageVector = item.selectedIcon,
                                 tint = MaterialTheme.colors.onPrimary,
-                                contentDescription = "Notes"
+                                contentDescription = "selectedNavImage"
                             ) else Icon(
                                 imageVector = item.unSelectedIcon,
-                                contentDescription = "Notes",
+                                contentDescription = "selectedNavImage",
                                 tint = MaterialTheme.colors.onPrimary,
                             )
                         },
@@ -124,42 +124,14 @@ fun MainStructureMainScreen(
         drawerState = drawerState
     ) {
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colors.primary),
-            bottomBar = {
-                BottomAppBar {
-                    BottomAppBar() {
-                    }
-                }
-            },
-            floatingActionButtonPosition = FabPosition.End,
-            isFloatingActionButtonDocked = true,
-            floatingActionButton = {
-                FloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    onClick = {
-                        navHostController.navigate(Screens.AddNoteScreen.route)
-                    },
-                    shape = MaterialTheme.shapes.medium.copy(
-                        topStart = CornerSize(15.dp),
-                        topEnd = CornerSize(15.dp),
-                        bottomStart = CornerSize(15.dp),
-                        bottomEnd = CornerSize(15.dp),
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        tint = MaterialTheme.colors.onPrimary,
-                        contentDescription = "Add Note"
-                    )
-                }
-            }
+            containerColor = MaterialTheme.colors.primary
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBar(navHostController, drawerState)
+                TopSearchBarArchive(navHostController, drawerState)
                 Notes(viewModel, activity, navHostController)
             }
         }
