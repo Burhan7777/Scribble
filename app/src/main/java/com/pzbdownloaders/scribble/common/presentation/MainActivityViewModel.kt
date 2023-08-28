@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNoteUseCase
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNoteUseCase
 import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
@@ -20,6 +20,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignU
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +42,8 @@ class MainActivityViewModel @Inject constructor(
     private val deleteNoteUseCase: DeleteNoteUseCase,
     private val getArchiveNotesUseCase: GetArchiveNotesUseCase,
     private val archiveNoteUseCase: ArchiveNoteUseCase,
-    private val unArchiveNoteUseCase: UnArchiveNoteUseCase
+    private val unArchiveNoteUseCase: UnArchiveNoteUseCase,
+    private val getSearchResultUseCase: GetSearchResultUseCase
 ) : ViewModel() {
 
     var listOfNotes = mutableListOf<Note>()
@@ -89,6 +91,9 @@ class MainActivityViewModel @Inject constructor(
         private set
 
     var getResultFromUnArchiveNotes = MutableLiveData<GetResult>()
+        private set
+
+    var getSearchResult = MutableLiveData<List<AddNote>>()
         private set
 
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
@@ -183,5 +188,12 @@ class MainActivityViewModel @Inject constructor(
 
     fun unArchiveNotes(notesId: String, map: HashMap<String, Any>) {
         getResultFromUnArchiveNotes = unArchiveNoteUseCase.unarchiveNote(notesId, map)
+    }
+
+    fun getSearchResult(searchQuery: String) {
+        viewModelScope.launch {
+            getSearchResult.value = getSearchResultUseCase.getSearchResult(searchQuery)
+        }
+
     }
 }

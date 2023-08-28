@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
@@ -32,6 +32,8 @@ fun Notes(
     viewModel.getNotesToShow()
     val listOfNotes: SnapshotStateList<AddNote>? =
         viewModel.getListOfNotesToShow.observeAsState().value
+
+    val searchResult = viewModel.getSearchResult.value
 
 
     Log.i("list", listOfNotes.toString())
@@ -50,7 +52,10 @@ fun Notes(
     )
 
     LazyColumn() {
-        items(listOfNotes?.toList() ?: emptyList()) { note ->
+        items(
+            if (searchResult == null) listOfNotes?.toList() ?: emptyList() else searchResult
+                ?: emptyList()
+        ) { note ->
             SingleItemNoteList(note = note, navHostController)
         }
     }

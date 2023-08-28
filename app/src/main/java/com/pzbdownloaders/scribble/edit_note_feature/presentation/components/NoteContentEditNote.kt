@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.R
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 
 
 @Composable
@@ -21,10 +21,7 @@ fun NoteContent(
     onChangeContent: (String) -> Unit
 ) {
 
-    val fontFamilyLight = Font(R.font.lufgalight).toFontFamily()
-    val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
-    val fontFamilyBlack = Font(R.font.lufgablack).toFontFamily()
-    val fontFamilyRegular = Font(R.font.lufgaregular).toFontFamily()
+
 
     TextField(
         value = title,
@@ -33,7 +30,7 @@ fun NoteContent(
             Text(
                 text = "Title",
                 fontSize = 30.sp,
-                fontFamily = fontFamilyExtraLight,
+                fontFamily = FontFamily.fontFamilyBold,
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.alpha(0.5f)
             )
@@ -44,7 +41,7 @@ fun NoteContent(
             unfocusedIndicatorColor = MaterialTheme.colors.primary,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
-        textStyle = TextStyle(fontFamily = fontFamilyLight, fontSize = 25.sp)
+        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
     )
 
     TextField(
@@ -54,7 +51,7 @@ fun NoteContent(
             Text(
                 text = "Note",
                 fontSize = 30.sp,
-                fontFamily = fontFamilyExtraLight,
+                fontFamily = FontFamily.fontFamilyLight,
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.alpha(0.5f)
             )
@@ -65,7 +62,7 @@ fun NoteContent(
             unfocusedIndicatorColor = MaterialTheme.colors.primary,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
-        textStyle = TextStyle(fontFamily = fontFamilyLight, fontSize = 25.sp)
+        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
     )
 }
 

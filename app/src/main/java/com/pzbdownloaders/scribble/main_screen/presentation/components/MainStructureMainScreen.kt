@@ -159,7 +159,7 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBar(navHostController, drawerState)
+                TopSearchBar(navHostController, drawerState, viewModel)
                 Notes(viewModel, activity, navHostController)
             }
         }

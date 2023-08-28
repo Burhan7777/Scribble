@@ -1,9 +1,9 @@
-package com.pzbdownloaders.scribble.add_note_feature.domain
+package com.pzbdownloaders.scribble.add_note_feature.domain.model
 
 import com.google.firebase.firestore.DocumentId
 
+@kotlinx.serialization.Serializable
 data class AddNote(
-    @DocumentId
     var noteId: String = "",
     val title: String = "",
     val content: String = "",

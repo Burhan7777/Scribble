@@ -3,7 +3,7 @@ package com.pzbdownloaders.scribble.edit_note_feature.domain.usecase
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import kotlinx.coroutines.tasks.await
 

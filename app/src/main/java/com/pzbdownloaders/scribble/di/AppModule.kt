@@ -3,7 +3,7 @@ package com.pzbdownloaders.scribble.di
 import android.content.Context
 import androidx.room.Room
 import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNoteUseCase
+import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNoteUseCase
 import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbdownloaders.scribble.common.data.data_source.NoteDatabase
 import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
@@ -14,6 +14,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignI
 import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignUpUserCase
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -80,5 +81,8 @@ class AppModule {
 
     @Provides
     fun unArchiveNotesUseCase() = UnArchiveNoteUseCase()
+
+    @Provides
+    fun getSearchResultUseCase() = GetSearchResultUseCase()
 
 }

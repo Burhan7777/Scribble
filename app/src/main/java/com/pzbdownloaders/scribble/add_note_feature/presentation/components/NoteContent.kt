@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.R
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 
 @Composable
 fun NoteContent(
@@ -30,7 +31,7 @@ fun NoteContent(
             Text(
                 text = "Title",
                 fontSize = 30.sp,
-                fontFamily = fontFamilyExtraLight,
+                fontFamily = FontFamily.fontFamilyBold,
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.alpha(0.5f)
             )
@@ -41,7 +42,7 @@ fun NoteContent(
             unfocusedIndicatorColor = MaterialTheme.colors.primary,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
-        textStyle = TextStyle(fontFamily = fontFamilyLight, fontSize = 25.sp)
+        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
     )
 
     TextField(

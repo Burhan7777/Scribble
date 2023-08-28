@@ -20,24 +20,34 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.common.presentation.Constant
+import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopSearchBar(navHostController: NavHostController, drawerState: DrawerState) {
+fun TopSearchBar(
+    navHostController: NavHostController,
+    drawerState: DrawerState,
+    viewModel: MainActivityViewModel
+) {
 
     var text by remember { mutableStateOf("") }
     var active by remember {
         mutableStateOf(false)
     }
 
+
     var scope = rememberCoroutineScope()
     val context = LocalContext.current
     SearchBar(
         query = text,
         onQueryChange = { text = it },
-        onSearch = {},
+        onSearch = {
+            active = !active
+            viewModel.getSearchResult(text)
+
+        },
         active = active,
         onActiveChange = { active = !active },
         modifier = Modifier
@@ -89,7 +99,8 @@ fun TopSearchBar(navHostController: NavHostController, drawerState: DrawerState)
                 }
             )
         },
-        placeholder = { Text(text = "Search notes", modifier = Modifier.alpha(.5f)) }
-    ) {
+        placeholder = { Text(text = "Search notes", modifier = Modifier.alpha(.5f)) },
+
+        ) {
     }
 }

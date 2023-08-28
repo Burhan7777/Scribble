@@ -6,15 +6,18 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainStructureAddNote(
     navController: NavHostController,
@@ -26,31 +29,28 @@ fun MainStructureAddNote(
     var context = LocalContext.current
     Scaffold(
         topBar = {
-            TopAppBar(
+            androidx.compose.material3.TopAppBar(
                 modifier = Modifier
                     .fillMaxWidth(),
-                backgroundColor = MaterialTheme.colors.primary,
-            ) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colors.primary
+                ),
+                title = { Text(text = "") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.addNoteToCloud(note)
+                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT).show()
+                        navController.popBackStack()
+                    }) {
+                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
+                    }
                 }
-
-                /*   IconButton(onClick = { *//*TODO*//* }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
-                }
-                IconButton(onClick = {}) {
-                    Icon(imageVector = Icons.Filled.ArrowForward, contentDescription = "Redo")
-                }*/
-                Spacer(modifier = Modifier.width(270.dp))
-                IconButton(onClick = {
-                    //     viewModel.insertNote(note)
-                    viewModel.addNoteToCloud(note)
-                    Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT).show()
-                    navController.popBackStack()
-                }) {
-                    Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
-                }
-            }
+            )
         },
         bottomBar = {
             BottomAppBar(

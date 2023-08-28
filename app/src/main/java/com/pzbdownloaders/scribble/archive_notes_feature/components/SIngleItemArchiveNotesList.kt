@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.Constant
 import com.pzbdownloaders.scribble.common.presentation.Screens
 

@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.add_note_feature.domain.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.common.presentation.*
 import java.util.*
