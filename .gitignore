@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-google-services.json
-ClientSearch
+/google-services.json
+/ClientSearch.kt
