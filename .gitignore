@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-/google-services.json
-/ClientSearch.kt
+/app/google-services.json
+/app/src/main/java/com/pzbdownloaders/scribble/search_feature/utils/ClientSearch.kt
