@@ -1,0 +1,5 @@
+on: push
+
+env:
+  application_id: ${{ secrets.APPLICATION_ID }}  
+  api_key: ${{ secrets.API_KEY }}
