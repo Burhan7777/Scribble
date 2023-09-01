@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.archive_notes_feature.components
+package com.pzbdownloaders.scribble.archive_notes_feature.presentation.components
 
 import android.content.Context
 import androidx.compose.foundation.clickable
@@ -20,12 +20,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.common.presentation.Constant
+import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopSearchBarArchive(navHostController: NavHostController, drawerState: DrawerState) {
+fun TopSearchBarArchive(
+    navHostController: NavHostController,
+    drawerState: DrawerState,
+    viewModel: MainActivityViewModel,
+) {
 
     var text by remember { mutableStateOf("") }
     var active by remember {
@@ -37,7 +42,12 @@ fun TopSearchBarArchive(navHostController: NavHostController, drawerState: Drawe
     SearchBar(
         query = text,
         onQueryChange = { text = it },
-        onSearch = {},
+        onSearch = {
+            if (text.isNotEmpty()) {
+                viewModel.getArchiveSearchResult(text)
+                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen(Constant.ARCHIVE))
+            }
+        },
         active = active,
         onActiveChange = { active = !active },
         modifier = Modifier
@@ -95,7 +105,7 @@ fun TopSearchBarArchive(navHostController: NavHostController, drawerState: Drawe
             Text(
                 text = "Search notes",
                 modifier = Modifier.alpha(.5f),
-                color = androidx.compose.material.MaterialTheme.colors.onPrimary
+                color = MaterialTheme.colors.onPrimary
             )
         }
     ) {

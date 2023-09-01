@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.archive_notes_feature.components
+package com.pzbdownloaders.scribble.archive_notes_feature.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 data class NavigationItems(
     var label: String,
     var selectedIcon: ImageVector,
-    var unSelectedIcon: ImageVector
+    var unSelectedIcon: ImageVector,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +40,7 @@ data class NavigationItems(
 fun MainStructureArchiveScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
-    activity: MainActivity
+    activity: MainActivity,
 ) {
 
     var navigationItems = listOf(
@@ -131,7 +131,7 @@ fun MainStructureArchiveScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBarArchive(navHostController, drawerState)
+                TopSearchBarArchive(navHostController, drawerState, viewModel)
                 Notes(viewModel, activity, navHostController)
             }
         }

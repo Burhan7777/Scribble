@@ -18,4 +18,10 @@ sealed class Screens(val route: String) {
     object SplashScreen : Screens("splash_screen")
     object SettingsScreen : Screens("settings_screen")
     object ArchiveScreen : Screens("archive_screen")
+
+    object SearchScreen : Screens("search_screen/{screen}") {
+        fun searchNoteWIthScreen(screen: String): String {
+            return "search_screen/$screen"
+        }
+    }
 }

@@ -14,6 +14,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignI
 import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignUpUserCase
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
 import dagger.Module
 import dagger.Provides
@@ -84,5 +85,8 @@ class AppModule {
 
     @Provides
     fun getSearchResultUseCase() = GetSearchResultUseCase()
+
+    @Provides
+    fun getArchivedSearchResultUseCase() = GetArchiveSearchResultUseCase()
 
 }

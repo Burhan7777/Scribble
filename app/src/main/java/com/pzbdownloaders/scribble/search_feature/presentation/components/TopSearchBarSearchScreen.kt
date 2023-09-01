@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.search_feature.presentation.components
 
 import android.content.Context
 import android.widget.Toast
@@ -10,9 +10,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,12 +31,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopSearchBar(
+fun TopSearchBarSearchScreen(
     navHostController: NavHostController,
-    drawerState: DrawerState,
     viewModel: MainActivityViewModel
 ) {
-
     var text by remember { mutableStateOf("") }
     var active by remember {
         mutableStateOf(false)
@@ -48,7 +50,7 @@ fun TopSearchBar(
             active = !active
             if (text.isNotEmpty()) {
                 viewModel.getSearchResult(text)
-                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen(Constant.HOME))
+                viewModel.getArchiveSearchResult(text)
             } else {
                 Toast.makeText(context, "Nothing to search", Toast.LENGTH_SHORT).show()
             }
@@ -75,13 +77,12 @@ fun TopSearchBar(
         ),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Filled.Menu,
-                contentDescription = "Menu",
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
                 modifier = Modifier.clickable {
-                    scope.launch {
-                        drawerState.open()
-                    }
+                    navHostController.popBackStack()
                 },
+                tint = MaterialTheme.colors.onPrimary
             )
         },
         trailingIcon = {
@@ -102,15 +103,17 @@ fun TopSearchBar(
                     navHostController.popBackStack()
                     navHostController.navigate(Screens.LoginScreen.route)
                 },
-
-                )
+                tint = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
         },
         placeholder = {
             Text(
                 text = "Search notes",
                 modifier = Modifier.alpha(.5f),
+                color = MaterialTheme.colors.onPrimary
             )
         },
-    ) {
+
+        ) {
     }
 }

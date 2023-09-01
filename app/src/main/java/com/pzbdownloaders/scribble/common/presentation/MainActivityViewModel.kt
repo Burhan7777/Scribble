@@ -20,6 +20,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignU
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +44,8 @@ class MainActivityViewModel @Inject constructor(
     private val getArchiveNotesUseCase: GetArchiveNotesUseCase,
     private val archiveNoteUseCase: ArchiveNoteUseCase,
     private val unArchiveNoteUseCase: UnArchiveNoteUseCase,
-    private val getSearchResultUseCase: GetSearchResultUseCase
+    private val getSearchResultUseCase: GetSearchResultUseCase,
+    private val getArchiveSearchResultUseCase: GetArchiveSearchResultUseCase
 ) : ViewModel() {
 
     var listOfNotes = mutableListOf<Note>()
@@ -93,7 +95,10 @@ class MainActivityViewModel @Inject constructor(
     var getResultFromUnArchiveNotes = MutableLiveData<GetResult>()
         private set
 
-    var getSearchResult = MutableLiveData<List<AddNote>>()
+    var getSearchResult = MutableLiveData<ArrayList<AddNote>>()
+        private set
+
+    var getArchiveSearchResult = MutableLiveData<ArrayList<AddNote>>()
         private set
 
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
@@ -193,6 +198,14 @@ class MainActivityViewModel @Inject constructor(
     fun getSearchResult(searchQuery: String) {
         viewModelScope.launch {
             getSearchResult.value = getSearchResultUseCase.getSearchResult(searchQuery)
+        }
+
+    }
+
+    fun getArchiveSearchResult(searchQuery: String) {
+        viewModelScope.launch {
+            getArchiveSearchResult.value =
+                getArchiveSearchResultUseCase.getArchiveSearchResult(searchQuery)
         }
 
     }

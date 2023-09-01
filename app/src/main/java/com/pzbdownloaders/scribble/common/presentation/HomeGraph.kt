@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.pzbdownloaders.scribble.add_note_feature.presentation.screens.AddNoteScreen
-import com.pzbdownloaders.scribble.archive_notes_feature.screen.ArchiveNotesScreen
+import com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen.ArchiveNotesScreen
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNoteScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
+import com.pzbdownloaders.scribble.search_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.SettingsScreen
 
 
@@ -56,6 +57,19 @@ fun NavGraphBuilder.homeGraph(
                 navHostController = navController,
                 viewModel = viewModel,
                 activity = activity
+            )
+        }
+
+        composable(Screens.SearchScreen.route,
+            listOf(navArgument("screen") {
+                type = NavType.StringType
+            }
+            )) {
+            SearchScreen(
+                navHostController = navController,
+                viewModel = viewModel,
+                activity = activity,
+                screen = it.arguments?.getString("screen")!!
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.archive_notes_feature.components
+package com.pzbdownloaders.scribble.archive_notes_feature.presentation.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
