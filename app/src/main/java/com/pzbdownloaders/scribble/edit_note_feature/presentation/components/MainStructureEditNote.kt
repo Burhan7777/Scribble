@@ -194,7 +194,6 @@ fun MainStructureEditNote(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-
             Box(contentAlignment = Alignment.Center) {
                 if (dialogOpen.value) {
                     AlertDialogBox(viewModel, id, activity, navController) {
@@ -307,7 +306,6 @@ fun AlertDialogBox(
                 Text(text = "Cancel", fontFamily = FontFamily.fontFamilyRegular)
             }
         }
-
     )
 }
 

@@ -24,7 +24,8 @@ fun MainStructureAddNote(
     title: MutableState<String>,
     content: MutableState<String>,
     viewModel: MainActivityViewModel,
-    note: AddNote
+    note: AddNote,
+    notebookState: MutableState<String>,
 ) {
     var context = LocalContext.current
     Scaffold(
@@ -63,7 +64,7 @@ fun MainStructureAddNote(
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            NoteContent(title, content)
+            NoteContent(title, content, viewModel, notebookState)
         }
     }
 }

@@ -19,6 +19,10 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
         mutableStateOf("")
     }
 
+    var notebookState = remember {
+        mutableStateOf("")
+    }
+
     //  var note = Note(0, title.value, content.value, getTimeInMilliSeconds(), 123456)
     var note = AddNote(
         "",
@@ -28,9 +32,9 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
         System.currentTimeMillis(),
         123,
         false,
-        "random"
+        notebookState.value
     )
-    MainStructureAddNote(navHostController, title, content, viewModel, note)
+    MainStructureAddNote(navHostController, title, content, viewModel, note, notebookState)
 
 
 }

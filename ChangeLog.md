@@ -1,5 +1,10 @@
 -------------------------- CHANGE LOG------------------------
 
+
+v0.0.5 ALPHA
+-------------------------------
+1) Notebook/ folder added to new notes.
+
 v0.0.4 ALPHA
 -------------------------------
 1) Search works perfectly

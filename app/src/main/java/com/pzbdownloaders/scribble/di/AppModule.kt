@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNoteUseCase
+import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNotebookUseCase
+import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.GetNoteBookUseCase
 import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbdownloaders.scribble.common.data.data_source.NoteDatabase
 import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
@@ -88,5 +90,12 @@ class AppModule {
 
     @Provides
     fun getArchivedSearchResultUseCase() = GetArchiveSearchResultUseCase()
+
+    @Provides
+    fun addNoteBookUseCase() = AddNotebookUseCase()
+
+    @Provides
+    fun getNoteBookUseCase() = GetNoteBookUseCase()
+
 
 }
