@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
@@ -57,9 +58,23 @@ fun MainStructureEditNote(
         mutableStateOf("")
     }
 
+    var notebook by remember {
+        mutableStateOf("")
+    }
+
+    var isExpanded = remember {
+        mutableStateOf(false)
+    }
+
+    var selectedNotebook = remember {
+        mutableStateOf("")
+    }
+
+
     if (note != null) {
         title = note?.title ?: ""
         content = note?.content ?: "Failed to get the contents.Please try again"
+        notebook = note?.label ?: ""
     }
     Scaffold(
         topBar = {
@@ -84,6 +99,7 @@ fun MainStructureEditNote(
                         map["title"] = title
                         map["content"] = content
                         map["timeStamp"] = System.currentTimeMillis()
+                        map["label"] = selectedNotebook.value
                         viewModel.updateNote(note!!.noteId, map)
                         viewModel.getResultFromUpdateNote.observe(activity) {
                             when (it) {
@@ -144,7 +160,7 @@ fun MainStructureEditNote(
                                     is GetResult.Success -> {
                                         Toast.makeText(
                                             context,
-                                            "Note has be unarchived",
+                                            "Note has been unarchived",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         navController.popBackStack()
@@ -189,7 +205,6 @@ fun MainStructureEditNote(
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-
             }
         }
     ) { paddingValues ->
@@ -202,8 +217,12 @@ fun MainStructureEditNote(
                 }
             }
             NoteContent(
+                selectedNotebook,
+                isExpanded,
+                viewModel,
                 title,
                 content,
+                notebook,
                 { title = it },
                 { content = it })
         }

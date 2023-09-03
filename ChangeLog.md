@@ -1,6 +1,10 @@
 -------------------------- CHANGE LOG------------------------
 
 
+v0.0.6 ALPHA
+------------------------------
+1) Notebook/folder works perfectly.
+
 v0.0.5 ALPHA
 -------------------------------
 1) Notebook/ folder added to new notes.
