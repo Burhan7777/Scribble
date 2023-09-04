@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,9 @@ fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
             text = note.title,
             modifier = Modifier.padding(10.dp),
             fontSize = 35.sp,
-            fontFamily = fontFamilyExtraLight
+            fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = note.content,

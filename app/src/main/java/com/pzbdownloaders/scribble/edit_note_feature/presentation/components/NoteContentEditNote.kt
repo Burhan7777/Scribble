@@ -56,11 +56,11 @@ fun NoteContent(
 
 
 
-    if (noteBook.isNotEmpty()) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(0.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (noteBook.isNotEmpty()) {
             Text(
                 text = if (selectedNotebook.value.isEmpty()) "Notebook:$noteBook" else "New Notebook selected: ${selectedNotebook.value}",
                 color = MaterialTheme.colors.onPrimary,
@@ -69,42 +69,51 @@ fun NoteContent(
                 fontSize = 15.sp,
                 modifier = Modifier.padding(start = 15.dp)
             )
+        } else {
+            Text(
+                text = if (selectedNotebook.value.isEmpty()) "Add to Notebook" else "New Notebook selected: ${selectedNotebook.value}",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyRegular,
+                fontStyle = FontStyle.Italic,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 15.dp)
+            )
+        }
 
-            /*     TextField(
-                    modifier = Modifier.wrapContentWidth(),
-                     value = "Notebook:$noteBook",
-                     onValueChange = { },
-                     placeholder = {
-                         Text(
-                             text = "Notebook",
-                             fontSize = 15.sp,
-                             fontFamily = FontFamily.fontFamilyRegular,
-                             color = MaterialTheme.colors.onPrimary,
-                             modifier = Modifier.alpha(0.5f)
-                         )
-                     },
-                     colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                         backgroundColor = MaterialTheme.colors.primary,
-                         focusedIndicatorColor = MaterialTheme.colors.primary,
-                         unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                         cursorColor = MaterialTheme.colors.onPrimary
-                     ),
-                     textStyle = TextStyle(
-                         fontFamily = FontFamily.fontFamilyRegular,
+        /*     TextField(
+                modifier = Modifier.wrapContentWidth(),
+                 value = "Notebook:$noteBook",
+                 onValueChange = { },
+                 placeholder = {
+                     Text(
+                         text = "Notebook",
                          fontSize = 15.sp,
-                         fontStyle = FontStyle.Italic
-                     ),
-                     readOnly = true
-                 )*/
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = "Arrow DropDown",
-                modifier = Modifier.clickable {
-                    isExpanded.value = true
-                })
-            if (isExpanded.value) {
-                Menu(isExpanded = isExpanded, notebooks, selectedNotebook)
-            }
+                         fontFamily = FontFamily.fontFamilyRegular,
+                         color = MaterialTheme.colors.onPrimary,
+                         modifier = Modifier.alpha(0.5f)
+                     )
+                 },
+                 colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                     backgroundColor = MaterialTheme.colors.primary,
+                     focusedIndicatorColor = MaterialTheme.colors.primary,
+                     unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                     cursorColor = MaterialTheme.colors.onPrimary
+                 ),
+                 textStyle = TextStyle(
+                     fontFamily = FontFamily.fontFamilyRegular,
+                     fontSize = 15.sp,
+                     fontStyle = FontStyle.Italic
+                 ),
+                 readOnly = true
+             )*/
+        Icon(
+            imageVector = Icons.Filled.ArrowDropDown,
+            contentDescription = "Arrow DropDown",
+            modifier = Modifier.clickable {
+                isExpanded.value = true
+            })
+        if (isExpanded.value) {
+            Menu(isExpanded = isExpanded, notebooks, selectedNotebook)
         }
     }
 

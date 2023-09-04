@@ -103,7 +103,7 @@ class MainActivityViewModel @Inject constructor(
     var getSearchResult = MutableLiveData<ArrayList<AddNote>>()
         private set
 
-    var getArchiveSearchResult = MutableLiveData<ArrayList<AddNote>>()
+    var getArchiveSearchResult =  MutableLiveData<ArrayList<AddNote>>()
         private set
 
     val getNoteBooks = MutableLiveData<ArrayList<GetNoteBook?>>()
