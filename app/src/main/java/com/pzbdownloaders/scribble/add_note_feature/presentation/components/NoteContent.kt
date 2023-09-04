@@ -58,19 +58,12 @@ fun NoteContent(
         mutableStateOf("")
     }
 
-    var color = remember {
-        mutableStateOf("")
-    }
-
     val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
     Log.i("notebooks", listOfNoteBooks?.size.toString())
 
     viewModel.getNoteBook()
-
-
     var notebooks: ArrayList<String> =
         arrayListOf("Add Notebook")
-
 
     for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
         notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
@@ -78,9 +71,8 @@ fun NoteContent(
 
 
     Row(
-        }
     ) {
-        CreateDropDownMenu(rowSize, "Notebook", notebookText, notebooks, viewModel, noteBookState)
+        CreateDropDownMenu("Choose Notebook", notebookText, notebooks, viewModel, noteBookState)
         //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
     }
 
@@ -131,6 +123,7 @@ fun NoteContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateDropDownMenu(
+
     label: String,
     notebookText: MutableState<String>,
     notebooks: ArrayList<String>,

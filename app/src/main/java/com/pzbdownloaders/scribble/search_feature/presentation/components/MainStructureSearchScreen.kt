@@ -23,7 +23,6 @@ import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
-import com.pzbdownloaders.scribble.main_screen.presentation.components.NavigationItems
 import com.pzbdownloaders.scribble.main_screen.presentation.components.Notes
 import com.pzbdownloaders.scribble.main_screen.presentation.components.TopSearchBar
 import kotlinx.coroutines.launch

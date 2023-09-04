@@ -25,9 +25,6 @@ import com.pzbdownloaders.scribble.common.presentation.Screens
 
 @Composable
 fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
-    val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
-    //   val fontFamilyRegular = Font(R.font.lufgaregular).toFontFamily()
-    val fontFamilyLight = Font(R.font.lufgalight).toFontFamily()
 
     Card(
         modifier = Modifier
@@ -50,7 +47,6 @@ fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
                         Constant.ARCHIVE
                     )
                 )
-                Log.i("title", note.title)
             },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(10.dp),
@@ -71,7 +67,7 @@ fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
             modifier = Modifier.padding(10.dp),
             fontSize = 35.sp,
             fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyBold,
-            maxLines = 1,
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
         Text(
@@ -79,7 +75,7 @@ fun SingleItemNoteList(note: AddNote, navHostController: NavHostController) {
             modifier = Modifier.padding(10.dp),
             fontSize = 15.sp,
             overflow = TextOverflow.Ellipsis,
-            fontFamily = fontFamilyLight
+            fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyLight
         )
     }
 }

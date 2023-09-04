@@ -23,17 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
 
-
-data class NavigationItems(
-    var label: String,
-    var selectedIcon: ImageVector,
-    var unSelectedIcon: ImageVector
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,24 +37,6 @@ fun MainStructureMainScreen(
     viewModel: MainActivityViewModel,
     activity: MainActivity
 ) {
-
-    var navigationItems = listOf(
-        NavigationItems(
-            label = "Notes",
-            selectedIcon = Icons.Filled.Note,
-            unSelectedIcon = Icons.Outlined.Note
-        ),
-        NavigationItems(
-            label = "Archive",
-            selectedIcon = Icons.Filled.Archive,
-            unSelectedIcon = Icons.Outlined.Archive
-        ),
-        NavigationItems(
-            label = "Settings",
-            selectedIcon = Icons.Filled.Settings,
-            unSelectedIcon = Icons.Outlined.Settings
-        )
-    )
 
     var drawerState = androidx.compose.material3.rememberDrawerState(
         initialValue =
@@ -76,7 +53,7 @@ fun MainStructureMainScreen(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
-                navigationItems.forEachIndexed { indexed, item ->
+                NavigationItems.navigationItems.forEachIndexed { indexed, item ->
                     NavigationDrawerItem(
                         colors = NavigationDrawerItemDefaults.colors(
                             selectedContainerColor = MaterialTheme.colors.primary,

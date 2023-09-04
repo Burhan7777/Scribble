@@ -10,7 +10,7 @@ import kotlinx.coroutines.tasks.await
 class GetNoteBookUseCase {
 
     suspend fun getNoteBook(): ArrayList<GetNoteBook?> {
-        var listOfNoteBooks = ArrayList<GetNoteBook?>()
+        val listOfNoteBooks = ArrayList<GetNoteBook?>()
         val fireStore = Firebase.firestore
         val querySnapshot = fireStore.collection("Notebooks").whereEqualTo(
             "user_id",
@@ -22,7 +22,6 @@ class GetNoteBookUseCase {
         }.await()
         for (i in querySnapshot.documents) {
             val notebook = i.toObject(GetNoteBook::class.java)
-
             listOfNoteBooks.add(notebook)
         }
         return listOfNoteBooks
