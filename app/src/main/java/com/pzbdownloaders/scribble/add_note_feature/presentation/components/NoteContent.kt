@@ -1,6 +1,8 @@
 package com.pzbdownloaders.scribble.add_note_feature.presentation.components
 
 import android.util.Log
+import android.util.Size
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -19,13 +21,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.CornerRadius.Companion.Zero
+import androidx.compose.ui.geometry.Offset.Companion.Zero
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
@@ -33,6 +40,7 @@ import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+
 
 @Composable
 fun NoteContent(
@@ -47,6 +55,10 @@ fun NoteContent(
     }
 
     var notebookText = remember {
+        mutableStateOf("")
+    }
+
+    var color = remember {
         mutableStateOf("")
     }
 
@@ -65,9 +77,11 @@ fun NoteContent(
     }
 
 
-    Row() {
-        CreateDropDownMenu("Notebook", notebookText, notebooks, viewModel, noteBookState)
-        CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
+    Row(
+        }
+    ) {
+        CreateDropDownMenu(rowSize, "Notebook", notebookText, notebooks, viewModel, noteBookState)
+        //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
     }
 
 
@@ -123,10 +137,10 @@ fun CreateDropDownMenu(
     viewModel: MainActivityViewModel,
     noteBookState: MutableState<String>
 ) {
+
     var isExpanded by remember {
         mutableStateOf(false)
     }
-
 
     var dialogOpen = remember {
         mutableStateOf(false)
@@ -137,7 +151,7 @@ fun CreateDropDownMenu(
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = !isExpanded },
-        modifier = Modifier.width(200.dp)
+        modifier = Modifier.fillMaxWidth(),
     ) {
         OutlinedTextField(
             value = noteBookState.value,
@@ -148,8 +162,8 @@ fun CreateDropDownMenu(
             },
             modifier = Modifier
                 .menuAnchor()
-                .width(200.dp)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
             label = {
                 Text(
                     text = label,
@@ -171,8 +185,8 @@ fun CreateDropDownMenu(
 
         DropdownMenu(
             modifier = Modifier
-                .width(200.dp)
-                .background(MaterialTheme.colors.primaryVariant),
+                .background(MaterialTheme.colors.primaryVariant)
+                .fillMaxWidth(),
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false }
         ) {
