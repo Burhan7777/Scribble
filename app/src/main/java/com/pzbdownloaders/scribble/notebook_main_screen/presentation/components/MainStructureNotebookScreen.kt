@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -28,11 +27,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainStructureMainScreen(
+fun MainStructureNotebookScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity,
     notebookNavigation: ArrayList<String>,
+    title: String,
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>
 ) {
@@ -43,9 +43,7 @@ fun MainStructureMainScreen(
     )
     var coroutineScope = rememberCoroutineScope()
 
-
     if (selectedItem.value == 0) selectedNote.value = 100000
-
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -76,7 +74,6 @@ fun MainStructureMainScreen(
                         selected = selectedItem.value == indexed,
                         onClick = {
                             selectedItem.value = indexed
-                            selectedNote.value = 100000
 
                             coroutineScope.launch {
                                 drawerState.close()
@@ -197,8 +194,8 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBar(navHostController, drawerState, viewModel)
-                Notes(viewModel, activity, navHostController)
+                TopSearchBarNotebook(navHostController, drawerState, viewModel)
+                NotesNotebook(viewModel, activity, navHostController, title)
             }
         }
     }

@@ -9,10 +9,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Note
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Note
 import androidx.compose.material.icons.outlined.Settings
@@ -22,8 +19,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
@@ -36,6 +35,9 @@ fun MainStructureArchiveScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity,
+    notebookNavigation: ArrayList<String>,
+    selectedItem: MutableState<Int>,
+    selectedNote: MutableState<Int>
 ) {
 
 
@@ -45,16 +47,22 @@ fun MainStructureArchiveScreen(
     )
     var coroutineScope = rememberCoroutineScope()
 
-    var selectedItem by remember {
-        mutableStateOf(0)
-    }
+    if (selectedItem.value == 0) selectedNote.value = 100000
+
 
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                androidx.compose.material.Text(
+                    text = "SCRIBBLE",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    modifier = Modifier.padding(20.dp),
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 NavigationItems.navigationItems.forEachIndexed { indexed, item ->
                     NavigationDrawerItem(
                         colors = NavigationDrawerItemDefaults.colors(
@@ -64,37 +72,91 @@ fun MainStructureArchiveScreen(
                         label = {
                             androidx.compose.material.Text(
                                 text = item.label,
-                                color = MaterialTheme.colors.onPrimary
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
                             )
                         },
+                        selected = selectedItem.value == indexed,
                         onClick = {
-                            selectedItem = indexed
+                            selectedItem.value = indexed
+
                             coroutineScope.launch {
                                 drawerState.close()
                             }
-                            if (selectedItem == 0) {
+                            if (selectedItem.value == 0) {
+                                navHostController.popBackStack()
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.HomeScreen.route)
-                            } else if (selectedItem == 1) {
+                            } else if (selectedItem.value == 1) {
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
-                            } else if (selectedItem == 2) {
+                            } else if (selectedItem.value == 2) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 3) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             }
                         },
-                        selected = selectedItem == indexed,
                         icon = {
-                            if (selectedItem == indexed) Icon(
+                            if (selectedItem.value == indexed) Icon(
                                 imageVector = item.selectedIcon,
                                 tint = MaterialTheme.colors.onPrimary,
-                                contentDescription = "selectedNavImage"
+                                contentDescription = "Notes"
                             ) else Icon(
                                 imageVector = item.unSelectedIcon,
-                                contentDescription = "selectedNavImage",
+                                contentDescription = "Notes",
                                 tint = MaterialTheme.colors.onPrimary,
                             )
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                    )
+                }
+                androidx.compose.material.Text(
+                    text = "NOTEBOOKS",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    modifier = Modifier.padding(20.dp),
+                    fontSize = 20.sp
+                )
+
+                notebookNavigation.forEachIndexed { indexed, items ->
+                    NavigationDrawerItem(
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = MaterialTheme.colors.primary,
+                            unselectedContainerColor = MaterialTheme.colors.primaryVariant
+                        ),
+                        selected = selectedNote.value == indexed,
+                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                        label = {
+                            androidx.compose.material.Text(
+                                text = items,
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
+                            )
+                        },
+                        onClick = {
+                            selectedNote.value = indexed
+                            selectedItem.value = 100000
+                            navHostController.navigate(
+                                Screens.NotebookMainScreen.notebookWithTitle(
+                                    items
+                                )
+                            )
+                        },
+                        icon = {
+                            if (selectedNote.value == indexed) {
+                                Icon(
+                                    imageVector = Icons.Filled.Folder,
+                                    contentDescription = "Folder",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Folder,
+                                    contentDescription = "Folder",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                            }
+                        }
                     )
                 }
             }

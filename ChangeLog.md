@@ -1,5 +1,9 @@
 -------------------------- CHANGE LOG------------------------
 
+v0.0.8 ALPHA
+-----------------------------
+1) Notebooks in navigation work perfectly
+2) Notebooks screen added separately
 
 v 0.0.7 ALPHA
 ------------------------------

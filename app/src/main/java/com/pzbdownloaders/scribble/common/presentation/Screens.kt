@@ -1,5 +1,7 @@
 package com.pzbdownloaders.scribble.common.presentation
 
+import android.icu.text.CaseMap.Title
+
 const val HOME_GRAPH = "home_graph"
 const val AUTH_GRAPH = "auth_graph"
 
@@ -22,6 +24,14 @@ sealed class Screens(val route: String) {
     object SearchScreen : Screens("search_screen/{screen}") {
         fun searchNoteWIthScreen(screen: String): String {
             return "search_screen/$screen"
+        }
+    }
+
+    object AboutUs : Screens("about_us")
+
+    object NotebookMainScreen : Screens("notebook_main_screen/{title}") {
+        fun notebookWithTitle(title: String): String {
+            return "notebook_main_screen/$title"
         }
     }
 }

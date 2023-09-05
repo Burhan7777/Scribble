@@ -23,6 +23,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignU
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.notebook_main_screen.domain.GetNotebookNotesUseCase
 import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +51,8 @@ class MainActivityViewModel @Inject constructor(
     private val getSearchResultUseCase: GetSearchResultUseCase,
     private val getArchiveSearchResultUseCase: GetArchiveSearchResultUseCase,
     private val addNotebookUseCase: AddNotebookUseCase,
-    private val getNotebookUseCase: GetNoteBookUseCase
+    private val getNotebookUseCase: GetNoteBookUseCase,
+    private val getNotebookNotesUseCase: GetNotebookNotesUseCase
 ) : ViewModel() {
 
     var listOfNotes = mutableListOf<Note>()
@@ -103,7 +105,10 @@ class MainActivityViewModel @Inject constructor(
     var getSearchResult = MutableLiveData<ArrayList<AddNote>>()
         private set
 
-    var getArchiveSearchResult =  MutableLiveData<ArrayList<AddNote>>()
+    var getArchiveSearchResult = MutableLiveData<ArrayList<AddNote>>()
+        private set
+
+    var getNotebookNotes = MutableLiveData<ArrayList<AddNote?>>()
         private set
 
     val getNoteBooks = MutableLiveData<ArrayList<GetNoteBook?>>()
@@ -223,6 +228,12 @@ class MainActivityViewModel @Inject constructor(
     fun getNoteBook() {
         viewModelScope.launch {
             getNoteBooks.value = getNotebookUseCase.getNoteBook()
+        }
+    }
+
+    fun getNotebookNote(notebook: String) {
+        viewModelScope.launch {
+            getNotebookNotes.value = getNotebookNotesUseCase.getNotebookNote(notebook)
         }
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,13 +31,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             ScribbleTheme {
                 // A surface container using the 'background' color from the theme
+                var selectedIItem = remember{
+                    mutableStateOf(0)
+                }
+                var selectedNote = remember{
+                    mutableStateOf(0)
+                }
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colors.primary)
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, viewModel, this@MainActivity, result)
+                    NavHost(navController = navController, viewModel, this@MainActivity, result, selectedIItem, selectedNote)
                 }
             }
         }
