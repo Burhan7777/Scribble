@@ -1,11 +1,9 @@
-package com.pzbdownloaders.scribble.common.presentation
+package com.pzbdownloaders.scribble.common.domain.utils
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 
 object Constant {
-
-    val firebaseUser = FirebaseAuth.getInstance().currentUser?.uid
 
     const val SUCCESS = "SUCCESS"
     const val FAILURE = "FAILURE"

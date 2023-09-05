@@ -9,21 +9,16 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Note
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Note
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
@@ -35,7 +30,8 @@ import kotlinx.coroutines.launch
 fun MainStructureMainScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
-    activity: MainActivity
+    activity: MainActivity,
+    notebookNavigation: ArrayList<String>
 ) {
 
     var drawerState = androidx.compose.material3.rememberDrawerState(
@@ -52,6 +48,13 @@ fun MainStructureMainScreen(
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
+                androidx.compose.material.Text(
+                    text = "SCRIBBLE",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    modifier = Modifier.padding(20.dp),
+                    fontSize = 20.sp
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 NavigationItems.navigationItems.forEachIndexed { indexed, item ->
                     NavigationDrawerItem(
@@ -62,7 +65,8 @@ fun MainStructureMainScreen(
                         label = {
                             androidx.compose.material.Text(
                                 text = item.label,
-                                color = MaterialTheme.colors.onPrimary
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
                             )
                         },
                         selected = indexed == selectedItem,
@@ -94,6 +98,37 @@ fun MainStructureMainScreen(
                             )
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                    )
+                }
+                androidx.compose.material.Text(
+                    text = "NOTEBOOKS",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    modifier = Modifier.padding(20.dp),
+                    fontSize = 20.sp
+                )
+
+                notebookNavigation.forEachIndexed { indexed, items ->
+                    NavigationDrawerItem(
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = MaterialTheme.colors.primary,
+                            unselectedContainerColor = MaterialTheme.colors.primaryVariant
+                        ),
+                        label = {
+                            androidx.compose.material.Text(
+                                text = items,
+                                color = MaterialTheme.colors.onPrimary,
+                                fontFamily = FontFamily.fontFamilyRegular
+                            )
+                        },
+                        selected = false,
+                        onClick = { },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Folder,
+                                contentDescription = "Folder"
+                            )
+                        }
                     )
                 }
             }

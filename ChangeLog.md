@@ -1,6 +1,10 @@
 -------------------------- CHANGE LOG------------------------
 
 
+v 0.0.7 ALPHA
+------------------------------
+1) Notebooks added in navigation drawer
+
 v0.0.6 ALPHA
 ------------------------------
 1) Notebook/folder works perfectly.

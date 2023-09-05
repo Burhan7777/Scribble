@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.main_screen.presentation.screens
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -14,7 +15,14 @@ fun NotesScreen(
     activity: MainActivity
 ) {
 
+    // WE GET THE NOTEBOOKS HERE BECAUSE WE HAVE TO DISPLAY THEM IN THE NAVIGATION  VIEW
 
-    MainStructureMainScreen(navHostController, viewModel, activity)
+    viewModel.getNoteBook()
+    val notebooks = viewModel.getNoteBooks.observeAsState().value
+    val notebookNavigation: ArrayList<String> = ArrayList()
+    for (i in notebooks?.indices ?: emptyList<String>().indices) {
+        notebookNavigation.add(notebooks!![i]?.notebook ?: "")
+    }
+    MainStructureMainScreen(navHostController, viewModel, activity, notebookNavigation)
 }
 

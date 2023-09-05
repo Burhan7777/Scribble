@@ -11,15 +11,12 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
-import com.pzbdownloaders.scribble.common.presentation.Constant
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.Screens
 

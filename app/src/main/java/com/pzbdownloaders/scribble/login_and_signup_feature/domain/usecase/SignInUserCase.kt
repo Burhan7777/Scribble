@@ -2,7 +2,7 @@ package com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.pzbdownloaders.scribble.common.presentation.Constant
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 
 class SignInUserCase {
 
