@@ -89,7 +89,7 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.44"
 
     //NAVIGATION
-    implementation "androidx.navigation:navigation-compose:2.4.2"
+    implementation 'androidx.navigation:navigation-compose:2.4.2'
 
     //MATERIAL3
     implementation "androidx.compose.material3:material3:1.1.1"

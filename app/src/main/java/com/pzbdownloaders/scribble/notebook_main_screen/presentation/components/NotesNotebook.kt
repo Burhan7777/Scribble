@@ -1,14 +1,16 @@
 package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components
 
 import android.util.Log
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
@@ -34,6 +36,17 @@ fun NotesNotebook(
     viewModel.getNotebookNote(title)
     val listOfNotes = viewModel.getNotebookNotes.observeAsState().value
 
+    if (listOfNotes == null) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(35.dp)
+                    .height(35.dp),
+                color = MaterialTheme.colors.onPrimary
+            )
+        }
+    }
     LazyColumn() {
         item {
             Text(
