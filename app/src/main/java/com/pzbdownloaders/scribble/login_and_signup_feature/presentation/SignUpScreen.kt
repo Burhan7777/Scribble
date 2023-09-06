@@ -1,10 +1,16 @@
 package com.pzbdownloaders.scribble.login_and_signup_feature.sign_up
 
+import android.view.animation.Transformation
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -12,6 +18,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -54,6 +62,23 @@ fun SignUpScreen(
             mutableStateOf(false)
         }
 
+        var passwordVisibilityToggle by remember {
+            mutableStateOf(false)
+        }
+
+        var passwordRepeatedVisibilityToggle by remember {
+            mutableStateOf(false)
+        }
+
+        var logInButtonWidth by remember {
+            mutableStateOf(100)
+        }
+
+        var signUpButtonClick by remember {
+            mutableStateOf(false)
+        }
+
+
         var context = LocalContext.current
         Text(
             text = "Sign Up",
@@ -89,6 +114,9 @@ fun SignUpScreen(
                 topEnd = CornerSize(15.dp),
                 bottomStart = CornerSize(15.dp),
                 bottomEnd = CornerSize(15.dp),
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontFamily = FontFamily.fontFamilyRegular
             )
         )
 
@@ -149,6 +177,9 @@ fun SignUpScreen(
                 topEnd = CornerSize(15.dp),
                 bottomStart = CornerSize(15.dp),
                 bottomEnd = CornerSize(15.dp),
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontFamily = FontFamily.fontFamilyRegular
             )
         )
 
@@ -164,6 +195,7 @@ fun SignUpScreen(
                 focusedContainerColor = MaterialTheme.colors.primary,
                 unfocusedContainerColor = MaterialTheme.colors.primary,
             ),
+            visualTransformation = if (!passwordVisibilityToggle) PasswordVisualTransformation() else VisualTransformation.None,
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
@@ -179,7 +211,28 @@ fun SignUpScreen(
                 topEnd = CornerSize(15.dp),
                 bottomStart = CornerSize(15.dp),
                 bottomEnd = CornerSize(15.dp),
-            )
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontFamily = FontFamily.fontFamilyRegular
+            ),
+            trailingIcon = {
+                if (!passwordVisibilityToggle)
+                    IconButton(onClick = { passwordVisibilityToggle = !passwordVisibilityToggle }) {
+                        Icon(
+                            imageVector = Icons.Default.Visibility,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    } else {
+                    IconButton(onClick = { passwordVisibilityToggle = !passwordVisibilityToggle }) {
+                        Icon(
+                            imageVector = Icons.Default.VisibilityOff,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                }
+            }
         )
 
         OutlinedTextField(
@@ -204,16 +257,44 @@ fun SignUpScreen(
                     fontFamily = FontFamily.fontFamilyLight
                 )
             },
+            visualTransformation = if (!passwordRepeatedVisibilityToggle) PasswordVisualTransformation() else VisualTransformation.None,
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(15.dp),
                 topEnd = CornerSize(15.dp),
                 bottomStart = CornerSize(15.dp),
                 bottomEnd = CornerSize(15.dp),
-            )
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                fontFamily = FontFamily.fontFamilyRegular
+            ),
+            trailingIcon = {
+                if (!passwordRepeatedVisibilityToggle)
+                    IconButton(onClick = {
+                        passwordRepeatedVisibilityToggle = !passwordRepeatedVisibilityToggle
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Visibility,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    } else {
+                    IconButton(onClick = {
+                        passwordRepeatedVisibilityToggle = !passwordRepeatedVisibilityToggle
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.VisibilityOff,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                }
+            }
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(
                 checked = isChecked,
@@ -226,7 +307,7 @@ fun SignUpScreen(
         Text(
             text = "I accept all terms and conditions",
             color = MaterialTheme.colors.onPrimary,
-            fontFamily = FontFamily.fontFamilyLight
+            fontFamily = FontFamily.fontFamilyRegular
         )
 
 
@@ -240,6 +321,7 @@ fun SignUpScreen(
                     isChecked
                 )
                 if (result == "Correct") {
+                    signUpButtonClick = !signUpButtonClick
                     viewModel.signUpUser(email, password)
                     viewModel.getResultFromSignUp.observe(activity) {
                         when (it) {
@@ -260,7 +342,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .height(60.dp)
+                .height(60.dp),
             /*   .border(
                    border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
                    MaterialTheme.shapes.medium.copy(
@@ -269,7 +351,7 @@ fun SignUpScreen(
                        bottomEnd = CornerSize(15.dp),
                        bottomStart = CornerSize(15.dp),
                    )
-               )*/,
+               )*/
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(15.dp),
                 topEnd = CornerSize(15.dp),
@@ -278,23 +360,25 @@ fun SignUpScreen(
             ),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.onPrimary
-            )
+            ),
         ) {
             Text(
-                text = "Sign Up",
+                text = if (!signUpButtonClick) "Sign Up" else "Signing up...",
                 fontSize = 15.sp,
                 color = MaterialTheme.colors.onSecondary,
-                fontFamily = FontFamily.fontFamilyLight
+                fontFamily = FontFamily.fontFamilyRegular
             )
+            if (signUpButtonClick) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(20.dp)
+                        .height(20.dp),
+                    color = MaterialTheme.colors.onSecondary
+                )
+            }
         }
-
-
     }
 
 }
-
-@Composable
-fun successResultSignIn() = true
-
-fun failureResultSigIn() = true
 

@@ -2,20 +2,33 @@ package com.pzbdownloaders.scribble.login_and_signup_feature.presentation
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.api.Distribution.BucketOptions.Linear
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
 
@@ -38,6 +51,15 @@ fun LoginScreen(
         var password by remember {
             mutableStateOf("")
         }
+
+        var passwordVisibilityToggle by remember {
+            mutableStateOf(false)
+        }
+
+        var loginButtonClick by remember {
+            mutableStateOf(false)
+        }
+
 
         var context = LocalContext.current
         Text(
@@ -96,6 +118,7 @@ fun LoginScreen(
             textStyle = LocalTextStyle.current.copy(
                 fontFamily = FontFamily.fontFamilyRegular
             ),
+            visualTransformation = if (!passwordVisibilityToggle) PasswordVisualTransformation() else VisualTransformation.None,
             maxLines = 1,
             modifier = Modifier
                 .padding(10.dp)
@@ -112,13 +135,32 @@ fun LoginScreen(
                 topEnd = CornerSize(15.dp),
                 bottomStart = CornerSize(15.dp),
                 bottomEnd = CornerSize(15.dp),
-            )
+            ),
+            trailingIcon = {
+                if (!passwordVisibilityToggle)
+                    IconButton(onClick = { passwordVisibilityToggle = !passwordVisibilityToggle }) {
+                        Icon(
+                            imageVector = Icons.Default.Visibility,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    } else {
+                    IconButton(onClick = { passwordVisibilityToggle = !passwordVisibilityToggle }) {
+                        Icon(
+                            imageVector = Icons.Default.VisibilityOff,
+                            contentDescription = "Visibility",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                }
+            }
         )
 
         Button(
             onClick = {
                 val result = viewModel.authenticationSignIn(email, password)
                 if (result == "Correct") {
+                    loginButtonClick = !loginButtonClick
                     viewModel.signInUser(email, password)
                     viewModel.getResultFromSignIn.observe(activity) {
                         when (it) {
@@ -171,19 +213,29 @@ fun LoginScreen(
             )
         ) {
             Text(
-                text = "Log In",
+                text = if (!loginButtonClick) "Log In to your account" else "Logging in...",
                 fontSize = 15.sp,
                 color = MaterialTheme.colors.onSecondary,
-                fontFamily = FontFamily.fontFamilyLight
+                fontFamily = FontFamily.fontFamilyRegular
             )
+            if (loginButtonClick) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(20.dp)
+                        .height(20.dp),
+                    color = MaterialTheme.colors.onSecondary
+                )
+            }
         }
+
         /*     Text(
-                 text = "-------------------------------------- or -------------------------------------",
-                 color = MaterialTheme.colors.onPrimary,
-                 fontSize = 15.sp
-             )*/
+             text = "-------------------------------------- or -------------------------------------",
+             color = MaterialTheme.colors.onPrimary,
+             fontSize = 15.sp
+         )*/
         /*  Button(
-              onClick = { *//*TODO*//* },
+          onClick = { *//*TODO*//* },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = googleColor
             )
@@ -199,13 +251,28 @@ fun LoginScreen(
                 fontFamily = FontFamily.fontFamilyLight
             )
         }*/
-        Row(horizontalArrangement = Arrangement.Center) {
-            Text(text = "Not a user yet?", color = MaterialTheme.colors.onPrimary)
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Not a user yet?",
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 15.sp,
+                fontFamily = FontFamily.fontFamilyRegular
+            )
             TextButton(onClick = { navHostController.navigate(Screens.SignUpScreen.route) }) {
-                Text(text = "REGISTER", color = MaterialTheme.colors.onPrimary)
+                Text(
+                    text = "REGISTER",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    textDecoration = TextDecoration.Underline,
+                    fontSize = 15.sp
+                )
             }
         }
     }
 }
+
 
 
