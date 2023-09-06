@@ -91,7 +91,7 @@ fun MainStructureMainScreen(
                             } else if (selectedItem.value == 2) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             } else if (selectedItem.value == 3) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
                         icon = {

@@ -26,8 +26,7 @@ sealed class Screens(val route: String) {
             return "search_screen/$screen"
         }
     }
-
-    object AboutUs : Screens("about_us")
+    object AboutUsScreen : Screens("about_us")
 
     object NotebookMainScreen : Screens("notebook_main_screen/{title}") {
         fun notebookWithTitle(title: String): String {

@@ -82,9 +82,11 @@ fun NavGraphBuilder.homeGraph(
                 screen = it.arguments?.getString("screen")!!
             )
         }
-        composable(Screens.AboutUs.route) {
+
+        composable(Screens.AboutUsScreen.route) {
             AboutUsScreen()
         }
+
         composable(
             Screens.NotebookMainScreen.route,
             listOf(navArgument("title") {
