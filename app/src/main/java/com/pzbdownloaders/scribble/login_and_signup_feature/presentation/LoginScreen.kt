@@ -180,6 +180,7 @@ fun LoginScreen(
                                 navHostController.navigate(Screens.HomeScreen.route)
                             }
                             Constant.FAILURE -> {
+                                loginButtonClick = !loginButtonClick
                                 Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT)
                                     .show()
                             }

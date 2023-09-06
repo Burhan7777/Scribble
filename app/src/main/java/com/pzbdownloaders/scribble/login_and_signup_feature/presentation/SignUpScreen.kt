@@ -331,6 +331,7 @@ fun SignUpScreen(
                                 navHostController.popBackStack()
                             }
                             Constant.FAILURE -> {
+                                signUpButtonClick = !signUpButtonClick
                                 Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
                             }
                         }
