@@ -99,7 +99,8 @@ fun MainStructureEditNote(
                         map["title"] = title
                         map["content"] = content
                         map["timeStamp"] = System.currentTimeMillis()
-                        map["label"] = selectedNotebook.value
+                        if (selectedNotebook.value.isNotEmpty()) map["label"] =
+                            selectedNotebook.value
                         viewModel.updateNote(note!!.noteId, map)
                         viewModel.getResultFromUpdateNote.observe(activity) {
                             when (it) {
