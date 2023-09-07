@@ -1,7 +1,10 @@
 package com.pzbdownloaders.scribble.about_us.presentation.screens
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.ImageView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -17,9 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
+import com.pzbdownloaders.scribble.common.presentation.MainActivity
 
 @Composable
-fun AboutUsScreen() {
+fun AboutUsScreen(
+    activity: MainActivity
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,7 +45,10 @@ fun AboutUsScreen() {
                 .fillMaxWidth()
                 .height(200.dp)
         ) {
-            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "Connect with me",
                     fontSize = 20.sp,
@@ -49,17 +58,18 @@ fun AboutUsScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
                 Image(
                     painter = painterResource(id = R.drawable.ic_instagram),
-                    contentDescription = "instagram"
+                    contentDescription = "instagram",
+                    modifier = Modifier.clickable {
+                        Intent(Intent.ACTION_VIEW).apply {
+                            this.data = Uri.parse("https://www.instagram.com/peerburhan/")
+                        }.also {
+                            activity.startActivity(it)
+                        }
+                    }
                 )
             }
-
-
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    AboutUsScreen()
-}
+

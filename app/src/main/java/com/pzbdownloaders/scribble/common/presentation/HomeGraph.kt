@@ -84,7 +84,7 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.AboutUsScreen.route) {
-            AboutUsScreen()
+            AboutUsScreen(activity)
         }
 
         composable(
