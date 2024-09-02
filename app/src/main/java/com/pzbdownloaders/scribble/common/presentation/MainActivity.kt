@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.common.presentation
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -9,14 +10,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.pzbdownloaders.scribble.ui.theme.ScribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,14 +30,18 @@ class MainActivity : ComponentActivity() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         val sharedPreferences = getSharedPreferences("rememberUser", Context.MODE_PRIVATE)
         result = sharedPreferences.getString("LoggedInUser", "nothing")!!
-        Log.i("logged",result!!)
+
+        val conMgr = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = conMgr.activeNetworkInfo
+        Log.i("network", netInfo.toString())
+
         setContent {
             ScribbleTheme {
                 // A surface container using the 'background' color from the theme
-                var selectedIItem = remember{
+                var selectedIItem = remember {
                     mutableStateOf(0)
                 }
-                var selectedNote = remember{
+                var selectedNote = remember {
                     mutableStateOf(0)
                 }
                 Column(
@@ -43,13 +50,19 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colors.primary)
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, viewModel, this@MainActivity, result, selectedIItem, selectedNote)
+                    NavHost(
+                        navController = navController,
+                        viewModel,
+                        this@MainActivity,
+                        result,
+                        selectedIItem,
+                        selectedNote
+                    )
                 }
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

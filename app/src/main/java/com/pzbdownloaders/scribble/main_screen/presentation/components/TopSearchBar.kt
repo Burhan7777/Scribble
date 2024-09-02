@@ -84,27 +84,16 @@ fun TopSearchBar(
                 },
             )
         },
-        trailingIcon = {
+      /*  trailingIcon = {
             Icon(
                 imageVector = Icons.Filled.Clear,
                 contentDescription = "Clear",
                 modifier = Modifier.clickable {
-                    FirebaseAuth.getInstance().signOut()
-                    val sharedPreferences =
-                        context.getSharedPreferences(
-                            Constant.SHARED_PREP_NAME,
-                            Context.MODE_PRIVATE
-                        )
-                    sharedPreferences.edit().apply {
-                        putString(Constant.USER_KEY, "LoggedOut")
-                    }.apply()
 
-                    navHostController.popBackStack()
-                    navHostController.navigate(Screens.LoginScreen.route)
                 },
 
                 )
-        },
+        },*/
         placeholder = {
             Text(
                 text = "Search notes",

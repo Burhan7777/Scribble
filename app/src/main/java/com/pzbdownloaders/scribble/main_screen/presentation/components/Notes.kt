@@ -31,15 +31,16 @@ fun Notes(
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
-    viewModel.getNotesToShow()
-    val listOfNotes: SnapshotStateList<AddNote>? =
-        viewModel.getListOfNotesToShow.observeAsState().value
+//    viewModel.getNotesToShow()
+//    val listOfNotes: SnapshotStateList<AddNote>? =
+//        viewModel.getListOfNotesToShow.observeAsState().value
+
+    viewModel.getAllNotes()
+    var listOfNotesFromDB = viewModel.listOfNotes
 
 
 
-    Log.i("list", listOfNotes.toString())
-
-    if (listOfNotes == null) {
+    if (listOfNotesFromDB.isEmpty()) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             CircularProgressIndicator(
                 modifier = Modifier
@@ -70,7 +71,7 @@ fun Notes(
 
         }
         items(
-            listOfNotes?.toList() ?: emptyList()
+            listOfNotesFromDB ?: emptyList()
         ) { note ->
             SingleItemNoteList(note = note, navHostController)
         }

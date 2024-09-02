@@ -9,6 +9,7 @@ data class Note(
     val id: Int = 0 ,
     val title: String ="",
     val content: String = "",
+    val archive:Boolean = false,
     val timeStamp: Long = 0,
     val color: Int = 0,
 )

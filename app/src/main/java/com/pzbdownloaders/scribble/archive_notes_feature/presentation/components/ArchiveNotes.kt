@@ -31,10 +31,12 @@ fun Notes(
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
-    viewModel.getArchivedNotes()
-    val listOfNotes: SnapshotStateList<AddNote>? =
-        viewModel.getArchivedNotes.observeAsState().value
+//    viewModel.getArchivedNotes()
+//    val listOfNotes: SnapshotStateList<AddNote>? =
+//        viewModel.getArchivedNotes.observeAsState().value
 
+    viewModel.getAllNotes()
+    var listOfNotes = viewModel.listOfNotes
 
 
     if (listOfNotes == null) {
@@ -64,7 +66,7 @@ fun Notes(
     )
 
     LazyColumn() {
-        items(listOfNotes?.toList() ?: emptyList()) { note ->
+        items(listOfNotes ?: emptyList()) { note ->
             SingleItemNoteList(note = note, navHostController)
         }
     }

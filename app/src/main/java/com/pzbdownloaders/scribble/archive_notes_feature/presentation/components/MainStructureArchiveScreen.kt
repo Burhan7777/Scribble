@@ -77,7 +77,6 @@ fun MainStructureArchiveScreen(
                         selected = selectedItem.value == indexed,
                         onClick = {
                             selectedItem.value = indexed
-
                             coroutineScope.launch {
                                 drawerState.close()
                             }

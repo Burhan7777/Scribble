@@ -9,7 +9,7 @@ sealed class Screens(val route: String) {
     object HomeScreen : Screens("home_screen")
     object AddNoteScreen : Screens("add_note_screen")
     object EditNoteScreen : Screens("edit_note_screen/{id}/{screen}") {
-        fun editNoteWithId(id: String, screen: String): String {
+        fun editNoteWithId(id: Int, screen: String): String {
             return "edit_note_screen/$id/$screen"
         }
     }
@@ -26,6 +26,7 @@ sealed class Screens(val route: String) {
             return "search_screen/$screen"
         }
     }
+
     object AboutUsScreen : Screens("about_us")
 
     object NotebookMainScreen : Screens("notebook_main_screen/{title}") {
@@ -33,4 +34,6 @@ sealed class Screens(val route: String) {
             return "notebook_main_screen/$title"
         }
     }
+
+    object CheckboxMainScreen : Screens("checkbox_main_screen")
 }

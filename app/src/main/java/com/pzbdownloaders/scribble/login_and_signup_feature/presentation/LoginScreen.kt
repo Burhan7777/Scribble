@@ -270,7 +270,31 @@ fun LoginScreen(
                     textDecoration = TextDecoration.Underline,
                     fontSize = 15.sp
                 )
+
             }
+        }
+
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp).padding(10.dp)) {
+            Text(
+                text = " For testing purposes: ",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyLight,
+                fontSize = 15.sp
+            )
+            Text(
+                text = " email  = peerzadaburhan7@gmail.com",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyBold,
+                fontSize = 15.sp
+            )
+            Text(
+                text = " password  =123456",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyBold,
+                fontSize = 15.sp
+            )
         }
     }
 }

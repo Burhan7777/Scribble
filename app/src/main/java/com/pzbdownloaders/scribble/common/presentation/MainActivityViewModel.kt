@@ -1,8 +1,10 @@
 package com.pzbdownloaders.scribble.common.presentation
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,11 +57,14 @@ class MainActivityViewModel @Inject constructor(
     private val getNotebookNotesUseCase: GetNotebookNotesUseCase
 ) : ViewModel() {
 
-    var listOfNotes = mutableListOf<Note>()
+    var listOfNotes = mutableStateListOf<Note>()
         private set
 
     var getNote = mutableStateOf(Note())
         private set
+
+    var getNoteById = mutableStateOf<Note>(Note())
+
 
     var getResultFromSignUp: MutableLiveData<String> = MutableLiveData<String>()
         private set
@@ -124,7 +129,25 @@ class MainActivityViewModel @Inject constructor(
 
     fun getAllNotes() {
         viewModelScope.launch(Dispatchers.IO) {
-            listOfNotes = noteRepository.getAllNotes().toMutableList()
+            listOfNotes = noteRepository.getAllNotes().toMutableStateList()
+        }
+    }
+
+    fun getNoteById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getNoteById.value = editNoteRepository.getNotesById(id)
+        }
+    }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            editNoteRepository.updateNote(note)
+        }
+    }
+
+    fun deleteNoteById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            editNoteRepository.deleteNote(id)
         }
     }
 

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +25,7 @@ fun MainStructureAddNote(
     title: MutableState<String>,
     content: MutableState<String>,
     viewModel: MainActivityViewModel,
-    note: AddNote,
+    note: Note,
     notebookState: MutableState<String>,
 ) {
     var context = LocalContext.current
@@ -44,7 +45,7 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
-                        viewModel.addNoteToCloud(note)
+                        viewModel.insertNote(note)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT).show()
                         navController.popBackStack()
                     }) {

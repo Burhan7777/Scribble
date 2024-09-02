@@ -21,6 +21,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.common.presentation.*
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -30,7 +31,7 @@ import kotlin.collections.HashMap
 fun MainStructureEditNote(
     navController: NavHostController,
     viewModel: MainActivityViewModel,
-    id: String,
+    id: Int,
     activity: MainActivity,
     screen: String
 ) {
@@ -41,12 +42,15 @@ fun MainStructureEditNote(
     }
 
 
-    var note: AddNote? by remember {
-        mutableStateOf(AddNote())
-    }
+//    var note: AddNote? by remember {
+//        mutableStateOf(AddNote())
+//    }
 
-    viewModel.getNoteToEdit(id)
-    note = viewModel.getNoteDetailsToEdit.observeAsState().value
+    //viewModel.getNoteToEdit(id)
+    // note = viewModel.getNoteDetailsToEdit.observeAsState().value
+
+    viewModel.getNoteById(id)
+    var note = viewModel.getNoteById
 
 
     var title by remember {
@@ -71,10 +75,10 @@ fun MainStructureEditNote(
     }
 
 
-    if (note != null) {
-        title = note?.title ?: ""
-        content = note?.content ?: "Failed to get the contents.Please try again"
-        notebook = note?.label ?: ""
+    LaunchedEffect(key1 = true) {
+        title = note.value.title ?: ""
+        content = note.value.content ?: "Failed to get the contents.Please try again"
+        //  notebook = note?.value.?label ?: ""
     }
     Scaffold(
         topBar = {
@@ -95,86 +99,102 @@ fun MainStructureEditNote(
                         //    var updatedNote = Note(id, title, content, getTimeInMilliSeconds(), 123)
                         //   Log.i("title", title)
                         //  viewModel.updateNote(updatedNote)
-                        val map = HashMap<String, Any>()
-                        map["title"] = title
-                        map["content"] = content
-                        map["timeStamp"] = System.currentTimeMillis()
-                        if (selectedNotebook.value.isNotEmpty()) map["label"] =
-                            selectedNotebook.value
-                        viewModel.updateNote(note!!.noteId, map)
-                        viewModel.getResultFromUpdateNote.observe(activity) {
-                            when (it) {
-                                is GetResult.Success -> {
-                                    Toast.makeText(
-                                        context,
-                                        "Updated Successfully",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    navController.popBackStack()
-                                }
-                                is GetResult.Failure -> {
-                                    Toast.makeText(
-                                        context,
-                                        "Update failed. Try again",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                }
-                            }
-                        }
-                        // Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT).show()
+//                        val map = HashMap<String, Any>()
+//                        map["title"] = title
+//                        map["content"] = content
+//                        map["timeStamp"] = System.currentTimeMillis()
+//                        if (selectedNotebook.value.isNotEmpty()) map["label"] =
+//                            selectedNotebook.value
+//                      //  viewModel.updateNote(note!!.noteId, map)
+//                        viewModel.getResultFromUpdateNote.observe(activity) {
+//                            when (it) {
+//                                is GetResult.Success -> {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Updated Successfully",
+//                                        Toast.LENGTH_SHORT
+//                                    )
+//                                        .show()
+//                                    navController.popBackStack()
+//                                }
+//                                is GetResult.Failure -> {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Update failed. Try again",
+//                                        Toast.LENGTH_SHORT
+//                                    )
+//                                        .show()
+//                                }
+//                            }
+//                        }
+                        var note = Note(id, title, content, false, 123)
+                        viewModel.updateNote(note)
+                        navController.popBackStack()
+                        Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT).show()
 
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Undo")
                     }
                     IconButton(onClick = {
                         if (screen == Constant.HOME) {
-                            var hashmap = HashMap<String, Any>()
-                            hashmap["archived"] = true
-                            viewModel.archiveNotes(id, hashmap)
-                            viewModel.getResultFromArchivedNotes.observe(activity) {
-                                when (it) {
-                                    is GetResult.Success -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Note has be archived",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        navController.popBackStack()
-                                    }
-                                    is GetResult.Failure -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Note failed to be archived",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                            }
+
+                            var note = (Note(id, title, content, true, 123))
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Not has been archived", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+//                            var hashmap = HashMap<String, Any>()
+//                            hashmap["archived"] = true
+                            //   viewModel.archiveNotes(id, hashmap)
+//                            viewModel.getResultFromArchivedNotes.observe(activity) {
+//                                when (it) {
+//                                    is GetResult.Success -> {
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Note has be archived",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                        navController.popBackStack()
+//                                    }
+//
+//                                    is GetResult.Failure -> {
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Note failed to be archived",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                    }
+//                                }
+//                            }
                         } else if (screen == Constant.ARCHIVE) {
-                            val hashmap = HashMap<String, Any>()
-                            hashmap["archived"] = false
-                            viewModel.unArchiveNotes(id, hashmap)
-                            viewModel.getResultFromUnArchiveNotes.observe(activity) {
-                                when (it) {
-                                    is GetResult.Success -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Note has been unarchived",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        navController.popBackStack()
-                                    }
-                                    is GetResult.Failure -> {
-                                        Toast.makeText(
-                                            context,
-                                            "Note failed to be unarchived",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                            }
+                            var note = (Note(id, title, content, false, 123))
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Not has been unarchived", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+//                            val hashmap = HashMap<String, Any>()
+//                            hashmap["archived"] = false
+                            // viewModel.unArchiveNotes(id, hashmap)
+//                            viewModel.getResultFromUnArchiveNotes.observe(activity) {
+//                                when (it) {
+//                                    is GetResult.Success -> {
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Note has been unarchived",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                        navController.popBackStack()
+//                                    }
+//
+//                                    is GetResult.Failure -> {
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Note failed to be unarchived",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+//                                    }
+//                                }
+//                            }
                         }
 
                     }) {
@@ -184,9 +204,7 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
-                        //     viewModel.deleteNote(id)
-                        //    Toast.makeText(context, "Note has been deleted", Toast.LENGTH_SHORT).show()
-                        //  navController.popBackStack()
+                        // viewModel.deleteNoteById(id)
                         dialogOpen.value = true
 
                     }) {
@@ -212,9 +230,9 @@ fun MainStructureEditNote(
         Column(modifier = Modifier.padding(paddingValues)) {
             Box(contentAlignment = Alignment.Center) {
                 if (dialogOpen.value) {
-                    AlertDialogBox(viewModel, id, activity, navController) {
-                        dialogOpen.value = false
-                    }
+//                    AlertDialogBox(viewModel, id, activity, navController) {
+//                        dialogOpen.value = false
+//                    }
                 }
             }
             NoteContent(
@@ -228,13 +246,23 @@ fun MainStructureEditNote(
                 { content = it })
         }
     }
+    if (dialogOpen.value) {
+        AlertDialogBox(
+            viewModel = viewModel,
+            id = id,
+            activity = activity,
+            navHostController = navController
+        ) {
+            dialogOpen.value = false
+        }
+    }
 }
 
 
 @Composable
 fun AlertDialogBox(
     viewModel: MainActivityViewModel,
-    noteId: String,
+    id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
     onDismiss: () -> Unit
@@ -258,41 +286,23 @@ fun AlertDialogBox(
             Text(
                 text = "Delete Note ?",
                 fontFamily = FontFamily.fontFamilyBold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary
             )
         },
         text = {
             Text(
                 text = "Are you sure you want to delete this.It will permanently delete the note forever. ",
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = FontFamily.fontFamilyRegular,
+                color = MaterialTheme.colors.onPrimary
             )
         },
         confirmButton = {
             Button(
                 onClick = {
-                    viewModel.deleteNote(noteId = noteId)
-                    viewModel.getResultFromDeleteNote.observe(activity) {
-                        when (it) {
-                            is GetResult.Success -> {
-                                Toast.makeText(
-                                    context,
-                                    "Note has been deleted",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                onDismiss()
-                                navHostController.popBackStack()
-                            }
-                            is GetResult.Failure -> {
-                                Toast.makeText(
-                                    context,
-                                    "Note could not be deleted. Try again",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
-                        }
-                    }
+                    viewModel.deleteNoteById(id)
+                    onDismiss()
+                    navHostController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,

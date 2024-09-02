@@ -33,7 +33,8 @@ class AppModule {
     @Provides
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
-        return Room.databaseBuilder(context, NoteDatabase::class.java, "notes").build()
+        return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
+            .fallbackToDestructiveMigration().build()
     }
 
 

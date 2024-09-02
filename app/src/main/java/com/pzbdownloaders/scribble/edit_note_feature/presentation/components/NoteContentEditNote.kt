@@ -156,12 +156,9 @@ fun NoteContent(
             unfocusedIndicatorColor = MaterialTheme.colors.primary,
             cursorColor = MaterialTheme.colors.onPrimary
         ),
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
+        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 23.sp)
     )
-
-
 }
-
 
 @Composable
 fun Menu(

@@ -69,7 +69,7 @@ fun NotesNotebook(
         items(
             listOfNotes?.toList() ?: emptyList()
         ) { note ->
-            SingleItemNoteList(note = note!!, navHostController)
+          //  SingleItemNoteList(note = note!!, navHostController)
         }
     }
 }

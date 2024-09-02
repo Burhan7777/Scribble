@@ -14,7 +14,7 @@ fun EditNoteScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity,
-    id: String,
+    id: Int,
     screen: String
 ) {
 

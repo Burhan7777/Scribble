@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.pzbdownloaders.scribble.about_us.presentation.screens.AboutUsScreen
+import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.screens.CheckboxNoteMainScreen
 import com.pzbdownloaders.scribble.add_note_feature.presentation.screens.AddNoteScreen
 import com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen.ArchiveNotesScreen
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
@@ -43,7 +44,7 @@ fun NavGraphBuilder.homeGraph(
         composable(
             Screens.EditNoteScreen.route,
             arguments = listOf(navArgument("id") {
-                type = NavType.StringType
+                type = NavType.IntType
             }, navArgument("screen") {
                 type = NavType.StringType
             }
@@ -53,7 +54,7 @@ fun NavGraphBuilder.homeGraph(
                 navHostController = navController,
                 viewModel = viewModel,
                 activity = activity,
-                id = it.arguments!!.getString("id")!!,
+                id = it.arguments!!.getInt("id")!!,
                 screen = it.arguments!!.getString("screen")!!
             )
         }
@@ -101,6 +102,9 @@ fun NavGraphBuilder.homeGraph(
                 selectedItem,
                 selectedNote
             )
+        }
+        composable(Screens.CheckboxMainScreen.route) {
+            CheckboxNoteMainScreen(navController, viewModel)
         }
     }
 }

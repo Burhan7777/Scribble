@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
@@ -77,6 +78,7 @@ fun NoteContent(
     }
 
 
+
     TextField(
         value = title.value,
         onValueChange = { title.value = it },
@@ -98,32 +100,31 @@ fun NoteContent(
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
     )
 
-    TextField(
-        value = content.value,
-        onValueChange = { content.value = it },
-        placeholder = {
-            Text(
-                text = "Note",
-                fontSize = 30.sp,
-                fontFamily = FontFamily.fontFamilyExtraLight,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.alpha(0.5f)
-            )
-        },
-        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            focusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
-            cursorColor = MaterialTheme.colors.onPrimary
-        ),
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
-    )
-}
+        TextField(
+            value = content.value,
+            onValueChange = { content.value = it },
+            placeholder = {
+                Text(
+                    text = "Note",
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.fontFamilyExtraLight,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
+        )
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateDropDownMenu(
-
     label: String,
     notebookText: MutableState<String>,
     notebooks: ArrayList<String>,
@@ -211,6 +212,7 @@ fun CreateDropDownMenu(
             }
         }
     }
+
     if (dialogOpen.value) {
         AlertDialogBox(
             notebookText = notebookText,
@@ -327,3 +329,4 @@ fun AlertDialogBox(
         },
     )
 }
+

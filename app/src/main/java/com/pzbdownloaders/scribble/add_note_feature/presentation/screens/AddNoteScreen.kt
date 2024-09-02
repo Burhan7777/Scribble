@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.MainStructureAddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.Calendar
 
 @Composable
@@ -24,16 +25,14 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
     }
 
     //  var note = Note(0, title.value, content.value, getTimeInMilliSeconds(), 123456)
-    var note = AddNote(
-        "",
+    var note = Note(
+        0,
         title.value,
         content.value,
-        FirebaseAuth.getInstance().currentUser!!.uid,
-        System.currentTimeMillis(),
-        123,
         false,
-        notebookState.value
-    )
+        123,
+
+        )
     MainStructureAddNote(navHostController, title, content, viewModel, note, notebookState)
 
 

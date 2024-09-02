@@ -1,22 +1,29 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
+import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.BottomAppBar
+import androidx.compose.material.ButtonColors
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
@@ -52,13 +59,38 @@ fun MainStructureMainScreen(
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
-                androidx.compose.material.Text(
-                    text = "SCRIBBLE",
-                    color = MaterialTheme.colors.onPrimary,
-                    fontFamily = FontFamily.fontFamilyBold,
-                    modifier = Modifier.padding(20.dp),
-                    fontSize = 20.sp
-                )
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material.Text(
+                        text = "SCRIBBLE",
+                        color = MaterialTheme.colors.onPrimary,
+                        fontFamily = FontFamily.fontFamilyBold,
+                        modifier = Modifier.padding(20.dp),
+                        fontSize = 20.sp
+                    )
+                    androidx.compose.material.OutlinedButton(
+                        onClick = {   FirebaseAuth.getInstance().signOut()
+                            val sharedPreferences =
+                                activity.getSharedPreferences(
+                                    Constant.SHARED_PREP_NAME,
+                                    Context.MODE_PRIVATE
+                                )
+                            sharedPreferences.edit().apply {
+                                putString(Constant.USER_KEY, "LoggedOut")
+                            }.apply()
+
+                            navHostController.popBackStack()
+                            navHostController.navigate(Screens.LoginScreen.route) },
+                        border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        androidx.compose.material.Text(
+                            text = "Log out",
+                            color = MaterialTheme.colors.onPrimary,
+                            fontFamily = FontFamily.fontFamilyLight,
+                            fontSize = 10.sp,
+                            )
+                    }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 NavigationItems.navigationItems.forEachIndexed { indexed, item ->
                     NavigationDrawerItem(
@@ -166,6 +198,13 @@ fun MainStructureMainScreen(
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
+                        /*IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.CheckBox,
+                                contentDescription = "CheckBox",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }*/
                     }
                 }
             },

@@ -41,12 +41,12 @@ fun SearchedNotes(
         items(
             searchResult ?: emptyList()
         ) { note ->
-            SingleItemNoteList(note = note, navHostController)
+           // SingleItemNoteList(note = note, navHostController)
         }
         items(
             searchArchiveResult ?: emptyList()
         ) { note ->
-            SingleItemNoteList(note = note, navHostController)
+          //  SingleItemNoteList(note = note, navHostController)
         }
     }
 }
