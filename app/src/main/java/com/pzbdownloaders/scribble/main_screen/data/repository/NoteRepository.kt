@@ -11,6 +11,9 @@ class NoteRepository @Inject constructor(private val noteDatabase: NoteDatabase)
         return noteDatabase.getDao().getAllNotes()
     }
 
+    suspend fun getNotesByNoteBook(notebook: String): List<Note> {
+        return noteDatabase.getDao().getNoteByNotebook(notebook)
+    }
 
     suspend fun deleteAllNotes(list: List<Note>) {
         noteDatabase.getDao().deleteAllNotes(list)

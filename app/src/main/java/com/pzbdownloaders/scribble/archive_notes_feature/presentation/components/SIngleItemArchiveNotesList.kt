@@ -22,7 +22,7 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 @Composable
 fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
 
-    if(note.archive) {
+    if (note.archive) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

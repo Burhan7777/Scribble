@@ -33,8 +33,11 @@ fun NotesNotebook(
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
-    viewModel.getNotebookNote(title)
-    val listOfNotes = viewModel.getNotebookNotes.observeAsState().value
+    // viewModel.getNotebookNote(title)
+    // val listOfNotes = viewModel.getNotebookNotes.observeAsState().value
+
+    viewModel.getAllNotesByNotebook(title)
+    var listOfNotes = viewModel.listOfNotesByNotebook
 
     if (listOfNotes == null) {
         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -67,9 +70,9 @@ fun NotesNotebook(
 
         }
         items(
-            listOfNotes?.toList() ?: emptyList()
+            listOfNotes ?: emptyList()
         ) { note ->
-          //  SingleItemNoteList(note = note!!, navHostController)
+            SingleItemNotebookList(note = note, navHostController)
         }
     }
 }

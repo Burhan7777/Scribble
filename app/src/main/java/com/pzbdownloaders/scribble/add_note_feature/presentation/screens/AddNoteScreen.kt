@@ -30,7 +30,8 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
         title.value,
         content.value,
         false,
-        123,
+        notebookState.value,
+        timeStamp = 123,
 
         )
     MainStructureAddNote(navHostController, title, content, viewModel, note, notebookState)

@@ -60,6 +60,9 @@ class MainActivityViewModel @Inject constructor(
     var listOfNotes = mutableStateListOf<Note>()
         private set
 
+    var listOfNotesByNotebook = mutableStateListOf<Note>()
+        private set
+
     var getNote = mutableStateOf(Note())
         private set
 
@@ -130,6 +133,12 @@ class MainActivityViewModel @Inject constructor(
     fun getAllNotes() {
         viewModelScope.launch(Dispatchers.IO) {
             listOfNotes = noteRepository.getAllNotes().toMutableStateList()
+        }
+    }
+
+    fun getAllNotesByNotebook(notebook: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            listOfNotesByNotebook = noteRepository.getNotesByNoteBook(notebook).toMutableStateList()
         }
     }
 

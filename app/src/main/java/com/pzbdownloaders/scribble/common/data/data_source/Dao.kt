@@ -25,4 +25,7 @@ interface Dao {
 
     @Update
     suspend fun updateNote(note: Note)
+
+    @Query("SELECT * FROM notes where notebook= :notebook")
+    suspend fun getNoteByNotebook(notebook: String):List<Note>
 }

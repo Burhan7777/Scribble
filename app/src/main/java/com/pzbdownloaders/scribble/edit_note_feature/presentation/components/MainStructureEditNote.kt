@@ -78,7 +78,7 @@ fun MainStructureEditNote(
     LaunchedEffect(key1 = true) {
         title = note.value.title ?: ""
         content = note.value.content ?: "Failed to get the contents.Please try again"
-        //  notebook = note?.value.?label ?: ""
+        notebook = note.value.notebook
     }
     Scaffold(
         topBar = {
@@ -127,7 +127,17 @@ fun MainStructureEditNote(
 //                                }
 //                            }
 //                        }
-                        var note = Note(id, title, content, false, 123)
+                        viewModel.getNoteById(id)
+                        var noteFromDb = viewModel.getNoteById
+                        var archived = noteFromDb.value.archive
+                        var note = Note(
+                            id,
+                            title,
+                            content,
+                            archived,
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            timeStamp = 123
+                        )
                         viewModel.updateNote(note)
                         navController.popBackStack()
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT).show()
@@ -138,7 +148,7 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         if (screen == Constant.HOME) {
 
-                            var note = (Note(id, title, content, true, 123))
+                            var note = (Note(id, title, content, true, timeStamp = 123))
                             viewModel.updateNote(note)
                             Toast.makeText(activity, "Not has been archived", Toast.LENGTH_SHORT)
                                 .show()
@@ -167,7 +177,7 @@ fun MainStructureEditNote(
 //                                }
 //                            }
                         } else if (screen == Constant.ARCHIVE) {
-                            var note = (Note(id, title, content, false, 123))
+                            var note = (Note(id, title, content, false, timeStamp = 123))
                             viewModel.updateNote(note)
                             Toast.makeText(activity, "Not has been unarchived", Toast.LENGTH_SHORT)
                                 .show()
