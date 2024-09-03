@@ -1,12 +1,12 @@
-FEATURES THAT NEED TO BE ADDED
+FEATURES THAT NEED TO BE ADDED (4/28)
 =====================================
 
-1) Archive notes to be added:
-2) Delete Notes:
+1) Archive notes to be added: DONE
+2) Delete Notes: DONE
 3) Recycle Bin to be added:
 4) Locked Notes to be added:
-5) Notebooks to be added in edit screen:
-6) Notebook databases to be created:
+5) Notebooks to be added in edit screen: DONE
+6) Notebook databases to be created: DONE
 7) Search feature to be added for the database:
 8) Backup database locally or on cloud:
 9) Bullet points:
@@ -20,6 +20,12 @@ FEATURES THAT NEED TO BE ADDED
 17) Lock the whole app:
 18) Bottom bar features like google keep:
 19) In-App product to buy product with one time payment:
-20) Launch app on playstore before finishing the app for saving time at the end:
+20) Launch app on play-store before finishing the app for saving time at the end:
 21) Change layout from columns to grid option:
 22) Remove fall back to destructive migration and implement proper migration:
+23) Animations in lazy-column when note is deleted:
+24) Transitions between screens:
+25) "No Notes found" animation in main screen and notebooks screen:
+26) Rate app option while using app:
+27) Update app option:
+28) Firebase fix dialog boxes like in Instabuddy :( :

@@ -10,11 +10,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
@@ -27,7 +34,11 @@ fun MainStructureAddNote(
     viewModel: MainActivityViewModel,
     note: Note,
     notebookState: MutableState<String>,
+//    notebook: MutableState<ArrayList<String>>,
+//    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
+
+    var showCircularProgress = remember { mutableStateOf(true) }
     var context = LocalContext.current
     Scaffold(
         topBar = {
@@ -65,7 +76,11 @@ fun MainStructureAddNote(
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            NoteContent(title, content, viewModel, notebookState)
+            NoteContent(
+                title, content, viewModel, notebookState, showCircularProgress,
+//                notebook,
+//                notebookFromDB)
+            )
         }
     }
 }

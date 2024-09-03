@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.common.data.data_source
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
@@ -27,5 +28,11 @@ interface Dao {
     suspend fun updateNote(note: Note)
 
     @Query("SELECT * FROM notes where notebook= :notebook")
-    suspend fun getNoteByNotebook(notebook: String):List<Note>
+    suspend fun getNoteByNotebook(notebook: String): List<Note>
+
+    @Upsert
+    suspend fun addNoteBook(notebook: NoteBook)
+
+    @Query("SELECT * from notebook")
+    suspend fun getAllNoteBooks(): List<NoteBook>
 }

@@ -197,17 +197,18 @@ fun CreateDropDownMenuCheckbox(
         }
     }
 
-    if (dialogOpen.value) {
-        AlertDialogBox(
-            notebookText = notebookText,
-            viewModel = viewModel,
-            onSaveNotebook = {
-                notebooks.add(notebookText.value)
-            }
-        ) {
-            dialogOpen.value = false
-        }
-    }
+//    if (dialogOpen.value) {
+//        AlertDialogBox(
+//            notebookText = notebookText,
+//            viewModel = viewModel,
+//            onSaveNotebook = {
+//                notebooks.add(notebookText.value)
+//            },
+//        )
+//            onDismiss = {
+//                dialogOpen.value = false
+//            }
+//    }
 }
 
 @Composable

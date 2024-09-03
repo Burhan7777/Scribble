@@ -1,10 +1,12 @@
 package com.pzbdownloaders.scribble.add_note_feature.presentation.screens
 
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.MainStructureAddNote
+import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.Calendar
@@ -24,6 +26,8 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
         mutableStateOf("")
     }
 
+    viewModel.getAllNotebooks()
+
     //  var note = Note(0, title.value, content.value, getTimeInMilliSeconds(), 123456)
     var note = Note(
         0,
@@ -34,7 +38,16 @@ fun AddNoteScreen(navHostController: NavHostController, viewModel: MainActivityV
         timeStamp = 123,
 
         )
-    MainStructureAddNote(navHostController, title, content, viewModel, note, notebookState)
+    MainStructureAddNote(
+        navHostController,
+        title,
+        content,
+        viewModel,
+        note,
+        notebookState
+//        notebook,
+//        notebookFromDB
+    )
 
 
 }

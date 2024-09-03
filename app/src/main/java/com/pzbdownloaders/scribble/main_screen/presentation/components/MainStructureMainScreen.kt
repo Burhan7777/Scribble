@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.ButtonColors
@@ -39,7 +41,7 @@ fun MainStructureMainScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity,
-    notebookNavigation: ArrayList<String>,
+    // notebookNavigation: ArrayList<String>,
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>
 ) {
@@ -51,6 +53,8 @@ fun MainStructureMainScreen(
     var coroutineScope = rememberCoroutineScope()
 
 
+
+
     if (selectedItem.value == 0) selectedNote.value = 100000
 
 
@@ -59,7 +63,10 @@ fun MainStructureMainScreen(
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
-                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     androidx.compose.material.Text(
                         text = "SCRIBBLE",
                         color = MaterialTheme.colors.onPrimary,
@@ -68,7 +75,8 @@ fun MainStructureMainScreen(
                         fontSize = 20.sp
                     )
                     androidx.compose.material.OutlinedButton(
-                        onClick = {   FirebaseAuth.getInstance().signOut()
+                        onClick = {
+                            FirebaseAuth.getInstance().signOut()
                             val sharedPreferences =
                                 activity.getSharedPreferences(
                                     Constant.SHARED_PREP_NAME,
@@ -79,7 +87,8 @@ fun MainStructureMainScreen(
                             }.apply()
 
                             navHostController.popBackStack()
-                            navHostController.navigate(Screens.LoginScreen.route) },
+                            navHostController.navigate(Screens.LoginScreen.route)
+                        },
                         border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
                         shape = RoundedCornerShape(10.dp)
                     ) {
@@ -88,7 +97,7 @@ fun MainStructureMainScreen(
                             color = MaterialTheme.colors.onPrimary,
                             fontFamily = FontFamily.fontFamilyLight,
                             fontSize = 10.sp,
-                            )
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -148,46 +157,51 @@ fun MainStructureMainScreen(
                     fontSize = 20.sp
                 )
 
-                notebookNavigation.forEachIndexed { indexed, items ->
-                    NavigationDrawerItem(
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colors.primary,
-                            unselectedContainerColor = MaterialTheme.colors.primaryVariant
-                        ),
-                        selected = selectedNote.value == indexed,
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                        label = {
-                            androidx.compose.material.Text(
-                                text = items,
-                                color = MaterialTheme.colors.onPrimary,
-                                fontFamily = FontFamily.fontFamilyRegular
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                viewModel.notebooks.forEachIndexed { indexed, items ->
+
+                        if (indexed != 0) {
+                            NavigationDrawerItem(
+                                colors = NavigationDrawerItemDefaults.colors(
+                                    selectedContainerColor = MaterialTheme.colors.primary,
+                                    unselectedContainerColor = MaterialTheme.colors.primaryVariant
+                                ),
+                                selected = selectedNote.value == indexed,
+                                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                                label = {
+                                    androidx.compose.material.Text(
+                                        text = items,
+                                        color = MaterialTheme.colors.onPrimary,
+                                        fontFamily = FontFamily.fontFamilyRegular
+                                    )
+                                },
+                                onClick = {
+                                    selectedNote.value = indexed
+                                    selectedItem.value = 100000
+                                    navHostController.navigate(
+                                        Screens.NotebookMainScreen.notebookWithTitle(
+                                            items
+                                        )
+                                    )
+                                },
+                                icon = {
+                                    if (selectedNote.value == indexed) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Folder,
+                                            contentDescription = "Folder",
+                                            tint = MaterialTheme.colors.onPrimary
+                                        )
+                                    } else {
+                                        Icon(
+                                            imageVector = Icons.Default.Folder,
+                                            contentDescription = "Folder",
+                                            tint = MaterialTheme.colors.onPrimary
+                                        )
+                                    }
+                                }
                             )
-                        },
-                        onClick = {
-                            selectedNote.value = indexed
-                            selectedItem.value = 100000
-                            navHostController.navigate(
-                                Screens.NotebookMainScreen.notebookWithTitle(
-                                    items
-                                )
-                            )
-                        },
-                        icon = {
-                            if (selectedNote.value == indexed) {
-                                Icon(
-                                    imageVector = Icons.Filled.Folder,
-                                    contentDescription = "Folder",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                            } else {
-                                Icon(
-                                    imageVector = Icons.Default.Folder,
-                                    contentDescription = "Folder",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                            }
                         }
-                    )
+                    }
                 }
             }
         },

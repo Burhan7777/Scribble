@@ -98,6 +98,8 @@ dependencies {
     implementation(platform ("com.google.firebase:firebase-bom:32.2.2"))
     implementation "com.google.firebase:firebase-auth-ktx"
     implementation "com.google.firebase:firebase-firestore-ktx"
+    // FIREBASE ANALYTICS
+    implementation("com.google.firebase:firebase-analytics")
 
     //DATASTORE
     implementation "androidx.datastore:datastore-preferences:1.1.0-alpha04"
@@ -111,5 +113,8 @@ dependencies {
 
     //SERIALIZATION
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0'
+
+
+
 
 }

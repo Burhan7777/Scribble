@@ -18,19 +18,21 @@ fun NotesScreen(
     selectedNote: MutableState<Int>
 ) {
 
+
+
     // WE GET THE NOTEBOOKS HERE BECAUSE WE HAVE TO DISPLAY THEM IN THE NAVIGATION  VIEW
 
-    viewModel.getNoteBook()
-    val notebooks = viewModel.getNoteBooks.observeAsState().value
-    val notebookNavigation: ArrayList<String> = ArrayList()
-    for (i in notebooks?.indices ?: emptyList<String>().indices) {
-        notebookNavigation.add(notebooks!![i]?.notebook ?: "")
-    }
+//    viewModel.getNoteBook()
+//    val notebooks = viewModel.getNoteBooks.observeAsState().value
+//    val notebookNavigation: ArrayList<String> = ArrayList()
+//    for (i in notebooks?.indices ?: emptyList<String>().indices) {
+//        notebookNavigation.add(notebooks!![i]?.notebook ?: "")
+//    }
     MainStructureMainScreen(
         navHostController,
         viewModel,
         activity,
-        notebookNavigation,
+        // notebookNavigation,
         selectedItem,
         selectedNote
     )

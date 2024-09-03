@@ -3,6 +3,7 @@ package com.pzbdownloaders.scribble.common.presentation
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNoteUseCas
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNotebookUseCase
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.GetNoteBookUseCase
 import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
+import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.*
@@ -31,6 +33,7 @@ import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,6 +65,11 @@ class MainActivityViewModel @Inject constructor(
 
     var listOfNotesByNotebook = mutableStateListOf<Note>()
         private set
+
+    var listOfNoteBooks = mutableStateListOf<NoteBook>()
+
+    var notebooks =
+        mutableStateListOf<String>() // These are the notebooks displayed in the drop down menu in the "ADD NOTE" screen
 
     var getNote = mutableStateOf(Note())
         private set
@@ -253,8 +261,27 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun addNoteBook(notebook: String) {
-        addNotebookUseCase.addNoteBook(notebook)
+    fun addNoteBook(notebook: NoteBook) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertNoteRepository.addNoteBook(notebook)
+        }
+    }
+
+    fun getAllNotebooks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            listOfNoteBooks = insertNoteRepository.getAllNoteBooks().toMutableStateList()
+            withContext(Dispatchers.Main) {
+                notebooks.clear()
+                notebooks.add("Add Notebook")
+                for (i in listOfNoteBooks) {
+                    notebooks.add(i.name)
+                }
+            }
+        }
+    }
+
+    fun convertAllNotebooksIntoArrayList() {
+
     }
 
     fun getNoteBook() {

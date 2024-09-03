@@ -113,46 +113,48 @@ fun MainStructureNotebookScreen(
                     fontSize = 20.sp
                 )
 
-                notebookNavigation.forEachIndexed { indexed, items ->
-                    NavigationDrawerItem(
-                        colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colors.primary,
-                            unselectedContainerColor = MaterialTheme.colors.primaryVariant
-                        ),
-                        selected = selectedNote.value == indexed,
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                        label = {
-                            androidx.compose.material.Text(
-                                text = items,
-                                color = MaterialTheme.colors.onPrimary,
-                                fontFamily = FontFamily.fontFamilyRegular
-                            )
-                        },
-                        onClick = {
-                            selectedNote.value = indexed
-                            selectedItem.value = 100000
-                            navHostController.navigate(
-                                Screens.NotebookMainScreen.notebookWithTitle(
-                                    items
+                viewModel.notebooks.forEachIndexed { indexed, items ->
+                    if(indexed != 0 ) {
+                        NavigationDrawerItem(
+                            colors = NavigationDrawerItemDefaults.colors(
+                                selectedContainerColor = MaterialTheme.colors.primary,
+                                unselectedContainerColor = MaterialTheme.colors.primaryVariant
+                            ),
+                            selected = selectedNote.value == indexed,
+                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                            label = {
+                                androidx.compose.material.Text(
+                                    text = items,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontFamily = FontFamily.fontFamilyRegular
                                 )
-                            )
-                        },
-                        icon = {
-                            if (selectedNote.value == indexed) {
-                                Icon(
-                                    imageVector = Icons.Filled.Folder,
-                                    contentDescription = "Folder",
-                                    tint = MaterialTheme.colors.onPrimary
+                            },
+                            onClick = {
+                                selectedNote.value = indexed
+                                selectedItem.value = 100000
+                                navHostController.navigate(
+                                    Screens.NotebookMainScreen.notebookWithTitle(
+                                        items
+                                    )
                                 )
-                            } else {
-                                Icon(
-                                    imageVector = Icons.Default.Folder,
-                                    contentDescription = "Folder",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
+                            },
+                            icon = {
+                                if (selectedNote.value == indexed) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Folder,
+                                        contentDescription = "Folder",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.Folder,
+                                        contentDescription = "Folder",
+                                        tint = MaterialTheme.colors.onPrimary
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         },

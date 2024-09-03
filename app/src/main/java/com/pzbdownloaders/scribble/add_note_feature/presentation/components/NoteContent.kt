@@ -1,16 +1,14 @@
 package com.pzbdownloaders.scribble.add_note_feature.presentation.components
 
 import android.util.Log
-import android.util.Size
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
@@ -19,27 +17,17 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.CornerRadius.Companion.Zero
-import androidx.compose.ui.geometry.Offset.Companion.Zero
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.toFontFamily
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
-import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
-import com.pzbdownloaders.scribble.common.domain.utils.GetResult
+import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
-import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 
@@ -48,7 +36,10 @@ fun NoteContent(
     title: MutableState<String>,
     content: MutableState<String>,
     viewModel: MainActivityViewModel,
-    noteBookState: MutableState<String>
+    noteBookState: MutableState<String>,
+    showCircularProgress: MutableState<Boolean>,
+//    notebook: MutableState<ArrayList<String>>,
+//    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
 
     var dialogOpen = remember {
@@ -59,24 +50,24 @@ fun NoteContent(
         mutableStateOf("")
     }
 
-    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
-    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
-    viewModel.getNoteBook()
-    var notebooks: ArrayList<String> =
-        arrayListOf("Add Notebook")
+//    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
+//    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
-    for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
-        notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
-    }
 
 
     Row(
     ) {
-        CreateDropDownMenu("Choose Notebook", notebookText, notebooks, viewModel, noteBookState)
+        CreateDropDownMenu(
+            "Choose Notebook",
+            notebookText,
+            //   notebooks = remember { notebook },
+            viewModel = viewModel,
+            noteBookState = noteBookState,
+            // notebooksFromDB = remember { notebookFromDB }
+        )
         //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
     }
-
 
 
     TextField(
@@ -100,36 +91,37 @@ fun NoteContent(
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
     )
 
-        TextField(
-            value = content.value,
-            onValueChange = { content.value = it },
-            placeholder = {
-                Text(
-                    text = "Note",
-                    fontSize = 30.sp,
-                    fontFamily = FontFamily.fontFamilyExtraLight,
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.alpha(0.5f)
-                )
-            },
-            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary
-            ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
-        )
-    }
+    TextField(
+        value = content.value,
+        onValueChange = { content.value = it },
+        placeholder = {
+            Text(
+                text = "Note",
+                fontSize = 30.sp,
+                fontFamily = FontFamily.fontFamilyExtraLight,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.alpha(0.5f)
+            )
+        },
+        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            focusedIndicatorColor = MaterialTheme.colors.primary,
+            unfocusedIndicatorColor = MaterialTheme.colors.primary,
+            cursorColor = MaterialTheme.colors.onPrimary
+        ),
+        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 25.sp)
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateDropDownMenu(
     label: String,
     notebookText: MutableState<String>,
-    notebooks: ArrayList<String>,
     viewModel: MainActivityViewModel,
-    noteBookState: MutableState<String>
+    noteBookState: MutableState<String>,
+//    notebooksFromDB: MutableState<ArrayList<NoteBook>>,
+//    notebooks: MutableState<ArrayList<String>>
 ) {
 
     var isExpanded by remember {
@@ -177,38 +169,43 @@ fun CreateDropDownMenu(
 
             )
 
-        DropdownMenu(
-            modifier = Modifier
-                .background(MaterialTheme.colors.primaryVariant)
-                .fillMaxWidth(),
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
-        ) {
-            notebooks.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item,
-                            color = MaterialTheme.colors.onPrimary
-                        )
+
+            DropdownMenu(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.primaryVariant)
+                    .fillMaxWidth().fillMaxHeight()
+                    .clickable {
                     },
-                    onClick = {
-                        if (item == "Add Notebook") {
-                            dialogOpen.value = true
-                        }
-                        noteBookState.value = item
-                        isExpanded = !isExpanded
-                    },
-                    leadingIcon = {
-                        if (item == "Add Notebook") {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Add",
-                                tint = androidx.compose.material.MaterialTheme.colors.onPrimary
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
+            ) {
+//                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                viewModel.notebooks.forEach { item ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = item,
+                                color = MaterialTheme.colors.onPrimary
                             )
+                        },
+                        onClick = {
+                            if (item == "Add Notebook") {
+                                dialogOpen.value = true
+                            }
+                            noteBookState.value = item
+                            isExpanded = !isExpanded
+                        },
+                        leadingIcon = {
+                            if (item == "Add Notebook") {
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = "Add",
+                                    tint = androidx.compose.material.MaterialTheme.colors.onPrimary
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                //}
             }
         }
     }
@@ -217,12 +214,16 @@ fun CreateDropDownMenu(
         AlertDialogBox(
             notebookText = notebookText,
             viewModel = viewModel,
+//            notebooksFromDB = notebooksFromDB,
+//            notebooks = notebooks,
             onSaveNotebook = {
-                notebooks.add(notebookText.value)
+                //   notebooks.value.add(notebookText.value)
+            },
+            onDismiss = {
+                dialogOpen.value = false
             }
-        ) {
-            dialogOpen.value = false
-        }
+        )
+
     }
 }
 
@@ -232,8 +233,11 @@ fun AlertDialogBox(
     onSaveNotebook: () -> Unit,
     viewModel: MainActivityViewModel,
     onDismiss: () -> Unit,
+//    notebooksFromDB: MutableState<ArrayList<NoteBook>>,
+//    notebooks: MutableState<ArrayList<String>>,
 
-    ) {
+
+) {
 
     val context = LocalContext.current
     androidx.compose.material3.AlertDialog(
@@ -285,8 +289,9 @@ fun AlertDialogBox(
         confirmButton = {
             androidx.compose.material.Button(
                 onClick = {
-                    //    onSaveNotebook()
-                    viewModel.addNoteBook(notebookText.value)
+                    val noteBook = NoteBook(0, notebookText.value)
+                    viewModel.addNoteBook(noteBook)
+                    viewModel.notebooks.add(notebookText.value)
                     onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(
