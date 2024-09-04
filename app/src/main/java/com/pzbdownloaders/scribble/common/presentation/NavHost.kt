@@ -17,8 +17,8 @@ fun NavHost(
 ) {
     androidx.navigation.compose.NavHost(
         navController = navController,
-      //  startDestination = if (result == Constant.USER_VALUE) HOME_GRAPH else AUTH_GRAPH
-        startDestination = HOME_GRAPH
+        startDestination = if (result == Constant.USER_VALUE) HOME_GRAPH else AUTH_GRAPH
+
     ) {
         authGraph(navHostController = navController, viewModel, activity, result)
         homeGraph(

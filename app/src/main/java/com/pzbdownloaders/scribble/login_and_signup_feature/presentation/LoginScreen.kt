@@ -38,7 +38,7 @@ import com.google.api.Distribution.BucketOptions.Linear
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
-import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.googleTapIn
+import googleSignInButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +47,8 @@ fun LoginScreen(
     viewModel: MainActivityViewModel,
     activity: MainActivity
 ) {
+
+    var showGoogleSignIn = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -343,7 +345,8 @@ fun LoginScreen(
             shape = RoundedCornerShape(7.dp),
             onClick = {
                 clicked = !clicked
-                googleTapIn(context)
+                //showGoogleSignIn.value = true
+                googleSignInButton(navHostController, context)
             },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colors.onPrimary
@@ -388,6 +391,7 @@ fun LoginScreen(
             }
         }
     }
+
 }
 
 
