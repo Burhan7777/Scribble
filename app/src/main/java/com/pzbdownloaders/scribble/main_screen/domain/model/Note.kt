@@ -11,6 +11,7 @@ data class Note(
     val content: String = "",
     val archive: Boolean = false,
     val notebook: String = "Not Categorized",
+    val locked: Boolean = false,
     val timeStamp: Long = 0,
     val color: Int = 0,
 )

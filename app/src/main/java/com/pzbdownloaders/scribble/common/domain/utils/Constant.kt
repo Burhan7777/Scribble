@@ -13,6 +13,6 @@ object Constant {
     const val SHARED_PREP_NAME = "rememberUser"
     const val ARCHIVE = "archive"
     const val HOME = "home"
-
+    const val LOCKED_NOTE = "locked_note"
 
     }

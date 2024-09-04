@@ -130,8 +130,10 @@ fun MainStructureMainScreen(
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                navHostController.navigate(Screens.LockedNotesScreen.route)
                             } else if (selectedItem.value == 3) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 4) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
@@ -158,7 +160,7 @@ fun MainStructureMainScreen(
                 )
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                viewModel.notebooks.forEachIndexed { indexed, items ->
+                    viewModel.notebooks.forEachIndexed { indexed, items ->
 
                         if (indexed != 0) {
                             NavigationDrawerItem(

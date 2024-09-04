@@ -95,9 +95,11 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.1.1"
 
     //FIREBASE
-    implementation(platform ("com.google.firebase:firebase-bom:32.2.2"))
-    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation(platform ("com.google.firebase:firebase-bom:32.8.0"))
     implementation "com.google.firebase:firebase-firestore-ktx"
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+
     // FIREBASE ANALYTICS
     implementation("com.google.firebase:firebase-analytics")
 
@@ -113,6 +115,11 @@ dependencies {
 
     //SERIALIZATION
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0'
+
+    //CREDENTIAL MANAGER
+    implementation "androidx.credentials:credentials:1.2.2"
+    implementation "androidx.credentials:credentials-play-services-auth:1.2.2"
+    implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"
 
 
 

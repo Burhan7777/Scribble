@@ -146,11 +146,47 @@ fun MainStructureEditNote(
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Undo")
                     }
                     IconButton(onClick = {
-                        if (screen == Constant.HOME) {
+                        if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
+                            var note = Note(
+                                id = id,
+                                title,
+                                content = content,
+                                locked = true,
+                                archive = false,
+                                timeStamp = 123
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been locked", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        } else if (screen == Constant.LOCKED_NOTE) {
+                            var note = Note(
+                                id = id,
+                                title,
+                                content = content,
+                                locked = false,
+                                archive = false,
+                                timeStamp = 123
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been  unlocked", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (screen ==
+                                    Constant.HOME
+                            ) Icons.Filled.Lock else if (screen == Constant.ARCHIVE) Icons.Filled.Lock else Icons.Filled.LockOpen,
+                            contentDescription = "Lock Note"
+                        )
+                    }
+                    IconButton(onClick = {
+                        if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
 
                             var note = (Note(id, title, content, true, timeStamp = 123))
                             viewModel.updateNote(note)
-                            Toast.makeText(activity, "Not has been archived", Toast.LENGTH_SHORT)
+                            Toast.makeText(activity, "Note has been archived", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
 //                            var hashmap = HashMap<String, Any>()
@@ -209,7 +245,7 @@ fun MainStructureEditNote(
 
                     }) {
                         Icon(
-                            imageVector = if (screen == Constant.HOME) Icons.Filled.Archive else Icons.Filled.Unarchive,
+                            imageVector = if (screen == Constant.HOME) Icons.Filled.Archive else if (screen == Constant.LOCKED_NOTE) Icons.Filled.Archive else Icons.Filled.Unarchive,
                             contentDescription = "Archive"
                         )
                     }

@@ -1,28 +1,32 @@
-package com.pzbdownloaders.scribble.archive_notes_feature.presentation.components
+package com.pzbdownloaders.scribble.locked_notes_feature.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Note
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.DrawerValue
-import androidx.compose.runtime.*
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.archive_notes_feature.presentation.components.Notes
+import com.pzbdownloaders.scribble.archive_notes_feature.presentation.components.TopSearchBarArchive
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -30,8 +34,9 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
 
+
 @Composable
-fun MainStructureArchiveScreen(
+fun MainStructureLockedNotesScreen(
     navHostController: NavHostController,
     viewModel: MainActivityViewModel,
     activity: MainActivity,
@@ -55,7 +60,7 @@ fun MainStructureArchiveScreen(
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colors.primaryVariant,
             ) {
-                androidx.compose.material.Text(
+                Text(
                     text = "SCRIBBLE",
                     color = MaterialTheme.colors.onPrimary,
                     fontFamily = FontFamily.fontFamilyBold,
@@ -70,7 +75,7 @@ fun MainStructureArchiveScreen(
                             unselectedContainerColor = MaterialTheme.colors.primaryVariant
                         ),
                         label = {
-                            androidx.compose.material.Text(
+                            Text(
                                 text = item.label,
                                 color = MaterialTheme.colors.onPrimary,
                                 fontFamily = FontFamily.fontFamilyRegular
@@ -111,7 +116,7 @@ fun MainStructureArchiveScreen(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                 }
-                androidx.compose.material.Text(
+                Text(
                     text = "NOTEBOOKS",
                     color = MaterialTheme.colors.onPrimary,
                     fontFamily = FontFamily.fontFamilyBold,
@@ -130,7 +135,7 @@ fun MainStructureArchiveScreen(
                                 selected = selectedNote.value == indexed,
                                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                                 label = {
-                                    androidx.compose.material.Text(
+                                    Text(
                                         text = items,
                                         color = MaterialTheme.colors.onPrimary,
                                         fontFamily = FontFamily.fontFamilyRegular
@@ -177,7 +182,7 @@ fun MainStructureArchiveScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBarArchive(navHostController, drawerState, viewModel)
-                Notes(viewModel, activity, navHostController)
+                LockedNotes(viewModel, activity, navHostController)
             }
         }
     }

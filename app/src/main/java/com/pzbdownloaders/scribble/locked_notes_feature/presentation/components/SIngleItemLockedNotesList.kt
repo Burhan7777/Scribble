@@ -1,6 +1,5 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.scribble.locked_notes_feature.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,14 +16,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
-fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
+fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
 
-    if (!note.archive && !note.locked) {
+    if (note.locked) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -43,10 +41,9 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                     navHostController.navigate(
                         Screens.EditNoteScreen.editNoteWithId(
                             note.id,
-                            Constant.HOME
+                            Constant.LOCKED_NOTE
                         )
                     )
-                    Log.i("title", note.title)
                 },
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(10.dp),
@@ -66,7 +63,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 text = note.title,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 25.sp,
-                fontFamily = FontFamily.fontFamilyBold,
+                fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyBold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -75,7 +72,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = FontFamily.fontFamilyLight
+                fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyLight
             )
         }
     }

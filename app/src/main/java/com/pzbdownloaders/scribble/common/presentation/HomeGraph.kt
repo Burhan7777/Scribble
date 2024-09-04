@@ -12,6 +12,7 @@ import com.pzbdownloaders.scribble.add_note_feature.presentation.screens.AddNote
 import com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen.ArchiveNotesScreen
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNoteScreen
+import com.pzbdownloaders.scribble.locked_notes_feature.presentation.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
 import com.pzbdownloaders.scribble.search_feature.presentation.screens.SearchScreen
@@ -59,7 +60,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable(route = Screens.SettingsScreen.route) {
-            SettingsScreen()
+            SettingsScreen(navController)
         }
         composable(Screens.ArchiveScreen.route) {
             ArchiveNotesScreen(
@@ -105,6 +106,15 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(Screens.CheckboxMainScreen.route) {
             CheckboxNoteMainScreen(navController, viewModel)
+        }
+        composable(Screens.LockedNotesScreen.route) {
+            LockedNotesScreen(
+                navHostController = navController,
+                viewModel = viewModel,
+                activity = activity,
+                selectedItem = selectedItem,
+                selectedNote = selectedNote
+            )
         }
     }
 }

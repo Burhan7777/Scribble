@@ -38,6 +38,7 @@ import com.google.api.Distribution.BucketOptions.Linear
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
+import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.googleTapIn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -307,6 +308,7 @@ fun LoginScreen(
 //        }
 //    }
 
+        val context = LocalContext.current
         Text(
             text = "Login",
             fontSize = 55.sp,
@@ -339,7 +341,10 @@ fun LoginScreen(
                     )
                 ),
             shape = RoundedCornerShape(7.dp),
-            onClick = { clicked = !clicked },
+            onClick = {
+                clicked = !clicked
+                googleTapIn(context)
+            },
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colors.onPrimary
             )

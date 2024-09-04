@@ -21,6 +21,8 @@ sealed class Screens(val route: String) {
     object SettingsScreen : Screens("settings_screen")
     object ArchiveScreen : Screens("archive_screen")
 
+    object LockedNotesScreen : Screens("locked_notes_screen")
+
     object SearchScreen : Screens("search_screen/{screen}") {
         fun searchNoteWIthScreen(screen: String): String {
             return "search_screen/$screen"

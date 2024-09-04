@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (4/28)
+FEATURES THAT NEED TO BE ADDED (4/29)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -29,3 +29,5 @@ FEATURES THAT NEED TO BE ADDED (4/28)
 26) Rate app option while using app:
 27) Update app option:
 28) Firebase fix dialog boxes like in Instabuddy :( :
+29) Don't forget to save password of locked notes on the cloud:
+30) Save note on back buttton also autosave function:
