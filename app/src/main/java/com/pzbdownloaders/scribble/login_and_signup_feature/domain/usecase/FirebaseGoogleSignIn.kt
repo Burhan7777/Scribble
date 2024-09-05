@@ -66,7 +66,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
             firebase.signInWithCredential(googleAuthProvider).addOnSuccessListener { user ->
                 var calendar = Calendar.getInstance()
                 var timeInSeconds = calendar.timeInMillis / 1000L
-                var remainingTime = timeInSeconds + 86400
+                var remainingTime = timeInSeconds + 60
                 val dateFormatter = SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm")
                 val startingTIme: String = dateFormatter.format(Date(timeInSeconds * 1000L))
                 var firestore = Firebase.firestore

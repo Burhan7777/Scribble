@@ -18,10 +18,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -256,17 +259,57 @@ fun MainStructureMainScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBar(navHostController, drawerState, viewModel)
+                ShowPremiumBar()
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
                         viewModel = viewModel,
                         activity = activity,
                         navHostController = navHostController,
-                        ) {
-                    showDialogToAccessLockedNotes.value = false
+                    ) {
+                        showDialogToAccessLockedNotes.value = false
                     }
                 }
                 Notes(viewModel, activity, navHostController)
             }
+        }
+    }
+}
+
+@Composable
+fun ShowPremiumBar() {
+    Box(
+        modifier = Modifier
+            .background(
+                brush = Brush.horizontalGradient(
+                    listOf(
+                        MaterialTheme.colors.onPrimary,
+                        MaterialTheme.colors.onSecondary
+                    )
+                )
+            )
+            .fillMaxWidth()
+    ) {
+        androidx.compose.material3.Text(
+            text = "Buy app forever",
+            fontFamily = FontFamily.fontFamilyRegular,
+            fontSize = 15.sp,
+            modifier = Modifier.align(Alignment.CenterStart).padding(start = 10.dp),
+            color = MaterialTheme.colors.onSecondary
+        )
+        androidx.compose.material3.OutlinedButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.align(Alignment.CenterEnd).padding(15.dp),
+            border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+            )
+        ) {
+            androidx.compose.material3.Text(
+                text = "Buy App",
+                fontFamily = FontFamily.fontFamilyBold,
+                color = Color.Black
+            )
         }
     }
 }

@@ -14,5 +14,9 @@ object Constant {
     const val ARCHIVE = "archive"
     const val HOME = "home"
     const val LOCKED_NOTE = "locked_note"
+    const val TRIAL_ENDED = "trial_ended"
+    const val TRIAL_ONGOING = "trial_ongoing"
+    const val TRIAL_NOT_STARTED = "trial_not_started"
+    const val TRIAL_ENDED_OR_NOT = "trial_ended_or_not"
 
-    }
+}
