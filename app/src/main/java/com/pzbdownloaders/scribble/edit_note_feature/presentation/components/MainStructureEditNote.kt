@@ -21,6 +21,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.common.presentation.*
+import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
 import kotlin.collections.HashMap
@@ -73,6 +74,14 @@ fun MainStructureEditNote(
     var selectedNotebook = remember {
         mutableStateOf("")
     }
+
+    var passwordNotSetUpDialogBox = remember {
+        mutableStateOf(false)
+    }
+
+    var enterPasswordToLockDialogBox = remember { mutableStateOf(false) }
+
+    var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
 
 
     LaunchedEffect(key1 = true) {
@@ -147,36 +156,24 @@ fun MainStructureEditNote(
                     }
                     IconButton(onClick = {
                         if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
-                            var note = Note(
-                                id = id,
-                                title,
-                                content = content,
-                                locked = true,
-                                archive = false,
-                                timeStamp = 123
-                            )
-                            viewModel.updateNote(note)
-                            Toast.makeText(activity, "Note has been locked", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                            val result = checkIfUserHasCreatedPassword()
+                            result.observe(activity) {
+                                if (it == false) {
+                                    passwordNotSetUpDialogBox.value = true
+                                } else {
+                                    enterPasswordToLockDialogBox.value = true
+
+                                }
+                            }
+
+
                         } else if (screen == Constant.LOCKED_NOTE) {
-                            var note = Note(
-                                id = id,
-                                title,
-                                content = content,
-                                locked = false,
-                                archive = false,
-                                timeStamp = 123
-                            )
-                            viewModel.updateNote(note)
-                            Toast.makeText(activity, "Note has been  unlocked", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                            enterPasswordToUnLockDialogBox.value = true
                         }
                     }) {
                         Icon(
                             imageVector = if (screen ==
-                                    Constant.HOME
+                                Constant.HOME
                             ) Icons.Filled.Lock else if (screen == Constant.ARCHIVE) Icons.Filled.Lock else Icons.Filled.LockOpen,
                             contentDescription = "Lock Note"
                         )
@@ -293,7 +290,7 @@ fun MainStructureEditNote(
         }
     }
     if (dialogOpen.value) {
-        AlertDialogBox(
+        AlertDialogBoxDelete(
             viewModel = viewModel,
             id = id,
             activity = activity,
@@ -302,86 +299,42 @@ fun MainStructureEditNote(
             dialogOpen.value = false
         }
     }
-}
-
-
-@Composable
-fun AlertDialogBox(
-    viewModel: MainActivityViewModel,
-    id: Int,
-    activity: MainActivity,
-    navHostController: NavHostController,
-    onDismiss: () -> Unit
-) {
-    val context = LocalContext.current
-    androidx.compose.material3.AlertDialog(onDismissRequest = {
-        onDismiss()
-    },
-        shape = MaterialTheme.shapes.medium.copy(
-            topStart = CornerSize(15.dp),
-            topEnd = CornerSize(15.dp),
-            bottomStart = CornerSize(15.dp),
-            bottomEnd = CornerSize(15.dp),
-        ),
-        containerColor = MaterialTheme.colors.primaryVariant,
-        /*      icon = {
-                     Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
-              }*/
-
-        title = {
-            Text(
-                text = "Delete Note ?",
-                fontFamily = FontFamily.fontFamilyBold,
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onPrimary
-            )
-        },
-        text = {
-            Text(
-                text = "Are you sure you want to delete this.It will permanently delete the note forever. ",
-                fontFamily = FontFamily.fontFamilyRegular,
-                color = MaterialTheme.colors.onPrimary
-            )
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    viewModel.deleteNoteById(id)
-                    onDismiss()
-                    navHostController.popBackStack()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.onPrimary,
-                    contentColor = MaterialTheme.colors.primary
-                ),
-                shape = MaterialTheme.shapes.medium.copy(
-                    topStart = CornerSize(15.dp),
-                    topEnd = CornerSize(15.dp),
-                    bottomStart = CornerSize(15.dp),
-                    bottomEnd = CornerSize(15.dp),
-                )
-            ) {
-                Text(text = "Delete", fontFamily = FontFamily.fontFamilyRegular)
-            }
-        },
-        dismissButton = {
-            OutlinedButton(
-                onClick = { onDismiss() },
-                shape = MaterialTheme.shapes.medium.copy(
-                    topStart = CornerSize(15.dp),
-                    topEnd = CornerSize(15.dp),
-                    bottomStart = CornerSize(15.dp),
-                    bottomEnd = CornerSize(15.dp),
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    contentColor = MaterialTheme.colors.onPrimary
-                ),
-            ) {
-                Text(text = "Cancel", fontFamily = FontFamily.fontFamilyRegular)
-            }
+    if (passwordNotSetUpDialogBox.value) {
+        AlertDialogBoxPassword(
+            viewModel = viewModel,
+            activity = activity,
+            navHostController = navController
+        ) {
+            passwordNotSetUpDialogBox.value = false
         }
-    )
+    }
+    if (enterPasswordToLockDialogBox.value) {
+        AlertDialogBoxEnterPassword(
+            viewModel = viewModel,
+            id = id,
+            activity = activity,
+            navHostController = navController,
+            title = title,
+            content = content
+        ) {
+            enterPasswordToLockDialogBox.value = false
+        }
+    }
+    if(enterPasswordToUnLockDialogBox.value){
+        AlertDialogBoxEnterPasswordToUnlock(
+            viewModel = viewModel,
+            id = id,
+            activity = activity,
+            navHostController = navController,
+            title = title,
+            content = content
+        ) {
+            
+        }
+    }
 }
+
+
+
+
 

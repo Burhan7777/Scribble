@@ -52,6 +52,8 @@ fun MainStructureMainScreen(
     )
     var coroutineScope = rememberCoroutineScope()
 
+    var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
+
 
 
 
@@ -130,7 +132,8 @@ fun MainStructureMainScreen(
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
-                                navHostController.navigate(Screens.LockedNotesScreen.route)
+                                showDialogToAccessLockedNotes.value = true
+
                             } else if (selectedItem.value == 3) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             } else if (selectedItem.value == 4) {
@@ -253,6 +256,15 @@ fun MainStructureMainScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBar(navHostController, drawerState, viewModel)
+                if (showDialogToAccessLockedNotes.value) {
+                    AlertDialogBoxEnterPasswordToOpenLockedNotes(
+                        viewModel = viewModel,
+                        activity = activity,
+                        navHostController = navHostController,
+                        ) {
+                    showDialogToAccessLockedNotes.value = false
+                    }
+                }
                 Notes(viewModel, activity, navHostController)
             }
         }

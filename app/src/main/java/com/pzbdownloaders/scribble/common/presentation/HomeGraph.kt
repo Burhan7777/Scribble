@@ -2,8 +2,6 @@ package com.pzbdownloaders.scribble.common.presentation
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.pzbdownloaders.scribble.about_us.presentation.screens.AboutUsScreen
@@ -16,7 +14,7 @@ import com.pzbdownloaders.scribble.locked_notes_feature.presentation.LockedNotes
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
 import com.pzbdownloaders.scribble.search_feature.presentation.screens.SearchScreen
-import com.pzbdownloaders.scribble.settings_feature.screen.SettingsScreen
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
 
 
 fun NavGraphBuilder.homeGraph(
@@ -60,7 +58,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable(route = Screens.SettingsScreen.route) {
-            SettingsScreen(navController)
+            SettingsScreen(navController, activity)
         }
         composable(Screens.ArchiveScreen.route) {
             ArchiveNotesScreen(

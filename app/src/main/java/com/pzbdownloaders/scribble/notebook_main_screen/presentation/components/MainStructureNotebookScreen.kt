@@ -22,6 +22,7 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
+import com.pzbdownloaders.scribble.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import kotlinx.coroutines.launch
 
 
@@ -42,6 +43,8 @@ fun MainStructureNotebookScreen(
         DrawerValue.Closed
     )
     var coroutineScope = rememberCoroutineScope()
+
+    var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
 
     if (selectedItem.value == 0) selectedNote.value = 100000
 
@@ -86,8 +89,10 @@ fun MainStructureNotebookScreen(
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                showDialogToAccessLockedNotes.value = true
                             } else if (selectedItem.value == 3) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 4) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
@@ -114,7 +119,7 @@ fun MainStructureNotebookScreen(
                 )
 
                 viewModel.notebooks.forEachIndexed { indexed, items ->
-                    if(indexed != 0 ) {
+                    if (indexed != 0) {
                         NavigationDrawerItem(
                             colors = NavigationDrawerItemDefaults.colors(
                                 selectedContainerColor = MaterialTheme.colors.primary,
@@ -197,6 +202,15 @@ fun MainStructureNotebookScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBarNotebook(navHostController, drawerState, viewModel)
+                if (showDialogToAccessLockedNotes.value) {
+                    AlertDialogBoxEnterPasswordToOpenLockedNotes(  // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
+                        viewModel = viewModel,
+                        activity = activity,
+                        navHostController = navHostController
+                    ) {
+                        showDialogToAccessLockedNotes.value = false
+                    }
+                }
                 NotesNotebook(viewModel, activity, navHostController, title)
             }
         }
