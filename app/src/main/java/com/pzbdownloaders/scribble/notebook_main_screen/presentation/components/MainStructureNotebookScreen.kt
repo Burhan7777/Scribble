@@ -1,5 +1,6 @@
 package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -22,6 +23,7 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
+import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import kotlinx.coroutines.launch
 
@@ -89,7 +91,18 @@ fun MainStructureNotebookScreen(
                                 navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
-                                showDialogToAccessLockedNotes.value = true
+                                var result = checkIfUserHasCreatedPassword()
+                                result.observe(activity) {
+                                    if (it == true) {
+                                        showDialogToAccessLockedNotes.value = true
+                                    } else {
+                                        Toast.makeText(
+                                            activity,
+                                            "Please setup password in settings first",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
                             } else if (selectedItem.value == 3) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             } else if (selectedItem.value == 4) {

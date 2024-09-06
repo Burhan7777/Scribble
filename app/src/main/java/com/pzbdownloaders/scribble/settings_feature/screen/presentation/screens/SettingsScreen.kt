@@ -170,7 +170,22 @@ fun SettingsScreen(navHostController: NavHostController, activity: MainActivity)
                     )
                 )
                 .clickable {
-                    showChangePasswordDialog.value = true
+                    val result =
+                        checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
+                    result.observe(activity) {
+                        if (it == true) {
+                            showChangePasswordDialog.value = true
+                        } else {
+                            Toast
+                                .makeText(
+                                    activity,
+                                    "Please setup the password first.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+                    }
+
                 },
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(10.dp),
@@ -224,9 +239,9 @@ fun SettingsScreen(navHostController: NavHostController, activity: MainActivity)
                 activity
             )
         }
-        if(showChangePasswordDialog.value){
+        if (showChangePasswordDialog.value) {
             ChangePasswordAlertBox(
-                changePasswordDialog =showChangePasswordDialog ,
+                changePasswordDialog = showChangePasswordDialog,
                 activity = activity
             )
         }
