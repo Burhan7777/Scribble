@@ -3,6 +3,9 @@ package com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.compo
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +18,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,7 +38,9 @@ fun CheckboxNote(
     viewModel: MainActivityViewModel,
     navHostController: NavHostController,
     notebookState: MutableState<String>,
-    title: MutableState<String>
+    title: MutableState<String>,
+    mutableListOfCheckBoxTexts: SnapshotStateList<MutableState<String>>,
+    mutableListOfCheckBoxes: ArrayList<Boolean>
 ) {
 
     var dialogOpen = remember {
@@ -44,7 +50,6 @@ fun CheckboxNote(
     val notebookText = remember {
         mutableStateOf("")
     }
-
 
     val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
     Log.i("notebooks", listOfNoteBooks?.size.toString())
@@ -100,7 +105,18 @@ fun CheckboxNote(
             mutableStateOf(true)
         }
         if (firstCheckBoxCheck.value) {
-            CreateCheckBox(firstCheckBoxCheck)
+            //CreateCheckBox(firstCheckBoxCheck)
+        }
+
+        LazyColumn {
+            itemsIndexed(mutableListOfCheckBoxTexts) { indexed, item ->
+                SingleRowCheckBox(
+                    text = item,
+                    mutableListOfCheckBoxTexts,
+                    mutableListOfCheckBoxes,
+                    indexed
+                )
+            }
         }
     }
 }
@@ -210,60 +226,60 @@ fun CreateDropDownMenuCheckbox(
 //            }
 //    }
 }
-
-@Composable
-fun CreateCheckBox(previousCreateBox: MutableState<Boolean>) {
-    var checked by remember {
-        mutableStateOf(false)
-    }
-
-    var text by remember {
-        mutableStateOf("")
-    }
-    var createBox = remember {
-        mutableStateOf(false)
-    }
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        androidx.compose.material.Checkbox(
-            checked = checked,
-            onCheckedChange = { checked = it })
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            colors = androidx.compose.material3.TextFieldDefaults.colors(
-                focusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
-                unfocusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
-                focusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                unfocusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = androidx.compose.material.MaterialTheme.colors.primary,
-                focusedIndicatorColor = androidx.compose.material.MaterialTheme.colors.primary,
-                cursorColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-            ),
-            textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyLight,
-                fontSize = 16.sp
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { createBox.value = true }
-            ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-            ),
-            trailingIcon = {
-                IconButton(onClick = { previousCreateBox.value = false }) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = "Cancel",
-                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp)
-        )
-    }
-    if (createBox.value)
-        CreateCheckBox(createBox)
-}
+//
+//@Composable
+//fun CreateCheckBox(previousCreateBox: MutableState<Boolean>) {
+//    var checked by remember {
+//        mutableStateOf(false)
+//    }
+//
+//    var text by remember {
+//        mutableStateOf("")
+//    }
+//    var createBox = remember {
+//        mutableStateOf(false)
+//    }
+//
+//    Row(verticalAlignment = Alignment.CenterVertically) {
+//        androidx.compose.material.Checkbox(
+//            checked = checked,
+//            onCheckedChange = { checked = it })
+//        TextField(
+//            value = text,
+//            onValueChange = { text = it },
+//            colors = androidx.compose.material3.TextFieldDefaults.colors(
+//                focusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                unfocusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                focusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+//                unfocusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+//                unfocusedIndicatorColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                focusedIndicatorColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                cursorColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+//            ),
+//            textStyle = LocalTextStyle.current.copy(
+//                fontFamily = FontFamily.fontFamilyLight,
+//                fontSize = 16.sp
+//            ),
+//            keyboardActions = KeyboardActions(
+//                onDone = { createBox.value = true }
+//            ),
+//            keyboardOptions = KeyboardOptions(
+//                imeAction = ImeAction.Done
+//            ),
+//            trailingIcon = {
+//                IconButton(onClick = { previousCreateBox.value = false }) {
+//                    Icon(
+//                        imageVector = Icons.Default.Clear,
+//                        contentDescription = "Cancel",
+//                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary
+//                    )
+//                }
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(end = 10.dp)
+//        )
+//    }
+//    if (createBox.value)
+//        CreateCheckBox(createBox)
+//}

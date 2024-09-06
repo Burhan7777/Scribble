@@ -103,7 +103,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable(Screens.CheckboxMainScreen.route) {
-            CheckboxNoteMainScreen(navController, viewModel)
+            CheckboxNoteMainScreen(navController, viewModel,activity)
         }
         composable(Screens.LockedNotesScreen.route) {
             LockedNotesScreen(

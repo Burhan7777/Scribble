@@ -220,13 +220,13 @@ fun MainStructureMainScreen(
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
-                        /*IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
+                        IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
                             Icon(
                                 imageVector = Icons.Outlined.CheckBox,
                                 contentDescription = "CheckBox",
                                 tint = MaterialTheme.colors.onPrimary
                             )
-                        }*/
+                        }
                     }
                 }
             },
