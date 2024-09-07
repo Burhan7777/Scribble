@@ -273,7 +273,7 @@ fun MainStructureMainScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBar(navHostController, drawerState, viewModel)
-                ShowPremiumBar()
+                ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
                         viewModel = viewModel,
@@ -289,45 +289,3 @@ fun MainStructureMainScreen(
     }
 }
 
-@Composable
-fun ShowPremiumBar() {
-    Box(
-        modifier = Modifier
-            .background(
-                brush = Brush.horizontalGradient(
-                    listOf(
-                        MaterialTheme.colors.onPrimary,
-                        MaterialTheme.colors.onSecondary
-                    )
-                )
-            )
-            .fillMaxWidth()
-    ) {
-        androidx.compose.material3.Text(
-            text = "Buy app forever",
-            fontFamily = FontFamily.fontFamilyRegular,
-            fontSize = 15.sp,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 10.dp),
-            color = MaterialTheme.colors.onSecondary
-        )
-        androidx.compose.material3.OutlinedButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(15.dp),
-            border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black
-            )
-        ) {
-            androidx.compose.material3.Text(
-                text = "Buy App",
-                fontFamily = FontFamily.fontFamilyBold,
-                color = Color.Black
-            )
-        }
-    }
-}

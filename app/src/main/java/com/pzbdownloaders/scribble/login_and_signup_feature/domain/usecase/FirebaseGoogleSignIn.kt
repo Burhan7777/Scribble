@@ -66,7 +66,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
             firebase.signInWithCredential(googleAuthProvider).addOnSuccessListener { user ->
                 var calendar = Calendar.getInstance()
                 var timeInSeconds = calendar.timeInMillis / 1000L
-                var remainingTime = timeInSeconds + 60
+                var remainingTime = timeInSeconds + 2592000
                 val dateFormatter = SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm")
                 val startingTIme: String = dateFormatter.format(Date(timeInSeconds * 1000L))
                 var firestore = Firebase.firestore
@@ -87,7 +87,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                         } else {
                             Toast.makeText(
                                 context,
-                                "Your 10 days trial continues",
+                                "Your 30 days trial continues",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -102,7 +102,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                         docs.set(hashmap).addOnSuccessListener {
                             Toast.makeText(
                                 context,
-                                "Premium activated for 10 days",
+                                "Trial activated for 30 days",
                                 Toast.LENGTH_SHORT
                             ).show()
                             val sharedPreferences = context.getSharedPreferences(
@@ -118,7 +118,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                         }.addOnFailureListener {
                             Toast.makeText(
                                 context,
-                                "Premium failed to activate. Please try again.",
+                                "Trial failed to activate. Please try again.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

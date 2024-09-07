@@ -24,8 +24,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
+import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +51,12 @@ fun MainStructureCheckBoxNote(
     }
     var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }
 
+    var showTrialEndedDialogBox = remember {
+        mutableStateOf(
+            false
+        )
+    }
+
     LaunchedEffect(key1 = true) {
         mutableListOfCheckboxTexts.add(mutableStateOf(""))
 
@@ -56,6 +65,12 @@ fun MainStructureCheckBoxNote(
     LaunchedEffect(key1 = mutableListOfCheckboxTexts.size) {
         mutableListOfCheckBoxes.add(false)
 
+    }
+
+    if (showTrialEndedDialogBox.value) {
+        AlertDialogBoxTrialEnded {
+            showTrialEndedDialogBox.value = false
+        }
     }
 
 
@@ -87,17 +102,22 @@ fun MainStructureCheckBoxNote(
                             mutableListOfCheckboxTexts,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = 0,
-                            title = title.value,
-                            notebook = notebookState.value,
-                            listOfCheckedNotes = mutableListConverted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            timeStamp = 123
-                        )
-                        viewModel.insertNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
+                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
+                            val note = Note(
+                                id = 0,
+                                title = title.value,
+                                notebook = notebookState.value,
+                                listOfCheckedNotes = mutableListConverted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                timeStamp = 123
+                            )
+                            viewModel.insertNote(note)
+                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        } else {
+                            showTrialEndedDialogBox.value = true
+                        }
 
                     }) {
                         Icon(

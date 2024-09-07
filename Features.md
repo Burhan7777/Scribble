@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (8/33)
+FEATURES THAT NEED TO BE ADDED (9/34)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -16,7 +16,7 @@ FEATURES THAT NEED TO BE ADDED (8/33)
 13) Arrange notes by date created etc:
 14) Add 30 days trial login through google: DONE
 15) Get premium bar at the top of the screen: DONE
-16) Days remaining in the premium bar:
+16) Days remaining in the premium bar: DONE
 17) Lock the whole app:
 18) Bottom bar features like google keep:
 19) In-App product to buy product with one time payment:
@@ -34,3 +34,4 @@ FEATURES THAT NEED TO BE ADDED (8/33)
 31) Text formatting features(Main):
 32) Buy App Bar should not be visible to users who bought app:
 33) Export to PDF and other documents:
+34) Red premium bar when 30 days are over:

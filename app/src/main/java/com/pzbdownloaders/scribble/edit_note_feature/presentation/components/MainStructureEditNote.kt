@@ -21,7 +21,9 @@ import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
+import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.*
+import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
@@ -92,6 +94,8 @@ fun MainStructureEditNote(
 
     var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
 
+    var showTrialEndedDialogBox = remember { mutableStateOf(false) }
+
 
     LaunchedEffect(key1 = Unit) {
         for (i in note.value.listOfCheckedNotes) {
@@ -112,6 +116,11 @@ fun MainStructureEditNote(
     }
 
 
+    if (showTrialEndedDialogBox.value) {
+        AlertDialogBoxTrialEnded {
+            showTrialEndedDialogBox.value = false
+        }
+    }
 
 
     Scaffold(
@@ -166,19 +175,25 @@ fun MainStructureEditNote(
                         viewModel.getNoteById(id)
                         var noteFromDb = viewModel.getNoteById
                         var archived = noteFromDb.value.archive
-                        var note = Note(
-                            id,
-                            title,
-                            content,
-                            archived,
-                            listOfCheckedNotes = converted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                            timeStamp = 123
-                        )
-                        viewModel.updateNote(note)
-                        navController.popBackStack()
-                        Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT).show()
+                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
+                            var note = Note(
+                                id,
+                                title,
+                                content,
+                                archived,
+                                listOfCheckedNotes = converted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                                timeStamp = 123
+                            )
+                            viewModel.updateNote(note)
+                            navController.popBackStack()
+                            Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            showTrialEndedDialogBox.value = true
+                        }
+
 
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Undo")

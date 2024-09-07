@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
+import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +43,7 @@ fun MainStructureAddNote(
 
     var showCircularProgress = remember { mutableStateOf(true) }
     var context = LocalContext.current
+    var showTrialEndedDialogBox = remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             androidx.compose.material3.TopAppBar(
@@ -56,11 +60,21 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
-                        viewModel.insertNote(note)
-                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
+                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
+                            viewModel.insertNote(note)
+                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        } else {
+                            showTrialEndedDialogBox.value = true
+                        }
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
+                    }
+                    if (showTrialEndedDialogBox.value) {
+                        AlertDialogBoxTrialEnded {
+                            showTrialEndedDialogBox.value = false
+                        }
                     }
                 }
             )
