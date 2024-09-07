@@ -89,6 +89,7 @@ fun MainStructureCheckBoxNote(
                         )
                         val note = Note(
                             id = 0,
+                            title = title.value,
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             timeStamp = 123

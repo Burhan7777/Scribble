@@ -4,7 +4,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -12,22 +17,36 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -39,6 +58,7 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun NoteContent(
     selectedNotebook: MutableState<String>,
@@ -47,6 +67,8 @@ fun NoteContent(
     title: String,
     content: String,
     noteBook: String,
+    listOfNotes: SnapshotStateList<MutableState<String>>,
+    listOfCheckboxes: ArrayList<Boolean>,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit
 ) {
@@ -130,48 +152,79 @@ fun NoteContent(
             Menu(isExpanded = isExpanded, selectedNotebook, viewModel, dialogOpen, notebookText)
         }
     }
+    if (listOfNotes.size == 0) {
+        TextField(
+            value = title,
+            onValueChange = { onChangeTitle(it) },
+            placeholder = {
+                Text(
+                    text = "Title",
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+        )
 
-    TextField(
-        value = title,
-        onValueChange = { onChangeTitle(it) },
-        placeholder = {
-            Text(
-                text = "Title",
-                fontSize = 30.sp,
-                fontFamily = FontFamily.fontFamilyBold,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.alpha(0.5f)
-            )
-        },
-        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            focusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
-            cursorColor = MaterialTheme.colors.onPrimary
-        ),
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
-    )
+        TextField(
+            value = content,
+            onValueChange = { onChangeContent(it) },
+            placeholder = {
+                Text(
+                    text = "Note",
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.fontFamilyLight,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 23.sp)
+        )
+    } else {
+        androidx.compose.material3.TextField(
+            value = title,
+            onValueChange = { onChangeTitle(it) },
+            placeholder = {
+                Text(
+                    text = "Title",
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+        )
+        println(listOfNotes.size)
+        println(listOfCheckboxes.size)
+        LazyColumn(){
+            itemsIndexed(listOfNotes){ index,note ->
+                SingleRowCheckBoxNotes(note = note,index, listOfCheckboxes,listOfNotes)
 
-    TextField(
-        value = content,
-        onValueChange = { onChangeContent(it) },
-        placeholder = {
-            Text(
-                text = "Note",
-                fontSize = 30.sp,
-                fontFamily = FontFamily.fontFamilyLight,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.alpha(0.5f)
-            )
-        },
-        colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            focusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
-            cursorColor = MaterialTheme.colors.onPrimary
-        ),
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 23.sp)
-    )
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -201,7 +254,7 @@ fun Menu(
                 onClick = {
                     if (item == "Add Notebook") {
                         dialogOpen.value = true
-                    }else {
+                    } else {
                         selectedNotebook.value = item
                         isExpanded.value = false
                     }

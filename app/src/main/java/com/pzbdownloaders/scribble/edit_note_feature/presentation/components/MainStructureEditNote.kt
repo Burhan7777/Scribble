@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +25,7 @@ import com.pzbdownloaders.scribble.common.presentation.*
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -53,7 +55,6 @@ fun MainStructureEditNote(
     viewModel.getNoteById(id)
     var note = viewModel.getNoteById
 
-
     var title by remember {
         mutableStateOf("")
     }
@@ -62,6 +63,12 @@ fun MainStructureEditNote(
     var content by remember {
         mutableStateOf("")
     }
+
+    var mutableListOfCheckboxTexts = remember {
+        mutableStateListOf<MutableState<String>>()
+    }
+// This is the list of checkbox notes which we saved in checkboxes
+    var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }// This is the llst of checkboxes
 
     var notebook by remember {
         mutableStateOf("")
@@ -84,11 +91,24 @@ fun MainStructureEditNote(
     var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
 
 
+    LaunchedEffect(key1 = Unit) {
+        for (i in note.value.listOfCheckedNotes) {
+            mutableListOfCheckboxTexts.add(mutableStateOf(i))
+        }
+
+    }
+    mutableListOfCheckBoxes = note.value.listOfCheckedBoxes
+
     LaunchedEffect(key1 = true) {
         title = note.value.title ?: ""
         content = note.value.content ?: "Failed to get the contents.Please try again"
         notebook = note.value.notebook
+
     }
+
+
+
+
     Scaffold(
         topBar = {
             androidx.compose.material3.TopAppBar(
@@ -136,6 +156,8 @@ fun MainStructureEditNote(
 //                                }
 //                            }
 //                        }
+                        var converted = ArrayList<String>()
+                        convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         viewModel.getNoteById(id)
                         var noteFromDb = viewModel.getNoteById
                         var archived = noteFromDb.value.archive
@@ -144,6 +166,8 @@ fun MainStructureEditNote(
                             title,
                             content,
                             archived,
+                            listOfCheckedNotes = converted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             timeStamp = 123
                         )
@@ -285,6 +309,8 @@ fun MainStructureEditNote(
                 title,
                 content,
                 notebook,
+                mutableListOfCheckboxTexts,
+                mutableListOfCheckBoxes,
                 { title = it },
                 { content = it })
         }
@@ -320,7 +346,7 @@ fun MainStructureEditNote(
             enterPasswordToLockDialogBox.value = false
         }
     }
-    if(enterPasswordToUnLockDialogBox.value){
+    if (enterPasswordToUnLockDialogBox.value) {
         AlertDialogBoxEnterPasswordToUnlock(
             viewModel = viewModel,
             id = id,
@@ -329,11 +355,19 @@ fun MainStructureEditNote(
             title = title,
             content = content
         ) {
-            
+
         }
     }
 }
 
+fun convertMutableStateIntoString(
+    mutableList: SnapshotStateList<MutableState<String>>,
+    mutableListConverted: ArrayList<String>
+) {
+    for (i in mutableList) {
+        mutableListConverted.add(i.value)
+    }
+}
 
 
 
