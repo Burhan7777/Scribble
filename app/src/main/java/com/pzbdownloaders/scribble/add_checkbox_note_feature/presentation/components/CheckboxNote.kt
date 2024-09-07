@@ -51,16 +51,16 @@ fun CheckboxNote(
         mutableStateOf("")
     }
 
-    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
-    Log.i("notebooks", listOfNoteBooks?.size.toString())
+    viewModel.getNoteBook()
+
 
     viewModel.getNoteBook()
     val notebooks: ArrayList<String> =
         arrayListOf("Add Notebook")
 
-    for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
-        notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
-    }
+//    for (i in listOfNoteBooks?.indices ?: arrayListOf<GetNoteBook>().indices) {
+//        notebooks.add(listOfNoteBooks!![i]?.notebook ?: GetNoteBook().notebook)
+//    }
 
     Column(
         modifier = Modifier
@@ -184,7 +184,7 @@ fun CreateDropDownMenuCheckbox(
             expanded = isExpanded,
             onDismissRequest = { isExpanded = false }
         ) {
-            notebooks.forEach { item ->
+            viewModel.notebooks.forEach { item ->
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -213,18 +213,21 @@ fun CreateDropDownMenuCheckbox(
         }
     }
 
-//    if (dialogOpen.value) {
-//        AlertDialogBox(
-//            notebookText = notebookText,
-//            viewModel = viewModel,
-//            onSaveNotebook = {
-//                notebooks.add(notebookText.value)
-//            },
-//        )
-//            onDismiss = {
-//                dialogOpen.value = false
-//            }
-//    }
+    if (dialogOpen.value) {
+        AlertDialogBox(
+            notebookText = notebookText,
+            viewModel = viewModel,
+//            notebooksFromDB = notebooksFromDB,
+//            notebooks = notebooks,
+            onSaveNotebook = {
+                //   notebooks.value.add(notebookText.value)
+            },
+            onDismiss = {
+                dialogOpen.value = false
+            }
+        )
+
+    }
 }
 //
 //@Composable
