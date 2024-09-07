@@ -67,6 +67,8 @@ fun MainStructureEditNote(
     var mutableListOfCheckboxTexts = remember {
         mutableStateListOf<MutableState<String>>()
     }
+
+    var converted = remember { ArrayList<String>() }
 // This is the list of checkbox notes which we saved in checkboxes
     var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }// This is the llst of checkboxes
 
@@ -97,7 +99,10 @@ fun MainStructureEditNote(
         }
 
     }
-    mutableListOfCheckBoxes = note.value.listOfCheckedBoxes
+
+    if (note.value != null) {
+        mutableListOfCheckBoxes = note.value.listOfCheckedBoxes
+    }
 
     LaunchedEffect(key1 = true) {
         title = note.value.title ?: ""
@@ -156,7 +161,7 @@ fun MainStructureEditNote(
 //                                }
 //                            }
 //                        }
-                        var converted = ArrayList<String>()
+
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         viewModel.getNoteById(id)
                         var noteFromDb = viewModel.getNoteById
@@ -203,9 +208,17 @@ fun MainStructureEditNote(
                         )
                     }
                     IconButton(onClick = {
+                        convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
-
-                            var note = (Note(id, title, content, true, timeStamp = 123))
+                            var note = (Note(
+                                id,
+                                title,
+                                content,
+                                listOfCheckedNotes = converted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                archive = true,
+                                timeStamp = 123
+                            ))
                             viewModel.updateNote(note)
                             Toast.makeText(activity, "Note has been archived", Toast.LENGTH_SHORT)
                                 .show()
@@ -234,9 +247,17 @@ fun MainStructureEditNote(
 //                                }
 //                            }
                         } else if (screen == Constant.ARCHIVE) {
-                            var note = (Note(id, title, content, false, timeStamp = 123))
+                            var note = (Note(
+                                id,
+                                title,
+                                content,
+                                archive = false,
+                                timeStamp = 123,
+                                listOfCheckedNotes = converted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            ))
                             viewModel.updateNote(note)
-                            Toast.makeText(activity, "Not has been unarchived", Toast.LENGTH_SHORT)
+                            Toast.makeText(activity, "Note has been unarchived", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
 //                            val hashmap = HashMap<String, Any>()
@@ -296,11 +317,11 @@ fun MainStructureEditNote(
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             Box(contentAlignment = Alignment.Center) {
-                if (dialogOpen.value) {
+//                if (dialogOpen.value) {
 //                    AlertDialogBox(viewModel, id, activity, navController) {
 //                        dialogOpen.value = false
 //                    }
-                }
+//                }
             }
             NoteContent(
                 selectedNotebook,

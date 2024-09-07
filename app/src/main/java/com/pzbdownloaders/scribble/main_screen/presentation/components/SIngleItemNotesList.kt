@@ -43,44 +43,44 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 @Composable
 fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(180.dp)
-            .padding(10.dp)
-            .border(
-                BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
-                androidx.compose.material.MaterialTheme.shapes.medium.copy(
-                    topStart = CornerSize(10.dp),
-                    topEnd = CornerSize(10.dp),
-                    bottomStart = CornerSize(10.dp),
-                    bottomEnd = CornerSize(10.dp),
-                )
-            )
-            .clickable {
-                navHostController.navigate(
-                    Screens.EditNoteScreen.editNoteWithId(
-                        note.id,
-                        Constant.HOME
+    if (!note.archive && !note.locked && note.listOfCheckedNotes.size == 0) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
                     )
                 )
-                Log.i("title", note.title)
-            },
-        shape = MaterialTheme.shapes.medium.copy(
-            topStart = CornerSize(10.dp),
-            topEnd = CornerSize(10.dp),
-            bottomStart = CornerSize(10.dp),
-            bottomEnd = CornerSize(10.dp),
-        ),
-        elevation = CardDefaults.cardElevation(15.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = androidx.compose.material.MaterialTheme.colors.primary,
-            contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-            disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
-            disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
-        )
-    ) {
-        if (!note.archive && !note.locked && note.listOfCheckedNotes.size == 0) {
+                .clickable {
+                    navHostController.navigate(
+                        Screens.EditNoteScreen.editNoteWithId(
+                            note.id,
+                            Constant.HOME
+                        )
+                    )
+                    Log.i("title", note.title)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
             Text(
                 text = note.title,
                 modifier = Modifier.padding(10.dp),
@@ -96,7 +96,45 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = FontFamily.fontFamilyLight
             )
-        } else if (note.listOfCheckedNotes.size > 0) {
+        }
+    } else if (note.listOfCheckedNotes.size > 0 && !note.archive && !note.locked) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+                    navHostController.navigate(
+                        Screens.EditNoteScreen.editNoteWithId(
+                            note.id,
+                            Constant.HOME
+                        )
+                    )
+                    Log.i("title", note.title)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = note.title,
@@ -177,3 +215,4 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
         }
     }
 }
+

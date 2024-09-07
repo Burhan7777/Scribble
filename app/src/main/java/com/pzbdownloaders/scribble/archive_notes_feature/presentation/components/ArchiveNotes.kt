@@ -67,7 +67,7 @@ fun Notes(
 
     LazyColumn() {
         items(listOfNotes ?: emptyList()) { note ->
-            SingleItemNoteList(note = note, navHostController)
+            SingleItemArchiveNoteList(note = note, navHostController,activity)
         }
     }
 }

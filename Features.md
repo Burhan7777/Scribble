@@ -30,7 +30,7 @@ FEATURES THAT NEED TO BE ADDED (8/33)
 27) Update app option:
 28) Firebase fix dialog boxes like in Instabuddy :( :
 29) Don't forget to save password of locked notes on the cloud: DONE
-30) Save note on back button also autosave function(Main):
+30) Save note on back button also auto-save function(Main):
 31) Text formatting features(Main):
 32) Buy App Bar should not be visible to users who bought app:
 33) Export to PDF and other documents:
