@@ -37,6 +37,9 @@ fun AlertDialogBoxEnterPassword(
     navHostController: NavHostController,
     title: String,
     content: String,
+    convertedMutableList: ArrayList<String>,
+    listOfCheckboxes: ArrayList<Boolean>,
+    listOfBulletPoints: ArrayList<String>,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -97,6 +100,7 @@ fun AlertDialogBoxEnterPassword(
         confirmButton = {
             Button(
                 onClick = {
+                    println(convertedMutableList)
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
@@ -106,6 +110,9 @@ fun AlertDialogBoxEnterPassword(
                                 content = content,
                                 locked = true,
                                 archive = false,
+                                listOfCheckedBoxes = listOfCheckboxes,
+                                listOfCheckedNotes = convertedMutableList,
+                               listOfBulletPointNotes =  listOfBulletPoints,
                                 timeStamp = 123
                             )
                             viewModel.updateNote(note)

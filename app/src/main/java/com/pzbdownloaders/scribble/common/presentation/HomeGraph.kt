@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.pzbdownloaders.add_bullet_points_note_feature.presentation.screens.BulletPointsNoteMainScreen
 import com.pzbdownloaders.scribble.about_us.presentation.screens.AboutUsScreen
 import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.screens.CheckboxNoteMainScreen
 import com.pzbdownloaders.scribble.add_note_feature.presentation.screens.AddNoteScreen
@@ -103,7 +104,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable(Screens.CheckboxMainScreen.route) {
-            CheckboxNoteMainScreen(navController, viewModel,activity)
+            CheckboxNoteMainScreen(navController, viewModel, activity)
         }
         composable(Screens.LockedNotesScreen.route) {
             LockedNotesScreen(
@@ -114,5 +115,9 @@ fun NavGraphBuilder.homeGraph(
                 selectedNote = selectedNote
             )
         }
+        composable(Screens.BulletPointMainScreen.route) {
+            BulletPointsNoteMainScreen(navController, viewModel, activity)
+        }
+
     }
 }

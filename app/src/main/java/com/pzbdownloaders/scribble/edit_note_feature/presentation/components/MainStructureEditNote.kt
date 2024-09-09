@@ -74,6 +74,8 @@ fun MainStructureEditNote(
 // This is the list of checkbox notes which we saved in checkboxes
     var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }// This is the llst of checkboxes
 
+    var convertedBulletPoints = remember { ArrayList<String>() }
+
     var notebook by remember {
         mutableStateOf("")
     }
@@ -90,6 +92,8 @@ fun MainStructureEditNote(
         mutableStateOf(false)
     }
 
+    var mutableListOfBulletPoints = remember { mutableStateListOf<MutableState<String>>() }
+
     var enterPasswordToLockDialogBox = remember { mutableStateOf(false) }
 
     var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
@@ -102,6 +106,12 @@ fun MainStructureEditNote(
             mutableListOfCheckboxTexts.add(mutableStateOf(i))
         }
 
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        for (i in note.value.listOfBulletPointNotes) {
+            mutableListOfBulletPoints.add(mutableStateOf(i))
+        }
     }
 
     if (note.value != null) {
@@ -172,18 +182,25 @@ fun MainStructureEditNote(
 //                        }
 
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
+                        convertMutableStateIntoString(
+                            mutableListOfBulletPoints,
+                            convertedBulletPoints
+                        )
                         viewModel.getNoteById(id)
                         var noteFromDb = viewModel.getNoteById
                         var archived = noteFromDb.value.archive
+                        var lockedOrNote = noteFromDb.value.locked
                         if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
                             var note = Note(
                                 id,
                                 title,
                                 content,
                                 archived,
+                                locked = lockedOrNote,
                                 listOfCheckedNotes = converted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                                listOfBulletPointNotes = convertedBulletPoints,
                                 timeStamp = 123
                             )
                             viewModel.updateNote(note)
@@ -205,6 +222,14 @@ fun MainStructureEditNote(
                                 if (it == false) {
                                     passwordNotSetUpDialogBox.value = true
                                 } else {
+                                    convertMutableStateIntoString(
+                                        mutableListOfCheckboxTexts,
+                                        converted
+                                    )
+                                    convertMutableStateIntoString(
+                                        mutableListOfBulletPoints,
+                                        convertedBulletPoints
+                                    )
                                     enterPasswordToLockDialogBox.value = true
 
                                 }
@@ -212,6 +237,14 @@ fun MainStructureEditNote(
 
 
                         } else if (screen == Constant.LOCKED_NOTE) {
+                            convertMutableStateIntoString(
+                                mutableListOfCheckboxTexts,
+                                converted
+                            )
+                            convertMutableStateIntoString(
+                                mutableListOfBulletPoints,
+                                convertedBulletPoints
+                            )
                             enterPasswordToUnLockDialogBox.value = true
                         }
                     }) {
@@ -224,6 +257,10 @@ fun MainStructureEditNote(
                     }
                     IconButton(onClick = {
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
+                        convertMutableStateIntoString(
+                            mutableListOfBulletPoints,
+                            convertedBulletPoints
+                        )
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                             var note = (Note(
                                 id,
@@ -231,11 +268,16 @@ fun MainStructureEditNote(
                                 content,
                                 listOfCheckedNotes = converted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                listOfBulletPointNotes = convertedBulletPoints,
                                 archive = true,
                                 timeStamp = 123
                             ))
                             viewModel.updateNote(note)
-                            Toast.makeText(activity, "Note has been archived", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                activity,
+                                "Note has been archived",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             navController.popBackStack()
 //                            var hashmap = HashMap<String, Any>()
@@ -270,9 +312,14 @@ fun MainStructureEditNote(
                                 timeStamp = 123,
                                 listOfCheckedNotes = converted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                listOfBulletPointNotes = convertedBulletPoints,
                             ))
                             viewModel.updateNote(note)
-                            Toast.makeText(activity, "Note has been unarchived", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                activity,
+                                "Note has been unarchived",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             navController.popBackStack()
 //                            val hashmap = HashMap<String, Any>()
@@ -347,6 +394,8 @@ fun MainStructureEditNote(
                 notebook,
                 mutableListOfCheckboxTexts,
                 mutableListOfCheckBoxes,
+                mutableListOfBulletPoints,
+                activity,
                 { title = it },
                 { content = it })
         }
@@ -377,6 +426,9 @@ fun MainStructureEditNote(
             activity = activity,
             navHostController = navController,
             title = title,
+            convertedMutableList = converted,
+            listOfCheckboxes = mutableListOfCheckBoxes,
+            listOfBulletPoints = convertedBulletPoints,
             content = content
         ) {
             enterPasswordToLockDialogBox.value = false
@@ -389,6 +441,9 @@ fun MainStructureEditNote(
             activity = activity,
             navHostController = navController,
             title = title,
+            listOfCheckedNotes = converted,
+            listOfCheckBoxes = mutableListOfCheckBoxes,
+            listOfBulletPoints = convertedBulletPoints,
             content = content
         ) {
 

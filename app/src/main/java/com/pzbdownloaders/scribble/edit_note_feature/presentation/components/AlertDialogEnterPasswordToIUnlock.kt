@@ -37,6 +37,9 @@ fun AlertDialogBoxEnterPasswordToUnlock(
     navHostController: NavHostController,
     title: String,
     content: String,
+    listOfCheckedNotes: ArrayList<String>,
+    listOfCheckBoxes: ArrayList<Boolean>,
+    listOfBulletPoints: ArrayList<String>,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -106,6 +109,9 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                                 content = content,
                                 locked = false,
                                 archive = false,
+                                listOfCheckedNotes = listOfCheckedNotes,
+                                listOfCheckedBoxes = listOfCheckBoxes,
+                                listOfBulletPointNotes = listOfBulletPoints,
                                 timeStamp = 123
                             )
                             viewModel.updateNote(note)

@@ -10,7 +10,7 @@ import com.pzbdownloaders.scribble.common.domain.utils.ConverterBoolean
 import com.pzbdownloaders.scribble.common.domain.utils.ConverterString
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
-@Database(entities = [Note::class, NoteBook::class], version = 6)
+@Database(entities = [Note::class, NoteBook::class], version = 7)
 @TypeConverters(ConverterBoolean::class, ConverterString::class)
 abstract class NoteDatabase : RoomDatabase() {
 

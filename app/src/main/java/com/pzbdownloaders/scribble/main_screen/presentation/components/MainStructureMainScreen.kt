@@ -241,6 +241,13 @@ fun MainStructureMainScreen(
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
+                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                            Icon(
+                                imageVector = Icons.Filled.FormatListBulleted,
+                                contentDescription = "Bullet point list",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
                 }
             },

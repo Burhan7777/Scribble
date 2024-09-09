@@ -29,15 +29,6 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
     val coroutineScope = CoroutineScope(Dispatchers.Main)
     val credentialManager = CredentialManager.create(context)
 
-    // Generate a nonce and hash it with sha-256
-    // Providing a nonce is optional but recommended
-//        val rawNonce = UUID.randomUUID().toString() // Generate a random String. UUID should be sufficient, but can also be any other random string.
-//        val bytes = rawNonce.toString().toByteArray()
-//        val md = MessageDigest.getInstance("SHA-256")
-//        val digest = md.digest(bytes)
-//        val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) } // Hashed nonce to be passed to Google sign-in
-
-
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
         .setFilterByAuthorizedAccounts(false)
         .setServerClientId(context.getString(R.string.default_web_client_id_1))
@@ -83,6 +74,15 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                                 "Your trial period is over",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val sharedPreferences = context.getSharedPreferences(
+                                Constant.SHARED_PREP_NAME,
+                                Context.MODE_PRIVATE
+                            )
+                            val editor = sharedPreferences.edit()
+                            editor.apply {
+                                putString(Constant.USER_KEY, Constant.USER_VALUE)
+                            }.apply()
+                            navHostController.navigate(Screens.HomeScreen.route)
 
                         } else {
                             Toast.makeText(
@@ -90,6 +90,15 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                                 "Your 30 days trial continues",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            val sharedPreferences = context.getSharedPreferences(
+                                Constant.SHARED_PREP_NAME,
+                                Context.MODE_PRIVATE
+                            )
+                            val editor = sharedPreferences.edit()
+                            editor.apply {
+                                putString(Constant.USER_KEY, Constant.USER_VALUE)
+                            }.apply()
+                            navHostController.navigate(Screens.HomeScreen.route)
                         }
                     } else {
                         var hashmap: HashMap<String, Any> = HashMap()

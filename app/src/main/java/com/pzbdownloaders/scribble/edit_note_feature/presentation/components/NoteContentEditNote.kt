@@ -1,5 +1,6 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,6 +56,7 @@ import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
+import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 
@@ -69,6 +71,8 @@ fun NoteContent(
     noteBook: String,
     listOfNotes: SnapshotStateList<MutableState<String>>,
     listOfCheckboxes: ArrayList<Boolean>,
+    listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
+    activity: MainActivity,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit
 ) {
@@ -152,7 +156,7 @@ fun NoteContent(
             Menu(isExpanded = isExpanded, selectedNotebook, viewModel, dialogOpen, notebookText)
         }
     }
-    if (listOfNotes.size == 0) {
+    if (listOfNotes.size == 0 && listOfBulletPointNotes.size == 0) {
         TextField(
             value = title,
             onValueChange = { onChangeTitle(it) },
@@ -190,11 +194,12 @@ fun NoteContent(
                 backgroundColor = MaterialTheme.colors.primary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary
+                cursorColor = MaterialTheme.colors.onPrimary,
+                textColor = MaterialTheme.colors.onPrimary
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 23.sp)
         )
-    } else {
+    } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
         androidx.compose.material3.TextField(
             value = title,
             onValueChange = { onChangeTitle(it) },
@@ -211,15 +216,47 @@ fun NoteContent(
                 containerColor = MaterialTheme.colors.primary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary
+                cursorColor = MaterialTheme.colors.onPrimary,
+                focusedTextColor = MaterialTheme.colors.onPrimary,
+                unfocusedTextColor = MaterialTheme.colors.onPrimary
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )
         println(listOfNotes.size)
         println(listOfCheckboxes.size)
-        LazyColumn(){
-            itemsIndexed(listOfNotes){ index,note ->
-                SingleRowCheckBoxNotes(note = note,index, listOfCheckboxes,listOfNotes)
+        LazyColumn() {
+            itemsIndexed(listOfNotes) { index, note ->
+                SingleRowCheckBoxNotes(note = note, index, listOfCheckboxes, listOfNotes)
+
+            }
+        }
+    } else if (listOfBulletPointNotes.size > 0) {
+        androidx.compose.material3.TextField(
+            value = title,
+            onValueChange = { onChangeTitle(it) },
+            placeholder = {
+                Text(
+                    text = "Title",
+                    fontSize = 30.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary,
+                focusedTextColor = MaterialTheme.colors.onPrimary,
+                unfocusedTextColor = MaterialTheme.colors.onPrimary
+            ),
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+        )
+
+        LazyColumn() {
+            itemsIndexed(listOfBulletPointNotes) { index, note ->
+                SingleRoaBulletPointNotes(note = note, index, listOfBulletPointNotes)
 
             }
         }

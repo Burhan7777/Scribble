@@ -38,4 +38,6 @@ sealed class Screens(val route: String) {
     }
 
     object CheckboxMainScreen : Screens("checkbox_main_screen")
+
+    object BulletPointMainScreen : Screens("bullet_point_screen")
 }

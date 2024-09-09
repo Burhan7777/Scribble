@@ -16,6 +16,7 @@ data class Note(
     val locked: Boolean = false,
     val listOfCheckedNotes: ArrayList<String> = arrayListOf(),
     val listOfCheckedBoxes: ArrayList<Boolean> = arrayListOf(),
+    val listOfBulletPointNotes: ArrayList<String> = arrayListOf(),
     val timeStamp: Long = 0,
     val color: Int = 0,
 )
