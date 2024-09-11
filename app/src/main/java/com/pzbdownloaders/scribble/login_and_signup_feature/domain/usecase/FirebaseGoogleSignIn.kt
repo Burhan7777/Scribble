@@ -55,26 +55,7 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
 
             var firebase = Firebase.auth
             firebase.signInWithCredential(googleAuthProvider).addOnSuccessListener { user ->
-                var calendar = Calendar.getInstance()
-                var timeInSeconds = calendar.timeInMillis / 1000L
-                var remainingTime = timeInSeconds + 2592000
-                val dateFormatter = SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm")
-                val startingTIme: String = dateFormatter.format(Date(timeInSeconds * 1000L))
-                var firestore = Firebase.firestore
-
-                var docs = firestore.collection("Users").document(user.user?.uid!!)
-                var document = docs.get()
-                document.addOnSuccessListener {
-                    if (it.exists()) {
-                        var details = it.data
-                        var ongoing = details!!["trialOngoing"] as Boolean
-                        if (!ongoing) {
-                            Toast.makeText(
-                                context,
-                                "Your trial period is over",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val sharedPreferences = context.getSharedPreferences(
+                val sharedPreferences = context.getSharedPreferences(
                                 Constant.SHARED_PREP_NAME,
                                 Context.MODE_PRIVATE
                             )
@@ -82,57 +63,80 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
                             editor.apply {
                                 putString(Constant.USER_KEY, Constant.USER_VALUE)
                             }.apply()
-                            navHostController.navigate(Screens.HomeScreen.route)
-
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Your 30 days trial continues",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val sharedPreferences = context.getSharedPreferences(
-                                Constant.SHARED_PREP_NAME,
-                                Context.MODE_PRIVATE
-                            )
-                            val editor = sharedPreferences.edit()
-                            editor.apply {
-                                putString(Constant.USER_KEY, Constant.USER_VALUE)
-                            }.apply()
-                            navHostController.navigate(Screens.HomeScreen.route)
-                        }
-                    } else {
-                        var hashmap: HashMap<String, Any> = HashMap()
-                        hashmap["userId"] = user.user!!.uid
-                        hashmap["emailId"] = user.user!!.email!!
-                        hashmap["startingTime"] = timeInSeconds
-                        hashmap["remainingTime"] = remainingTime
-                        hashmap["dateWhenTrialPeriodStarted"] = startingTIme
-                        hashmap["trialOngoing"] = true
-                        docs.set(hashmap).addOnSuccessListener {
-                            Toast.makeText(
-                                context,
-                                "Trial activated for 30 days",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val sharedPreferences = context.getSharedPreferences(
-                                Constant.SHARED_PREP_NAME,
-                                Context.MODE_PRIVATE
-                            )
-                            val editor = sharedPreferences.edit()
-                            editor.apply {
-                                putString(Constant.USER_KEY, Constant.USER_VALUE)
-                            }.apply()
-                            navHostController.navigate(Screens.HomeScreen.route)
-                            // checkTrialPeriod(uid, activity, navController)
-                        }.addOnFailureListener {
-                            Toast.makeText(
-                                context,
-                                "Trial failed to activate. Please try again.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+                Toast.makeText(context, "Welcome ${user.user?.displayName}", Toast.LENGTH_SHORT)
+                    .show()
+                navHostController.navigate(Screens.HomeScreen.route)
+//                var calendar = Calendar.getInstance()
+//                var timeInSeconds = calendar.timeInMillis / 1000L
+//                var remainingTime = timeInSeconds + 2592000
+//                val dateFormatter = SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm")
+//                val startingTIme: String = dateFormatter.format(Date(timeInSeconds * 1000L))
+//                var firestore = Firebase.firestore
+//
+//                var docs = firestore.collection("Users").document(user.user?.uid!!)
+//                var document = docs.get()
+//                document.addOnSuccessListener {
+//                    if (it.exists()) {
+//                        var details = it.data
+//                        var ongoing = details!!["trialOngoing"] as Boolean
+//                        if (!ongoing) {
+//                            Toast.makeText(
+//                                context,
+//                                "Your trial period is over",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                            val sharedPreferences = context.getSharedPreferences(
+//                                Constant.SHARED_PREP_NAME,
+//                                Context.MODE_PRIVATE
+//                            )
+//                            val editor = sharedPreferences.edit()
+//                            editor.apply {
+//                                putString(Constant.USER_KEY, Constant.USER_VALUE)
+//                            }.apply()
+//                            navHostController.navigate(Screens.HomeScreen.route)
+//
+//                        } else {
+//                            Toast.makeText(
+//                                context,
+//                                "Your 30 days trial continues",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                            val sharedPreferences = context.getSharedPreferences(
+//                                Constant.SHARED_PREP_NAME,
+//                                Context.MODE_PRIVATE
+//                            )
+//                            val editor = sharedPreferences.edit()
+//                            editor.apply {
+//                                putString(Constant.USER_KEY, Constant.USER_VALUE)
+//                            }.apply()
+//                            navHostController.navigate(Screens.HomeScreen.route)
+//                        }
+//                    } else {
+//                        var hashmap: HashMap<String, Any> = HashMap()
+//                        hashmap["userId"] = user.user!!.uid
+//                        hashmap["emailId"] = user.user!!.email!!
+//                        hashmap["startingTime"] = timeInSeconds
+//                        hashmap["remainingTime"] = remainingTime
+//                        hashmap["dateWhenTrialPeriodStarted"] = startingTIme
+//                        hashmap["trialOngoing"] = true
+//                        docs.set(hashmap).addOnSuccessListener {
+//                            Toast.makeText(
+//                                context,
+//                                "Trial activated for 30 days",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//
+//                            navHostController.navigate(Screens.HomeScreen.route)
+//                            // checkTrialPeriod(uid, activity, navController)
+//                        }.addOnFailureListener {
+//                            Toast.makeText(
+//                                context,
+//                                "Trial failed to activate. Please try again.",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//                }
             }
 
             // Handle successful sign-in

@@ -177,7 +177,7 @@ fun NoteContent(
             placeholder = {
                 Text(
                     text = "Title",
-                    fontSize = 30.sp,
+                    fontSize = 20.sp,
                     fontFamily = FontFamily.fontFamilyBold,
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.alpha(0.5f)
@@ -189,7 +189,7 @@ fun NoteContent(
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
                 cursorColor = MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp)
         )
 
         RichTextEditor(
@@ -204,13 +204,13 @@ fun NoteContent(
             placeholder = {
                 Text(
                     text = "Note",
-                    fontSize = 30.sp,
+                    fontSize = 18.sp,
                     fontFamily = FontFamily.fontFamilyBold,
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.alpha(0.5f)
                 )
             },
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 25.sp)
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
         )
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
         androidx.compose.material3.TextField(

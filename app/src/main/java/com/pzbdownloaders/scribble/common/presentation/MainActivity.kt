@@ -18,8 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.domain.utils.checkTrialPeriod
-import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.ui.theme.ScribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,30 +64,6 @@ class MainActivity : ComponentActivity() {
                         selectedIItem,
                         selectedNote
                     )
-                }
-
-                checkTrialPeriod(this)
-                trialPeriodExists.observe(this) {
-                    val prefs = this.getSharedPreferences(
-                        Constant.TRIAL_ENDED_OR_NOT,
-                        Context.MODE_PRIVATE
-                    )
-                    val name = prefs.getString("trial", "true")
-                    if (it == Constant.TRIAL_ENDED && name == "true") {
-                        val editor = this.getSharedPreferences(
-                            Constant.TRIAL_ENDED_OR_NOT,
-                            Context.MODE_PRIVATE
-                        )?.edit()
-                        editor?.putString("trial", "false")
-                        editor?.apply()
-                        showTrialEndedDialogBox.value = true
-
-                    }
-                }
-                if (showTrialEndedDialogBox.value) {
-                    AlertDialogBoxTrialEnded {
-                        showTrialEndedDialogBox.value = false
-                    }
                 }
             }
         }

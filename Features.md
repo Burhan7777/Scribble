@@ -1,9 +1,9 @@
-FEATURES THAT NEED TO BE ADDED (10/35) // MAIN - (2/8)
+FEATURES THAT NEED TO BE ADDED (12/39) // MAIN - (4/11)
 =====================================
 
 1) Archive notes to be added: DONE
 2) Delete Notes: DONE
-3) Recycle Bin to be added:
+3) Recycle Bin to be added(Main):
 4) Locked Notes to be added: DONE
 5) Notebooks to be added in edit screen: DONE
 6) Notebook databases to be created: DONE
@@ -31,8 +31,12 @@ FEATURES THAT NEED TO BE ADDED (10/35) // MAIN - (2/8)
 28) Firebase fix dialog boxes like in Instabuddy :( :
 29) Don't forget to save password of locked notes on the cloud: DONE
 30) Save note on back button also auto-save function(Main):
-31) Text formatting features(Main):
+31) Text formatting features(Main): DONE
 32) Buy App Bar should not be visible to users who bought app:
 33) Export to PDF and other documents:
 34) Reminder for notes:
 35) Pomodoro for checkboxes:
+36) Change drop down menu in add note to text view like in edit note:
+37) Remove 30 days trial stuff(Main): DONE
+38) Delete Notebooks(Main):
+39) Why login dialog box on login screen:

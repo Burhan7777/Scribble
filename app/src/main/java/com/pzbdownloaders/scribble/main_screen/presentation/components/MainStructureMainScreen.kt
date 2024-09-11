@@ -280,7 +280,7 @@ fun MainStructureMainScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBar(navHostController, drawerState, viewModel)
-                ShowPremiumBar(activity)
+               // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
                         viewModel = viewModel,

@@ -17,6 +17,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlignHorizontalCenter
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.FormatAlignCenter
+import androidx.compose.material.icons.filled.FormatAlignJustify
+import androidx.compose.material.icons.filled.FormatAlignLeft
+import androidx.compose.material.icons.filled.FormatAlignRight
 import androidx.compose.material.icons.filled.FormatBold
 import androidx.compose.material.icons.filled.FormatItalic
 import androidx.compose.material.icons.filled.FormatListBulleted
@@ -65,7 +69,6 @@ import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
@@ -148,14 +151,10 @@ fun MainStructureAddNote(
                             locked = false
 
                         )
-                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
                             viewModel.insertNote(note)
                             Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
-                        } else {
-                            showTrialEndedDialogBox.value = true
-                        }
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }
@@ -204,213 +203,20 @@ fun MainStructureAddNote(
                         Alignment.BottomCenter
                     )
             ) {
-                Column() {
-                    if (showFontSize.value) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(5.dp),
-                            modifier = Modifier.width(200.dp)
-                        ) {
-                            androidx.compose.material3.IconButton(onClick = {
-                                if (fontSize.value > "0") {
-                                    fontSize.value = (fontSize.value.toInt() - 1).toString()
-                                    richTextState.value.toggleSpanStyle(
-                                        SpanStyle(fontSize = fontSize.value.toInt().sp)
-                                    )
-                                }
-                            }) {
-                                androidx.compose.material3.Icon(
-                                    imageVector = Icons.Filled.TextDecrease,
-                                    contentDescription = "Decrease font size",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                            }
-                            TextField(
-                                value = fontSize.value,
-                                onValueChange = { fontSize.value = it },
-                                modifier = Modifier
-                                    .width(50.dp)
-                                    .background(MaterialTheme.colors.primaryVariant),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    focusedIndicatorColor = MaterialTheme.colors.primaryVariant,
-                                    unfocusedIndicatorColor = MaterialTheme.colors.primaryVariant,
-                                    textColor = MaterialTheme.colors.onPrimary
-                                ),
-                                enabled = false
-                            )
-                            androidx.compose.material3.IconButton(onClick = {
-                                fontSize.value = (fontSize.value.toInt() + 1).toString()
-                                richTextState.value.toggleSpanStyle(
-                                    SpanStyle(fontSize = fontSize.value.toInt().sp)
-                                )
-                            }) {
-                                androidx.compose.material3.Icon(
-                                    imageVector = Icons.Filled.TextIncrease,
-                                    contentDescription = "increase  font size",
-                                    tint = MaterialTheme.colors.onPrimary
-                                )
-                            }
-                        }
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.horizontalScroll(rememberScrollState())
-                    ) {
-                        IconButton(
-                            onClick = {
-                                richTextState.value.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
-                                isBoldActivated.value = !isBoldActivated.value
-                            },
-                            modifier = Modifier
-                                .clip(
-                                    if (isBoldActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
-                                        all = CornerSize(0.dp)
-                                    )
-                                )
-                                .background(if (isBoldActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
-                                .border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colors.primaryVariant,
-                                    shape = CircleShape
-                                )
-                        )
-                        {
-                            Icon(
-                                imageVector = Icons.Filled.FormatBold,
-                                contentDescription = "Make text bold",
-                                tint = if (isBoldActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                richTextState.value.toggleSpanStyle(
-                                    SpanStyle(
-                                        textDecoration = TextDecoration.Underline
-                                    )
-                                )
-                                isUnderlineActivated.value = !isUnderlineActivated.value
-                            },
-                            modifier = Modifier
-                                .clip(
-                                    if (isUnderlineActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
-                                        all = CornerSize(0.dp)
-                                    )
-                                )
-                                .background(if (isUnderlineActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
-                                .border(
-                                    width = 0.dp,
-                                    color = MaterialTheme.colors.primaryVariant,
-                                    shape = CircleShape
-                                )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatUnderlined,
-                                contentDescription = "Make text underline",
-                                tint = if (isUnderlineActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                richTextState.value.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
-                                isItalicActivated.value = !isItalicActivated.value
-                            },
-                            modifier = Modifier
-                                .clip(
-                                    if (isItalicActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
-                                        all = CornerSize(0.dp)
-                                    )
-                                )
-                                .background(if (isItalicActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
-                                .border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colors.primaryVariant,
-                                    shape = CircleShape
-                                )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatItalic,
-                                contentDescription = "Make text Italic",
-                                tint = if (isItalicActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        IconButton(onClick = {
-                            showFontSize.value = !showFontSize.value
-
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatSize,
-                                contentDescription = "Change text format",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                richTextState.value.toggleOrderedList()
-                                isOrderedListActivated.value = !isOrderedListActivated.value
-                                isUnOrderedListActivated.value = false
-                            },
-                            modifier = Modifier
-                                .clip(
-                                    if (isOrderedListActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
-                                        all = CornerSize(0.dp)
-                                    )
-                                )
-                                .background(if (isOrderedListActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
-                                .border(
-                                    width = 0.dp,
-                                    color = MaterialTheme.colors.primaryVariant,
-                                    shape = CircleShape
-                                )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatListNumbered,
-                                contentDescription = "Change text format",
-                                tint = if (isOrderedListActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                richTextState.value.toggleUnorderedList()
-                                isUnOrderedListActivated.value = !isUnOrderedListActivated.value
-                                isOrderedListActivated.value = false
-                            },
-                            modifier = Modifier
-                                .clip(
-                                    if (isUnOrderedListActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
-                                        all = CornerSize(0.dp)
-                                    )
-                                )
-                                .background(if (isUnOrderedListActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
-                                .border(
-                                    width = 0.dp,
-                                    color = MaterialTheme.colors.primaryVariant,
-                                    shape = CircleShape
-                                )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatListBulleted,
-                                contentDescription = "Change text format",
-                                tint = if (isUnOrderedListActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
-                            )
-                        }
-                        IconButton(onClick = {
-                            richTextState.value.toggleParagraphStyle(
-                                ParagraphStyle(
-                                    textAlign = TextAlign.Justify
-                                )
-                            )
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.AlignHorizontalCenter,
-                                contentDescription = "Change text format",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
-                    }
-                }
+                BottomTextFormattingBar(
+                    showFontSize = showFontSize,
+                    fontSize = fontSize,
+                    richTextState = richTextState,
+                    isBoldActivated = isBoldActivated,
+                    isUnderlineActivated = isUnderlineActivated,
+                    isItalicActivated = isItalicActivated,
+                    isOrderedListActivated = isOrderedListActivated,
+                    isUnOrderedListActivated = isUnOrderedListActivated
+                )
             }
         }
     }
+
 }
 
 fun makeTextBold(textFieldValue: MutableState<TextFieldValue>) {

@@ -26,9 +26,9 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
-import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.*
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
@@ -53,6 +53,17 @@ fun MainStructureEditNote(
         mutableStateOf(false)
     }
 
+    var richStateText = mutableStateOf(rememberRichTextState())
+
+    var isBoldActivated = remember { mutableStateOf(false) }
+    var isUnderlineActivated = remember { mutableStateOf(false) }
+    var isItalicActivated = remember { mutableStateOf(false) }
+    var isOrderedListActivated = remember { mutableStateOf(false) }
+    var isUnOrderedListActivated = remember { mutableStateOf(false) }
+    var showFontSize = remember { mutableStateOf(false) }
+    var fontSize = remember { mutableStateOf("20") }
+
+    if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
 //    var note: AddNote? by remember {
 //        mutableStateOf(AddNote())
@@ -107,7 +118,7 @@ fun MainStructureEditNote(
 
     var showTrialEndedDialogBox = remember { mutableStateOf(false) }
 
-    var richStateText = rememberRichTextState()
+
 
     WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
@@ -201,26 +212,22 @@ fun MainStructureEditNote(
                         var noteFromDb = viewModel.getNoteById
                         var archived = noteFromDb.value.archive
                         var lockedOrNote = noteFromDb.value.locked
-                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
-                            var note = Note(
-                                id,
-                                title,
-                                richStateText.toHtml(),
-                                archived,
-                                locked = lockedOrNote,
-                                listOfCheckedNotes = converted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-                                listOfBulletPointNotes = convertedBulletPoints,
-                                timeStamp = 123
-                            )
-                            viewModel.updateNote(note)
-                            navController.popBackStack()
-                            Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            showTrialEndedDialogBox.value = true
-                        }
+                        var note = Note(
+                            id,
+                            title,
+                            richStateText.value.toHtml(),
+                            archived,
+                            locked = lockedOrNote,
+                            listOfCheckedNotes = converted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            listOfBulletPointNotes = convertedBulletPoints,
+                            timeStamp = 123
+                        )
+                        viewModel.updateNote(note)
+                        navController.popBackStack()
+                        Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
+                            .show()
 
 
                     }) {
@@ -380,23 +387,24 @@ fun MainStructureEditNote(
 
         },
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier.padding(paddingValues)) {
-            NoteContent(
-                selectedNotebook,
-                isExpanded,
-                viewModel,
-                title,
-                content,
-                notebook,
-                mutableListOfCheckboxTexts,
-                mutableListOfCheckBoxes,
-                mutableListOfBulletPoints,
-                activity,
-                richStateText,
-                { title = it },
-                { content = it })
-        }
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.padding(paddingValues)) {
+                NoteContent(
+                    selectedNotebook,
+                    isExpanded,
+                    viewModel,
+                    title,
+                    content,
+                    notebook,
+                    mutableListOfCheckboxTexts,
+                    mutableListOfCheckBoxes,
+                    mutableListOfBulletPoints,
+                    activity,
+                    richStateText.value,
+                    { title = it },
+                    { content = it }
+                )
+            }
             Box(
                 modifier =
                 Modifier
@@ -404,52 +412,22 @@ fun MainStructureEditNote(
                     .padding(15.dp)
                     .background(MaterialTheme.colors.primaryVariant)
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(if (showFontSize.value) 100.dp else 50.dp)
                     .align(
                         Alignment.BottomCenter
                     )
             ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy((-10).dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            richStateText.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
-                        },
-                        modifier = Modifier
-                            .width(48.dp)
-                            .height(48.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.FormatBold,
-                            contentDescription = "Make text bold",
-                            tint = MaterialTheme.colors.onPrimary,
-                        )
-                    }
-                    IconButton(onClick = {
-                        richStateText.toggleSpanStyle(
-                            SpanStyle(
-                                textDecoration = TextDecoration.Underline
-                            )
-                        )
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.FormatUnderlined,
-                            contentDescription = "Make text underline",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
-                    IconButton(onClick = { richStateText.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic)) }) {
-                        Icon(
-                            imageVector = Icons.Filled.FormatItalic,
-                            contentDescription = "Make text Italic",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
+                BottomTextFormattingBar(
+                    showFontSize = showFontSize,
+                    fontSize = fontSize,
+                    richTextState = richStateText,
+                    isBoldActivated = isBoldActivated,
+                    isUnderlineActivated = isUnderlineActivated,
+                    isItalicActivated = isItalicActivated,
+                    isOrderedListActivated = isOrderedListActivated,
+                    isUnOrderedListActivated = isUnOrderedListActivated
+                )
             }
-        }
         }
     }
     if (dialogOpen.value) {

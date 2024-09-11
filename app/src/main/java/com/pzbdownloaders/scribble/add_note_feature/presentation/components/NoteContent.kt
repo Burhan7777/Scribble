@@ -19,10 +19,12 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -39,6 +41,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.algolia.search.dsl.settingsKey
@@ -50,6 +53,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.Menu
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +75,23 @@ fun NoteContent(
         mutableStateOf(false)
     }
 
+//    var notebookText = remember {
+//        mutableStateOf("")
+//    }
+//
+
+    var notebook by  remember {
+        mutableStateOf("")
+    }
+
+    var isExpanded = remember {
+        mutableStateOf(false)
+    }
+
+    var selectedNotebook = remember {
+        mutableStateOf("")
+    }
+
     var notebookText = remember {
         mutableStateOf("")
     }
@@ -78,18 +99,40 @@ fun NoteContent(
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
-
     Row(
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        CreateDropDownMenu(
-            "Choose Notebook",
-            notebookText,
-            //   notebooks = remember { notebook },
-            viewModel = viewModel,
-            noteBookState = noteBookState,
-            // notebooksFromDB = remember { notebookFromDB }
-        )
-        //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
+        if (notebook.isNotEmpty()) {
+            Text(
+                text = if (noteBookState.value.isEmpty()) "Notebook:$notebook" else "Notebook selected: ${noteBookState.value}",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyRegular,
+                fontStyle = FontStyle.Italic,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 15.dp)
+            )
+        } else {
+            Text(
+                text = if (noteBookState.value.isEmpty()) "Add to Notebook" else "Notebook selected: ${noteBookState.value}",
+                color = MaterialTheme.colors.onPrimary,
+                fontFamily = FontFamily.fontFamilyRegular,
+                fontStyle = FontStyle.Italic,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 15.dp)
+            )
+        }
+
+        androidx.compose.material.Icon(
+            imageVector = Icons.Filled.ArrowDropDown,
+            contentDescription = "Arrow DropDown",
+            modifier = Modifier.clickable {
+                isExpanded.value = true
+            })
+        if (isExpanded.value) {
+            MainMenu(isExpanded = isExpanded, noteBookState, viewModel, dialogOpen, notebookText)
+        }
+            //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
     }
 
 
@@ -99,7 +142,7 @@ fun NoteContent(
         placeholder = {
             Text(
                 text = "Title",
-                fontSize = 30.sp,
+                fontSize = 20.sp,
                 fontFamily = FontFamily.fontFamilyBold,
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.alpha(0.5f)
@@ -120,8 +163,13 @@ fun NoteContent(
             containerColor = MaterialTheme.colors.primary,
             cursorColor = MaterialTheme.colors.onPrimary,
             textColor = MaterialTheme.colors.onPrimary,
+            unfocusedIndicatorColor = MaterialTheme.colors.primary,
             focusedIndicatorColor = MaterialTheme.colors.primary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary
+            selectionColors = TextSelectionColors(
+                handleColor = MaterialTheme.colors.onPrimary,
+                backgroundColor = Color.Gray
+            )
+
         ),
         placeholder = {
             Text(
@@ -134,110 +182,46 @@ fun NoteContent(
         },
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
     )
-
-
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateDropDownMenu(
-    label: String,
-    notebookText: MutableState<String>,
+fun MainMenu(
+    isExpanded: MutableState<Boolean>,
+    selectedNotebook: MutableState<String>,
     viewModel: MainActivityViewModel,
-    noteBookState: MutableState<String>,
-//    notebooksFromDB: MutableState<ArrayList<NoteBook>>,
-//    notebooks: MutableState<ArrayList<String>>
+    dialogOpen: MutableState<Boolean>,
+    notebookText: MutableState<String>
 ) {
-
-    var isExpanded by remember {
-        mutableStateOf(false)
-    }
-
-    var dialogOpen = remember {
-        mutableStateOf(false)
-    }
-
-    viewModel.getNoteBook()
-
-    ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = !isExpanded },
-        modifier = Modifier.fillMaxWidth(),
+    DropdownMenu(
+        offset = DpOffset.Zero,
+        modifier = Modifier
+            .width(200.dp)
+            .background(MaterialTheme.colors.primaryVariant),
+        expanded = isExpanded.value,
+        onDismissRequest = { isExpanded.value = false }
     ) {
-        OutlinedTextField(
-            value = noteBookState.value,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-            },
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            label = {
-                Text(
-                    text = label,
-                    color = MaterialTheme.colors.onPrimary
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colors.onPrimary,
-                unfocusedBorderColor = MaterialTheme.colors.onPrimary,
-                focusedTextColor = MaterialTheme.colors.onPrimary,
-                focusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
-                unfocusedContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
-                unfocusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary
-            ),
-            shape = RoundedCornerShape(15.dp),
-            maxLines = 1,
-
-            )
-
-
-        DropdownMenu(
-            modifier = Modifier
-                .background(MaterialTheme.colors.primaryVariant)
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .clickable {
+        viewModel.notebooks.forEach { item ->
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = item,
+                        color = MaterialTheme.colors.onPrimary
+                    )
                 },
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
-        ) {
-//                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            viewModel.notebooks.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item,
-                            color = MaterialTheme.colors.onPrimary
-                        )
-                    },
-                    onClick = {
-                        if (item == "Add Notebook") {
-                            dialogOpen.value = true
-                        }
-                        noteBookState.value = item
-                        isExpanded = !isExpanded
-                    },
-                    leadingIcon = {
-                        if (item == "Add Notebook") {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Add",
-                                tint = androidx.compose.material.MaterialTheme.colors.onPrimary
-                            )
-                        }
+                onClick = {
+                    if (item == "Add Notebook") {
+                        dialogOpen.value = true
+                    } else {
+                        selectedNotebook.value = item
+                        isExpanded.value = false
                     }
-                )
-                //}
-            }
+                },
+            )
         }
     }
 
     if (dialogOpen.value) {
-        AlertDialogBox(
+        com.pzbdownloaders.scribble.edit_note_feature.presentation.components.AlertDialogBox(
             notebookText = notebookText,
             viewModel = viewModel,
 //            notebooksFromDB = notebooksFromDB,
@@ -288,23 +272,23 @@ fun AlertDialogBox(
                 label = {
                     Text(
                         text = "Add notebook",
-                        color = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 15.sp,
                         fontFamily = FontFamily.fontFamilyRegular
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colors.onPrimary,
-                    unfocusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                    focusedTextColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                    unfocusedBorderColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                    cursorColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+                    unfocusedTextColor = MaterialTheme.colors.onPrimary,
+                    focusedTextColor = MaterialTheme.colors.onPrimary,
+                    unfocusedBorderColor = MaterialTheme.colors.onPrimary,
+                    cursorColor = MaterialTheme.colors.onPrimary
                 ),
                 textStyle = TextStyle.Default.copy(
                     fontSize = 15.sp,
                     fontFamily = FontFamily.fontFamilyRegular
                 ),
-                shape = androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                shape = MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
                     topEnd = CornerSize(15.dp),
                     bottomEnd = CornerSize(15.dp),
@@ -361,56 +345,6 @@ fun AlertDialogBox(
     )
 }
 
-fun makeTextBold123(textFieldValue: MutableState<TextFieldValue>, content: MutableState<String>) {
-    val selection = textFieldValue.value.selection
 
-    if (!selection.collapsed) {
-        val currentText = textFieldValue.value.annotatedString
-
-        // Extract the text parts
-        val beforeSelection = currentText.subSequence(0, selection.start)
-        val selectedText = currentText.subSequence(selection.start, selection.end)
-        val afterSelection = currentText.subSequence(selection.end, currentText.length)
-
-        // Build the new AnnotatedString with existing and new formatting
-        val newAnnotatedString = buildAnnotatedString {
-            // Append the text before the selection (preserve its styles)
-            append(beforeSelection)
-
-            // Get styles from the original text and apply them to the new text
-            currentText.spanStyles.forEach { spanStyle ->
-                addStyle(spanStyle.item, spanStyle.start, spanStyle.end)
-            }
-
-            // Apply bold style to the selected text
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(selectedText)
-            }
-
-            // Get styles for after the selection and apply them
-            currentText.spanStyles.forEach { spanStyle ->
-                addStyle(
-                    spanStyle.item,
-                    beforeSelection.length + selectedText.length + spanStyle.start - selection.end,
-                    beforeSelection.length + selectedText.length + spanStyle.end - selection.end
-                )
-            }
-
-            // Append the text after the selection (preserve its styles)
-            append(afterSelection)
-        }
-
-        // Update the TextFieldValue with the new AnnotatedString
-        textFieldValue.value = textFieldValue.value.copy(
-            annotatedString = newAnnotatedString// Optionally move the cursor to the end of the selection
-        )
-    }
-}
-
-fun toggleBold(selection: MutableState<TextRange>, boldRanges: MutableState<List<TextRange>>) {
-    if (!selection.value.collapsed) {
-        boldRanges.value = boldRanges.value + selection.value
-    }
-}
 
 

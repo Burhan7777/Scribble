@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components.CheckboxNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.domain.utils.trialPeriodExists
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
@@ -100,7 +99,6 @@ fun MainStructureBulletPointsNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        if (trialPeriodExists.value != Constant.TRIAL_ENDED) {
                             val note = Note(
                                 id = 0,
                                 title = title.value,
@@ -112,9 +110,6 @@ fun MainStructureBulletPointsNotes(
                             Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                                 .show()
                             navController.popBackStack()
-                        } else {
-                            showTrialEndedDialogBox.value = true
-                        }
 
                     }) {
                         Icon(
