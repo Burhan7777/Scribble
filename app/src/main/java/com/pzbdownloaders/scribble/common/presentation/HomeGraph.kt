@@ -39,7 +39,7 @@ fun NavGraphBuilder.homeGraph(
             NotesScreen(navController, viewModel, activity, selectedItem, selectedNote)
         }
         composable(Screens.AddNoteScreen.route) {
-            AddNoteScreen(navController, viewModel)
+            AddNoteScreen(navController, viewModel, activity)
         }
         composable(
             Screens.EditNoteScreen.route,

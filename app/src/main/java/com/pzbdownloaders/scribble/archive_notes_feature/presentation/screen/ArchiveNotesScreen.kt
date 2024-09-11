@@ -3,6 +3,7 @@ package com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.archive_notes_feature.presentation.components.MainStructureArchiveScreen
@@ -18,6 +19,7 @@ fun ArchiveNotesScreen(
     selectedItem: MutableState<Int>,
     selectedNote: MutableState<Int>
 ) {
+    WindowCompat.setDecorFitsSystemWindows(activity.window, true)
     viewModel.getNoteBook()
     val notebooks = viewModel.getNoteBooks.observeAsState().value
     val notebookNavigation: ArrayList<String> = ArrayList()

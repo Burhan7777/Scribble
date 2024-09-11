@@ -52,6 +52,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mohamedrejeb.richeditor.model.RichTextState
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
@@ -73,6 +77,7 @@ fun NoteContent(
     listOfCheckboxes: ArrayList<Boolean>,
     listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
     activity: MainActivity,
+    richStateText:RichTextState,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit
 ) {
@@ -87,6 +92,15 @@ fun NoteContent(
     var notebookText = remember {
         mutableStateOf("")
     }
+
+
+
+
+    LaunchedEffect(key1 = content) {
+     richStateText.setHtml(content)
+    }
+    // richTextState1.setText(richTextState1.annotatedString.text)
+    // println(richTextState1.annotatedString.text)
 
 
 //    var notebooks: ArrayList<String> = ArrayList()
@@ -178,26 +192,25 @@ fun NoteContent(
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )
 
-        TextField(
-            value = content,
-            onValueChange = { onChangeContent(it) },
+        RichTextEditor(
+            state = richStateText,
+            colors = RichTextEditorDefaults.richTextEditorColors(
+                containerColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary,
+                textColor = MaterialTheme.colors.onPrimary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary
+            ),
             placeholder = {
                 Text(
                     text = "Note",
                     fontSize = 30.sp,
-                    fontFamily = FontFamily.fontFamilyLight,
+                    fontFamily = FontFamily.fontFamilyBold,
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.alpha(0.5f)
                 )
             },
-            colors = androidx.compose.material.TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary,
-                textColor = MaterialTheme.colors.onPrimary
-            ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyLight, fontSize = 23.sp)
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 25.sp)
         )
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
         androidx.compose.material3.TextField(

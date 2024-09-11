@@ -4,6 +4,7 @@ package com.pzbdownloaders.scribble.main_screen.presentation.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -18,7 +19,7 @@ fun NotesScreen(
     selectedNote: MutableState<Int>
 ) {
 
-
+    WindowCompat.setDecorFitsSystemWindows(activity.window, true)
 
     // WE GET THE NOTEBOOKS HERE BECAUSE WE HAVE TO DISPLAY THEM IN THE NAVIGATION  VIEW
 

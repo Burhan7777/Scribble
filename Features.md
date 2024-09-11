@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (10/33) // MAIN - (2/8)
+FEATURES THAT NEED TO BE ADDED (10/35) // MAIN - (2/8)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -34,3 +34,5 @@ FEATURES THAT NEED TO BE ADDED (10/33) // MAIN - (2/8)
 31) Text formatting features(Main):
 32) Buy App Bar should not be visible to users who bought app:
 33) Export to PDF and other documents:
+34) Reminder for notes:
+35) Pomodoro for checkboxes:

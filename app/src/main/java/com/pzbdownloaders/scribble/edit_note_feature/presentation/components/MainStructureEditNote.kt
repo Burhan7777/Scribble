@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
@@ -15,9 +16,15 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
@@ -99,6 +106,10 @@ fun MainStructureEditNote(
     var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
 
     var showTrialEndedDialogBox = remember { mutableStateOf(false) }
+
+    var richStateText = rememberRichTextState()
+
+    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
 
     LaunchedEffect(key1 = Unit) {
@@ -194,7 +205,7 @@ fun MainStructureEditNote(
                             var note = Note(
                                 id,
                                 title,
-                                content,
+                                richStateText.toHtml(),
                                 archived,
                                 locked = lockedOrNote,
                                 listOfCheckedNotes = converted,
@@ -368,23 +379,9 @@ fun MainStructureEditNote(
 
 
         },
-        bottomBar = {
-            BottomAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-            }
-        }
     ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.padding(paddingValues)) {
-            Box(contentAlignment = Alignment.Center) {
-//                if (dialogOpen.value) {
-//                    AlertDialogBox(viewModel, id, activity, navController) {
-//                        dialogOpen.value = false
-//                    }
-//                }
-            }
             NoteContent(
                 selectedNotebook,
                 isExpanded,
@@ -396,8 +393,63 @@ fun MainStructureEditNote(
                 mutableListOfCheckBoxes,
                 mutableListOfBulletPoints,
                 activity,
+                richStateText,
                 { title = it },
                 { content = it })
+        }
+            Box(
+                modifier =
+                Modifier
+                    .padding(WindowInsets.ime.asPaddingValues())
+                    .padding(15.dp)
+                    .background(MaterialTheme.colors.primaryVariant)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .align(
+                        Alignment.BottomCenter
+                    )
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy((-10).dp)
+                ) {
+                    IconButton(
+                        onClick = {
+                            richStateText.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
+                        },
+                        modifier = Modifier
+                            .width(48.dp)
+                            .height(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatBold,
+                            contentDescription = "Make text bold",
+                            tint = MaterialTheme.colors.onPrimary,
+                        )
+                    }
+                    IconButton(onClick = {
+                        richStateText.toggleSpanStyle(
+                            SpanStyle(
+                                textDecoration = TextDecoration.Underline
+                            )
+                        )
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatUnderlined,
+                            contentDescription = "Make text underline",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = { richStateText.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic)) }) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatItalic,
+                            contentDescription = "Make text Italic",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+            }
+        }
         }
     }
     if (dialogOpen.value) {
