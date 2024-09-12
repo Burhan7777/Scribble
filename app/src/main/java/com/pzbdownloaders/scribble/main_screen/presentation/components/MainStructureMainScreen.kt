@@ -150,10 +150,11 @@ fun MainStructureMainScreen(
                                     }
                                 }
 
-
                             } else if (selectedItem.value == 3) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                navHostController.navigate(Screens.TrashBinScreen.route)
                             } else if (selectedItem.value == 4) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 5) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
@@ -280,7 +281,7 @@ fun MainStructureMainScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBar(navHostController, drawerState, viewModel)
-               // ShowPremiumBar(activity)
+                // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
                         viewModel = viewModel,

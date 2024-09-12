@@ -120,8 +120,9 @@ fun MainStructureEditNote(
 
 
 
-    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
-
+    LaunchedEffect(key1 = true) {
+       // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+    }
 
     LaunchedEffect(key1 = Unit) {
         for (i in note.value.listOfCheckedNotes) {
@@ -431,11 +432,28 @@ fun MainStructureEditNote(
         }
     }
     if (dialogOpen.value) {
+        viewModel.getNoteById(id)
+        var noteFromDb = viewModel.getNoteById
+        var archived = noteFromDb.value.archive
+        var lockedOrNote = noteFromDb.value.locked
+        var note = Note(
+            id,
+            title,
+            richStateText.value.toHtml(),
+            archived,
+            locked = lockedOrNote,
+            listOfCheckedNotes = converted,
+            listOfCheckedBoxes = mutableListOfCheckBoxes,
+            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+            listOfBulletPointNotes = convertedBulletPoints,
+            timeStamp = 123
+        )
         AlertDialogBoxDelete(
             viewModel = viewModel,
             id = id,
             activity = activity,
-            navHostController = navController
+            navHostController = navController,
+            note = note
         ) {
             dialogOpen.value = false
         }

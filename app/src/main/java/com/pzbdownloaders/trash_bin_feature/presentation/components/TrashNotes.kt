@@ -1,4 +1,7 @@
-package com.pzbdownloaders.scribble.main_screen.presentation.components
+package com.pzbdownloaders.trash_bin_feature.presentation.components
+
+import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
+
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -25,7 +28,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 @Composable
-fun Notes(
+fun TrashNotes(
     viewModel: MainActivityViewModel,
     activity: MainActivity,
     navHostController: NavHostController
@@ -42,17 +45,17 @@ fun Notes(
 
 
 
-//    if (listOfNotesFromDB.isEmpty()) {
-//        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-//            CircularProgressIndicator(
-//                modifier = Modifier
-//                    .padding(8.dp)
-//                    .width(35.dp)
-//                    .height(35.dp),
-//                color = MaterialTheme.colors.onPrimary
-//            )
-//        }
-//    }
+    if (listOfNotesFromDB.isEmpty()) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .width(35.dp)
+                    .height(35.dp),
+                color = MaterialTheme.colors.onPrimary
+            )
+        }
+    }
     LazyColumn() {
         item {
             Text(
@@ -65,7 +68,7 @@ fun Notes(
         }
         item {
             Text(
-                text = "Notes",
+                text = "Trash",
                 fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.padding(horizontal = 10.dp)
@@ -75,7 +78,7 @@ fun Notes(
         items(
             listOfNotesFromDB ?: emptyList()
         ) { note ->
-            SingleItemNoteList(note = note, navHostController)
+            SingleItemTrashNoteList(note = note, navHostController)
         }
     }
 }

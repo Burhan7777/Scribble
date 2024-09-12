@@ -122,7 +122,7 @@ fun MainStructureAddNote(
 
 
 
-    WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+  // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
 
     Scaffold(
@@ -148,13 +148,14 @@ fun MainStructureAddNote(
                             false,
                             notebookState.value,
                             timeStamp = 123,
+                            deletedNote = false,
                             locked = false
 
                         )
-                            viewModel.insertNote(note)
-                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                        viewModel.insertNote(note)
+                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }

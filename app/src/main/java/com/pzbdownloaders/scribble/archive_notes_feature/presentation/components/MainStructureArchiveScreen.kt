@@ -108,8 +108,10 @@ fun MainStructureArchiveScreen(
                                     }
                                 }
                             } else if (selectedItem.value == 3) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                navHostController.navigate(Screens.TrashBinScreen.route)
                             } else if (selectedItem.value == 4) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 5) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
@@ -193,7 +195,7 @@ fun MainStructureArchiveScreen(
                     .fillMaxSize()
             ) {
                 TopSearchBarArchive(navHostController, drawerState, viewModel)
-                if(showDialogToAccessLockedNotes.value){
+                if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes( // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
                         viewModel = viewModel,
                         activity = activity,

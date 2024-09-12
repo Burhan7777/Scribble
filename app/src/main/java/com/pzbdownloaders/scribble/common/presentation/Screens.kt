@@ -40,4 +40,12 @@ sealed class Screens(val route: String) {
     object CheckboxMainScreen : Screens("checkbox_main_screen")
 
     object BulletPointMainScreen : Screens("bullet_point_screen")
+
+    object TrashBinScreen : Screens("trash_bin_screen")
+
+    object DeleteTrashScreen:Screens("delete_trash_screen/{id}"){
+        fun deleteTrashScreenWithId(id:Int):String{
+            return "delete_trash_screen/$id"
+        }
+    }
 }

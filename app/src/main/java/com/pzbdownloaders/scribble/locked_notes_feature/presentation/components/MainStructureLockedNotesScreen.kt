@@ -97,8 +97,10 @@ fun MainStructureLockedNotesScreen(
                             } else if (selectedItem.value == 2) {
                                 navHostController.navigate(Screens.LockedNotesScreen.route)
                             } else if (selectedItem.value == 3) {
-                                navHostController.navigate(Screens.SettingsScreen.route)
+                                navHostController.navigate(Screens.TrashBinScreen.route)
                             } else if (selectedItem.value == 4) {
+                                navHostController.navigate(Screens.SettingsScreen.route)
+                            } else if (selectedItem.value == 5) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },

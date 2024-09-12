@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
@@ -56,7 +59,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.Menu
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun NoteContent(
     title: MutableState<String>,
@@ -80,7 +83,7 @@ fun NoteContent(
 //    }
 //
 
-    var notebook by  remember {
+    var notebook by remember {
         mutableStateOf("")
     }
 
@@ -95,6 +98,9 @@ fun NoteContent(
     var notebookText = remember {
         mutableStateOf("")
     }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val imeVisible = WindowInsets.isImeVisible
 
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
@@ -132,7 +138,7 @@ fun NoteContent(
         if (isExpanded.value) {
             MainMenu(isExpanded = isExpanded, noteBookState, viewModel, dialogOpen, notebookText)
         }
-            //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
+        //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
     }
 
 
@@ -157,31 +163,44 @@ fun NoteContent(
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
     )
 
-    RichTextEditor(
-        state = richStateText,
-        colors = RichTextEditorDefaults.richTextEditorColors(
-            containerColor = MaterialTheme.colors.primary,
-            cursorColor = MaterialTheme.colors.onPrimary,
-            textColor = MaterialTheme.colors.onPrimary,
-            unfocusedIndicatorColor = MaterialTheme.colors.primary,
-            focusedIndicatorColor = MaterialTheme.colors.primary,
-            selectionColors = TextSelectionColors(
-                handleColor = MaterialTheme.colors.onPrimary,
-                backgroundColor = Color.Gray
-            )
+    Column(
+        modifier = Modifier
+            .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp + 100.dp else 0.dp)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+        }
+        RichTextEditor(
+            state = richStateText,
+            colors = RichTextEditorDefaults.richTextEditorColors(
+                containerColor = MaterialTheme.colors.primary,
+                cursorColor = MaterialTheme.colors.onPrimary,
+                textColor = MaterialTheme.colors.onPrimary,
+                unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                focusedIndicatorColor = MaterialTheme.colors.primary,
+                selectionColors = TextSelectionColors(
+                    handleColor = MaterialTheme.colors.onPrimary,
+                    backgroundColor = Color.Gray
+                )
 
-        ),
-        placeholder = {
-            Text(
-                text = "Note",
-                fontSize = 18.sp,
-                fontFamily = FontFamily.fontFamilyBold,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.alpha(0.5f)
+            ),
+            placeholder = {
+                Text(
+                    text = "Note",
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.alpha(0.5f)
+                )
+            },
+            textStyle = TextStyle(
+                fontFamily = FontFamily.fontFamilyRegular,
+                fontSize = 18.sp
             )
-        },
-        textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
-    )
+        )
+    }
 }
 
 @Composable

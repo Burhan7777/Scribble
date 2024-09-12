@@ -2,6 +2,8 @@ package com.pzbdownloaders.scribble.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNoteUseCase
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNotebookUseCase
@@ -30,11 +32,19 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
+    var migration_8_9 = object : Migration(8, 9) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '")
+        }
+//ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '
+    }
+
     @Provides
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .fallbackToDestructiveMigration().build()
+            .addMigrations(migration_8_9)
+            .build()
     }
 
 

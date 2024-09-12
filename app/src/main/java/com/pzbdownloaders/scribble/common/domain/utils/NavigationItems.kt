@@ -2,11 +2,13 @@ package com.pzbdownloaders.scribble.common.domain.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Note
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Archive
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Note
@@ -34,6 +36,11 @@ data class NavigationItems(
                 label = "Locked",
                 selectedIcon = Icons.Filled.Lock,
                 unSelectedIcon = Icons.Outlined.Lock
+            ),
+            NavigationItems(
+                label = "Trash Bin",
+                selectedIcon = Icons.Filled.Delete,
+                unSelectedIcon = Icons.Outlined.Delete
             ),
             NavigationItems(
                 label = "Settings",

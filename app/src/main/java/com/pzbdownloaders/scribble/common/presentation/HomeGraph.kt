@@ -16,6 +16,8 @@ import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
 import com.pzbdownloaders.scribble.search_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
+import com.pzbdownloaders.trash_bin_feature.presentation.screens.DeleteTrashScreen
+import com.pzbdownloaders.trash_bin_feature.presentation.screens.TrashBinScreen
 
 
 fun NavGraphBuilder.homeGraph(
@@ -118,6 +120,16 @@ fun NavGraphBuilder.homeGraph(
         composable(Screens.BulletPointMainScreen.route) {
             BulletPointsNoteMainScreen(navController, viewModel, activity)
         }
+        composable(Screens.TrashBinScreen.route) {
+            TrashBinScreen(navController, viewModel, activity, selectedItem, selectedNote)
+        }
+        composable(Screens.DeleteTrashScreen.route, listOf(navArgument("id") {
+            type = NavType.IntType
+            defaultValue = 0
+        })) {
+            DeleteTrashScreen(navController, viewModel, activity, it.arguments?.getInt("id") ?: 0)
+        }
+
 
     }
 }

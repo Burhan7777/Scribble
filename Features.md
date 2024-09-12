@@ -1,9 +1,9 @@
-FEATURES THAT NEED TO BE ADDED (12/39) // MAIN - (4/11)
+FEATURES THAT NEED TO BE ADDED (13/38) // MAIN - (5/10)
 =====================================
 
 1) Archive notes to be added: DONE
 2) Delete Notes: DONE
-3) Recycle Bin to be added(Main):
+3) Recycle Bin to be added(Main): DONE
 4) Locked Notes to be added: DONE
 5) Notebooks to be added in edit screen: DONE
 6) Notebook databases to be created: DONE
@@ -11,7 +11,7 @@ FEATURES THAT NEED TO BE ADDED (12/39) // MAIN - (4/11)
 8) Backup database locally or on cloud:
 9) Bullet points(Main): DONE
 10) CheckBox list(Main): DONE :D
-11) Colors to the background(Main):
+11) Colors to the background(Main): CANCELLED
 12) Pin Note(Main):
 13) Arrange notes by date created etc:
 14) Add 30 days trial login through google: DONE

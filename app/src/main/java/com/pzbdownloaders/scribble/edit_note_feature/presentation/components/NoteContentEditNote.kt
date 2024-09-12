@@ -42,6 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -64,7 +65,9 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 fun NoteContent(
     selectedNotebook: MutableState<String>,
@@ -93,6 +96,8 @@ fun NoteContent(
         mutableStateOf("")
     }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val imeVisible = WindowInsets.isImeVisible
 
 
 
@@ -192,26 +197,37 @@ fun NoteContent(
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp)
         )
 
-        RichTextEditor(
-            state = richStateText,
-            colors = RichTextEditorDefaults.richTextEditorColors(
-                containerColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary,
-                textColor = MaterialTheme.colors.onPrimary,
-                focusedIndicatorColor = MaterialTheme.colors.primary,
-                unfocusedIndicatorColor = MaterialTheme.colors.primary
-            ),
-            placeholder = {
-                Text(
-                    text = "Note",
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily.fontFamilyBold,
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.alpha(0.5f)
-                )
-            },
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
-        )
+        Column(
+            modifier = Modifier
+                .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp + 100.dp else 0.dp)
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+            }
+
+            RichTextEditor(
+                state = richStateText,
+                colors = RichTextEditorDefaults.richTextEditorColors(
+                    containerColor = MaterialTheme.colors.primary,
+                    cursorColor = MaterialTheme.colors.onPrimary,
+                    textColor = MaterialTheme.colors.onPrimary,
+                    focusedIndicatorColor = MaterialTheme.colors.primary,
+                    unfocusedIndicatorColor = MaterialTheme.colors.primary
+                ),
+                placeholder = {
+                    Text(
+                        text = "Note",
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.fontFamilyBold,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.alpha(0.5f)
+                    )
+                },
+                textStyle = TextStyle(fontFamily = FontFamily.fontFamilyRegular, fontSize = 18.sp)
+            )
+        }
     } else if (listOfNotes.size > 0 && listOfBulletPointNotes.size == 0) {
         androidx.compose.material3.TextField(
             value = title,

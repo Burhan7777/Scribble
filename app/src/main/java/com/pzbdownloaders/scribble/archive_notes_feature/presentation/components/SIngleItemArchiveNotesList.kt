@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
@@ -41,6 +42,8 @@ fun SingleItemArchiveNoteList(
 
 
     if (note.archive && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
+        var richTextState = rememberRichTextState()
+        var text = richTextState.setHtml(note.content).annotatedString.text
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -86,7 +89,7 @@ fun SingleItemArchiveNoteList(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = note.content,
+                text = text,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,

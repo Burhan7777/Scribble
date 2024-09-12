@@ -50,7 +50,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
 
     var richTextState = rememberRichTextState()
     var contentText = richTextState.setHtml(note.content).annotatedString.text
-    if (!note.archive && !note.locked && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
+    if (!note.archive && !note.locked && !note.deletedNote && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,7 +104,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 fontFamily = FontFamily.fontFamilyLight
             )
         }
-    } else if (note.listOfCheckedNotes.size > 0 && !note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
+    } else if (note.listOfCheckedNotes.size > 0 && !note.deletedNote &&!note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,7 +174,8 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                                        disabledUncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )
@@ -203,7 +204,8 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                                        disabledUncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )
@@ -220,7 +222,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 }
             }
         }
-    } else if (note.listOfBulletPointNotes.size > 0 && !note.archive && !note.locked && note.listOfCheckedNotes.size == 0) {
+    } else if (note.listOfBulletPointNotes.size > 0 && !note.deletedNote && !note.archive && !note.locked && note.listOfCheckedNotes.size == 0) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
