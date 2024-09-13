@@ -13,6 +13,7 @@ import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNoteScreen
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.AddNoteInNotebookScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
@@ -132,6 +133,12 @@ fun NavGraphBuilder.homeGraph(
             defaultValue = 0
         })) {
             DeleteTrashScreen(navController, viewModel, activity, it.arguments?.getInt("id") ?: 0)
+        }
+
+        composable(Screens.AddNoteInNotebookScreen.route, listOf(navArgument("notebookName"){
+            type = NavType.StringType
+        })){
+            AddNoteInNotebookScreen(viewModel,navController,activity,it.arguments?.getString("notebookName")!!)
         }
 
 

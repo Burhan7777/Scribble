@@ -219,7 +219,11 @@ fun MainStructureNotebookScreen(
                 FloatingActionButton(
                     backgroundColor = MaterialTheme.colors.primaryVariant,
                     onClick = {
-                        navHostController.navigate(Screens.AddNoteScreen.route)
+                        navHostController.navigate(
+                            Screens.AddNoteInNotebookScreen.addNoteBookWIthName(
+                                title
+                            )
+                        )
                     },
                     shape = MaterialTheme.shapes.medium.copy(
                         topStart = CornerSize(15.dp),

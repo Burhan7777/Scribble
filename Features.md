@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (19/41) // MAIN - (7/13)
+FEATURES THAT NEED TO BE ADDED (20/41) // MAIN - (8/13)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -40,5 +40,5 @@ FEATURES THAT NEED TO BE ADDED (19/41) // MAIN - (7/13)
 37) Remove 30 days trial stuff(Main): DONE
 38) Delete Notebooks(Main):
 39) Why login dialog box on login screen:
-40) Can add notes in locked screen(Main):
-41) Can add notes in notebooks(Main):
+40) Can add notes in locked screen(Main): 
+41) Can add notes in notebooks(Main): DONE

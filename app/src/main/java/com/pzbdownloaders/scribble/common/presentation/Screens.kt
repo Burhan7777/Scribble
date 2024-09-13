@@ -48,4 +48,10 @@ sealed class Screens(val route: String) {
             return "delete_trash_screen/$id"
         }
     }
+
+    object AddNoteInNotebookScreen : Screens("add_note_in_notebook_screen/{notebookName}") {
+        fun addNoteBookWIthName(notebookName: String): String {
+            return "add_note_in_notebook_screen/$notebookName"
+        }
+    }
 }
