@@ -63,6 +63,8 @@ class MainActivityViewModel @Inject constructor(
     var listOfNotes = mutableStateListOf<Note>()
         private set
 
+    var listOfNotesLiveData = MutableLiveData<ArrayList<Note>>()
+
     var listOfNotesByNotebook = mutableStateListOf<Note>()
         private set
 
@@ -141,6 +143,7 @@ class MainActivityViewModel @Inject constructor(
     fun getAllNotes() {
         viewModelScope.launch(Dispatchers.IO) {
             listOfNotes = noteRepository.getAllNotes().toMutableStateList()
+            listOfNotesLiveData.postValue(noteRepository.getAllNotes().toCollection(ArrayList()))
         }
     }
 
@@ -168,6 +171,11 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
+    fun deleteTrashNote(deletedNote: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            editNoteRepository.deleteTrashNote(deletedNote)
+        }
+    }
 
     fun authenticationSignUp(
         name: String,

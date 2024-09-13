@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -13,12 +14,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.ui.theme.ScribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,6 +40,8 @@ class MainActivity : ComponentActivity() {
         val conMgr = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = conMgr.activeNetworkInfo
         Log.i("network", netInfo.toString())
+        deleteTrashNotes(viewModel, this)
+
 
         setContent {
             var showTrialEndedDialogBox = remember {
@@ -50,6 +55,7 @@ class MainActivity : ComponentActivity() {
                 var selectedNote = remember {
                     mutableStateOf(0)
                 }
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -74,6 +80,28 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     ScribbleTheme {
+    }
+}
+
+
+fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
+    viewModel.getAllNotes()
+    viewModel.listOfNotesLiveData.observe(activity) {
+        var notesInTrash = mutableStateOf(SnapshotStateList<Note>())
+       // println(it.size)
+        for (i in it) {
+            if (i.deletedNote) {
+                notesInTrash.value.add(i)
+            }
+        }
+
+        println(notesInTrash.value.size)
+        for (i in notesInTrash.value) {
+            if ((System.currentTimeMillis() - i.timePutInTrash) > 60000) {
+                viewModel.deleteNoteById(i.id)
+                Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
 

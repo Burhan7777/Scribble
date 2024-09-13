@@ -61,7 +61,8 @@ fun AlertDialogBoxDelete(
             Button(
                 onClick = {
                     //viewModel.deleteNoteById(id)
-                    var note = note.copy(deletedNote = true)
+                    var note =
+                        note.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
                     viewModel.insertNote(note)
                     onDismiss()
                     navHostController.popBackStack()

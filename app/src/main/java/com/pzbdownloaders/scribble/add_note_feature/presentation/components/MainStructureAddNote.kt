@@ -147,7 +147,7 @@ fun MainStructureAddNote(
                             content = richTextState.value.toHtml(),
                             false,
                             notebookState.value,
-                            timeStamp = 123,
+                            timeStamp = System.currentTimeMillis(),
                             deletedNote = false,
                             locked = false
 

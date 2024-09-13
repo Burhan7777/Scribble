@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (13/38) // MAIN - (5/10)
+FEATURES THAT NEED TO BE ADDED (16/39) // MAIN - (6/10)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -18,11 +18,11 @@ FEATURES THAT NEED TO BE ADDED (13/38) // MAIN - (5/10)
 15) Get premium bar at the top of the screen: DONE
 16) Days remaining in the premium bar: DONE
 17) Lock the whole app:
-18) Bottom bar features like google keep(Main):
-19) In-App product to buy product with one time payment:
+18) Bottom bar features like google keep(Main): DONE
+19) In-App product to buy product with one time payment: DELAYED
 20) Launch app on play-store before finishing the app for saving time at the end:
 21) Change layout from columns to grid option:
-22) Remove fall back to destructive migration and implement proper migration:
+22) Remove fall back to destructive migration and implement proper migration: DONE
 23) Animations in lazy-column when note is deleted:
 24) Transitions between screens:
 25) "No Notes found" animation in main screen and notebooks screen:

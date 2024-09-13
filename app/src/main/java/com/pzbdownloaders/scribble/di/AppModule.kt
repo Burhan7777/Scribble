@@ -32,9 +32,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-    var migration_8_9 = object : Migration(8, 9) {
+    var migration_9_10 = object : Migration(9, 10) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '")
+            db.execSQL("ALTER TABLE notes ADD COLUMN timePutInTrash INTEGER NOT NULL DEFAULT (0) ")
         }
 //ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '
     }
@@ -43,7 +43,7 @@ class AppModule {
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .addMigrations(migration_8_9)
+            .addMigrations(migration_9_10)
             .build()
     }
 

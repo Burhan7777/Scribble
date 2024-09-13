@@ -18,7 +18,8 @@ data class Note(
     val listOfCheckedBoxes: ArrayList<Boolean> = arrayListOf(),
     val listOfBulletPointNotes: ArrayList<String> = arrayListOf(),
     val timeStamp: Long = 0,
-    val editTime:String = "",
+    val editTime: String = "",
     val color: Int = 0,
+    val timePutInTrash: Long = 0,
     val deletedNote: Boolean = false
 )
