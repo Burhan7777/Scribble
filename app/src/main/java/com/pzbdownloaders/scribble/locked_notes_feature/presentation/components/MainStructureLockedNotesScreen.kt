@@ -8,16 +8,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +40,7 @@ import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainStructureLockedNotesScreen(
     navHostController: NavHostController,
@@ -176,14 +182,39 @@ fun MainStructureLockedNotesScreen(
         drawerState = drawerState
     ) {
         Scaffold(
-            containerColor = MaterialTheme.colors.primary
+            containerColor = MaterialTheme.colors.primary,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Locked Notes",
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Go Back to main screen",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colors.primary
+                    ),
+                )
+
+            }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBarArchive(navHostController, drawerState, viewModel)
+                //TopSearchBarArchive(navHostController, drawerState, viewModel)
                 LockedNotes(viewModel, activity, navHostController)
             }
         }

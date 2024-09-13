@@ -182,6 +182,31 @@ fun MainStructureNotebookScreen(
     ) {
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colors.primary),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        androidx.compose.material.Text(
+                            text = title,
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Go Back to main screen",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colors.primary
+                    ),
+                )
+
+            },
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
@@ -216,7 +241,7 @@ fun MainStructureNotebookScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBarNotebook(navHostController, drawerState, viewModel)
+                //   TopSearchBarNotebook(navHostController, drawerState, viewModel)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(  // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
                         viewModel = viewModel,

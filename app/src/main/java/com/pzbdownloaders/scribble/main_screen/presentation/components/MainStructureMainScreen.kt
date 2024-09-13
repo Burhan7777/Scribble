@@ -130,11 +130,8 @@ fun MainStructureMainScreen(
                                 drawerState.close()
                             }
                             if (selectedItem.value == 0) {
-                                navHostController.popBackStack()
-                                navHostController.popBackStack()
                                 navHostController.navigate(Screens.HomeScreen.route)
                             } else if (selectedItem.value == 1) {
-                                navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
                                 var result = checkIfUserHasCreatedPassword()

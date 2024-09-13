@@ -21,6 +21,7 @@ import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
 fun NotesNotebook(
@@ -35,20 +36,16 @@ fun NotesNotebook(
     // viewModel.getNotebookNote(title)
     // val listOfNotes = viewModel.getNotebookNotes.observeAsState().value
 
-    viewModel.getAllNotesByNotebook(title)
-    var listOfNotes = viewModel.listOfNotesByNotebook
 
-    if (listOfNotes == null) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .width(35.dp)
-                    .height(35.dp),
-                color = MaterialTheme.colors.onPrimary
-            )
-        }
+    viewModel.getAllNotesByNotebook(title)
+    //var listOfNotes = viewModel.listOfNotesByNotebook
+    var listOfNotesBooks = SnapshotStateList<Note>()
+    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
+        listOfNotesBooks = it.toMutableStateList()
+        println(listOfNotesBooks.size)
     }
+
+
     LazyColumn() {
         item {
             Text(
@@ -69,9 +66,9 @@ fun NotesNotebook(
 
         }
         items(
-            listOfNotes ?: emptyList()
+            listOfNotesBooks ?: emptyList()
         ) { note ->
-            SingleItemNotebookList(note = note, navHostController)
+            SingleItemNotebookList(note = note, navHostController, title)
         }
     }
 }

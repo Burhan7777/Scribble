@@ -3,7 +3,6 @@ package com.pzbdownloaders.scribble.common.presentation
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.MutableLiveData
@@ -28,8 +27,8 @@ import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
 import com.pzbdownloaders.scribble.notebook_main_screen.domain.GetNotebookNotesUseCase
-import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetArchiveSearchResultUseCase
-import com.pzbdownloaders.scribble.search_feature.domain.usecase.GetSearchResultUseCase
+import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetArchiveSearchResultUseCase
+import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetSearchResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,6 +66,8 @@ class MainActivityViewModel @Inject constructor(
 
     var listOfNotesByNotebook = mutableStateListOf<Note>()
         private set
+
+    var listOfNotesByNotebookLiveData = MutableLiveData<ArrayList<Note>>()
 
     var listOfNoteBooks = mutableStateListOf<NoteBook>()
 
@@ -150,6 +151,9 @@ class MainActivityViewModel @Inject constructor(
     fun getAllNotesByNotebook(notebook: String) {
         viewModelScope.launch(Dispatchers.IO) {
             listOfNotesByNotebook = noteRepository.getNotesByNoteBook(notebook).toMutableStateList()
+            listOfNotesByNotebookLiveData.postValue(
+                noteRepository.getNotesByNoteBook(notebook).toCollection(ArrayList())
+            )
         }
     }
 

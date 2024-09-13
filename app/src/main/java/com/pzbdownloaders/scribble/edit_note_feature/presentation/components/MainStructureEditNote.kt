@@ -223,7 +223,7 @@ fun MainStructureEditNote(
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
-                            timeStamp = 123
+                            timeStamp = System.currentTimeMillis()
                         )
                         viewModel.updateNote(note)
                         navController.popBackStack()
@@ -289,7 +289,7 @@ fun MainStructureEditNote(
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 listOfBulletPointNotes = convertedBulletPoints,
                                 archive = true,
-                                timeStamp = 123
+                                timeStamp = System.currentTimeMillis()
                             ))
                             viewModel.updateNote(note)
                             Toast.makeText(
@@ -328,7 +328,7 @@ fun MainStructureEditNote(
                                 title,
                                 content,
                                 archive = false,
-                                timeStamp = 123,
+                                timeStamp = System.currentTimeMillis(),
                                 listOfCheckedNotes = converted,
                                 listOfCheckedBoxes = mutableListOfCheckBoxes,
                                 listOfBulletPointNotes = convertedBulletPoints,
@@ -446,7 +446,7 @@ fun MainStructureEditNote(
             listOfCheckedBoxes = mutableListOfCheckBoxes,
             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
             listOfBulletPointNotes = convertedBulletPoints,
-            timeStamp = 123
+            timeStamp = System.currentTimeMillis()
         )
         AlertDialogBoxDelete(
             viewModel = viewModel,

@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.search_feature.presentation.components
+package com.pzbdownloaders.scribble.search_main_screen_feature.presentation.components
 
 import android.content.Context
 import android.widget.Toast

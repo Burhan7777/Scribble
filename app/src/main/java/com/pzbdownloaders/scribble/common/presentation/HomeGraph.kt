@@ -14,7 +14,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNo
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
-import com.pzbdownloaders.scribble.search_feature.presentation.screens.SearchScreen
+import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
 import com.pzbdownloaders.trash_bin_feature.presentation.screens.DeleteTrashScreen
 import com.pzbdownloaders.trash_bin_feature.presentation.screens.TrashBinScreen
@@ -73,16 +73,20 @@ fun NavGraphBuilder.homeGraph(
             )
         }
 
-        composable(Screens.SearchScreen.route,
+        composable(
+            Screens.SearchScreen.route,
             listOf(navArgument("screen") {
                 type = NavType.StringType
-            }
-            )) {
+            }, navArgument("queryText") {
+                type = NavType.StringType
+            })
+        ) {
             SearchScreen(
                 navHostController = navController,
                 viewModel = viewModel,
                 activity = activity,
-                screen = it.arguments?.getString("screen")!!
+                screen = it.arguments?.getString("screen")!!,
+                queryText = it.arguments?.getString("queryText")!!
             )
         }
 

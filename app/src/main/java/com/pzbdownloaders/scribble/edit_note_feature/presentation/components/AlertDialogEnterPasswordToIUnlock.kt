@@ -112,7 +112,7 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                                 listOfCheckedNotes = listOfCheckedNotes,
                                 listOfCheckedBoxes = listOfCheckBoxes,
                                 listOfBulletPointNotes = listOfBulletPoints,
-                                timeStamp = 123
+                                timeStamp = System.currentTimeMillis()
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(

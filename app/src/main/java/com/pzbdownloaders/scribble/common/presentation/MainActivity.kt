@@ -99,7 +99,7 @@ fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
         for (i in notesInTrash.value) {
             if ((System.currentTimeMillis() - i.timePutInTrash) > 60000) {
                 viewModel.deleteNoteById(i.id)
-                Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
             }
         }
     }

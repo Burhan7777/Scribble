@@ -48,7 +48,7 @@ fun TopSearchBarNotebook(
             active = !active
             if (text.isNotEmpty()) {
                 viewModel.getSearchResult(text)
-                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen(Constant.HOME))
+                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen("text",Constant.HOME))
             } else {
                 Toast.makeText(context, "Nothing to search", Toast.LENGTH_SHORT).show()
             }

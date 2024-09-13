@@ -23,9 +23,9 @@ sealed class Screens(val route: String) {
 
     object LockedNotesScreen : Screens("locked_notes_screen")
 
-    object SearchScreen : Screens("search_screen/{screen}") {
-        fun searchNoteWIthScreen(screen: String): String {
-            return "search_screen/$screen"
+    object SearchScreen : Screens("search_screen/{queryText}/{screen}") {
+        fun searchNoteWIthScreen(queryText: String, screen: String): String {
+            return "search_screen/$queryText/$screen"
         }
     }
 
@@ -43,8 +43,8 @@ sealed class Screens(val route: String) {
 
     object TrashBinScreen : Screens("trash_bin_screen")
 
-    object DeleteTrashScreen:Screens("delete_trash_screen/{id}"){
-        fun deleteTrashScreenWithId(id:Int):String{
+    object DeleteTrashScreen : Screens("delete_trash_screen/{id}") {
+        fun deleteTrashScreenWithId(id: Int): String {
             return "delete_trash_screen/$id"
         }
     }

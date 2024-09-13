@@ -1,14 +1,12 @@
-package com.pzbdownloaders.scribble.search_feature.domain.usecase
+package com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase
 
 import android.util.Log
 import com.algolia.search.dsl.*
 import com.algolia.search.helper.deserialize
-import com.algolia.search.model.APIKey
-import com.algolia.search.model.ApplicationID
 import com.algolia.search.model.IndexName
 import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
-import com.pzbdownloaders.scribble.search_feature.utils.ClientSearch
+import com.pzbdownloaders.scribble.search_main_screen_feature.utils.ClientSearch
 
 class GetSearchResultUseCase {
 

@@ -236,14 +236,39 @@ fun MainStructureTrashBinScreen(
         drawerState = drawerState
     ) {
         Scaffold(
-            modifier = Modifier.background(MaterialTheme.colors.primary)
+            modifier = Modifier.background(MaterialTheme.colors.primary),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        androidx.compose.material.Text(
+                            text = "Trash Bin",
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Go Back to main screen",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colors.primary
+                    ),
+                )
+
+            }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize().background(MaterialTheme.colors.primary)
             ) {
-                TopSearchBarTrash(navHostController, drawerState, viewModel)
+              //  TopSearchBarTrash(navHostController, drawerState, viewModel)
                 // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(

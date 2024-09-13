@@ -33,6 +33,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserH
 import com.pzbdownloaders.scribble.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainStructureArchiveScreen(
     navHostController: NavHostController,
@@ -88,11 +89,8 @@ fun MainStructureArchiveScreen(
                                 drawerState.close()
                             }
                             if (selectedItem.value == 0) {
-                                navHostController.popBackStack()
-                                navHostController.popBackStack()
                                 navHostController.navigate(Screens.HomeScreen.route)
                             } else if (selectedItem.value == 1) {
-                                navHostController.popBackStack()
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
                                 var result = checkIfUserHasCreatedPassword()
@@ -187,14 +185,39 @@ fun MainStructureArchiveScreen(
         drawerState = drawerState
     ) {
         Scaffold(
-            containerColor = MaterialTheme.colors.primary
+            containerColor = MaterialTheme.colors.primary,
+            topBar = {
+                TopAppBar(
+                    title = {
+                        androidx.compose.material.Text(
+                            text = "Archive",
+                            fontFamily = FontFamily.fontFamilyRegular,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navHostController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Go Back to main screen",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colors.primary
+                    ),
+                )
+
+            }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBarArchive(navHostController, drawerState, viewModel)
+                //  TopSearchBarArchive(navHostController, drawerState, viewModel)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes( // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
                         viewModel = viewModel,

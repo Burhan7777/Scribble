@@ -113,7 +113,7 @@ fun AlertDialogBoxEnterPassword(
                                 listOfCheckedBoxes = listOfCheckboxes,
                                 listOfCheckedNotes = convertedMutableList,
                                listOfBulletPointNotes =  listOfBulletPoints,
-                                timeStamp = 123
+                                timeStamp = System.currentTimeMillis()
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(

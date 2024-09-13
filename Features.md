@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (16/39) // MAIN - (6/10)
+FEATURES THAT NEED TO BE ADDED (19/41) // MAIN - (7/13)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -7,8 +7,8 @@ FEATURES THAT NEED TO BE ADDED (16/39) // MAIN - (6/10)
 4) Locked Notes to be added: DONE
 5) Notebooks to be added in edit screen: DONE
 6) Notebook databases to be created: DONE
-7) Search feature to be added for the database(Main):
-8) Backup database locally or on cloud:
+7) Search feature to be added for the database(Main): DONE
+8) Backup database locally or on cloud(Main):
 9) Bullet points(Main): DONE
 10) CheckBox list(Main): DONE :D
 11) Colors to the background(Main): CANCELLED
@@ -32,11 +32,13 @@ FEATURES THAT NEED TO BE ADDED (16/39) // MAIN - (6/10)
 29) Don't forget to save password of locked notes on the cloud: DONE
 30) Save note on back button also auto-save function(Main):
 31) Text formatting features(Main): DONE
-32) Buy App Bar should not be visible to users who bought app:
+32) Buy App Bar should not be visible to users who bought app: CANCELLED
 33) Export to PDF and other documents:
 34) Reminder for notes:
 35) Pomodoro for checkboxes:
-36) Change drop down menu in add note to text view like in edit note:
+36) Change drop down menu in add note to text view like in edit note: DONE
 37) Remove 30 days trial stuff(Main): DONE
 38) Delete Notebooks(Main):
 39) Why login dialog box on login screen:
+40) Can add notes in locked screen(Main):
+41) Can add notes in notebooks(Main):

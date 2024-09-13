@@ -45,7 +45,7 @@ fun TopSearchBarArchive(
         onSearch = {
             if (text.isNotEmpty()) {
                 viewModel.getArchiveSearchResult(text)
-                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen(Constant.ARCHIVE))
+                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen("text",Constant.ARCHIVE))
             }
         },
         active = active,

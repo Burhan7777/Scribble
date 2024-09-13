@@ -47,8 +47,12 @@ fun TopSearchBar(
         onSearch = {
             active = !active
             if (text.isNotEmpty()) {
-                viewModel.getSearchResult(text)
-                navHostController.navigate(Screens.SearchScreen.searchNoteWIthScreen(Constant.HOME))
+                navHostController.navigate(
+                    Screens.SearchScreen.searchNoteWIthScreen(
+                        text,
+                        Constant.HOME
+                    )
+                )
             } else {
                 Toast.makeText(context, "Nothing to search", Toast.LENGTH_SHORT).show()
             }
@@ -84,16 +88,16 @@ fun TopSearchBar(
                 },
             )
         },
-      /*  trailingIcon = {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                contentDescription = "Clear",
-                modifier = Modifier.clickable {
+        /*  trailingIcon = {
+              Icon(
+                  imageVector = Icons.Filled.Clear,
+                  contentDescription = "Clear",
+                  modifier = Modifier.clickable {
 
-                },
+                  },
 
-                )
-        },*/
+                  )
+          },*/
         placeholder = {
             Text(
                 text = "Search notes",
