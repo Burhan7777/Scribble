@@ -54,4 +54,6 @@ sealed class Screens(val route: String) {
             return "add_note_in_notebook_screen/$notebookName"
         }
     }
+
+    object AddNoteInLockedScreen : Screens("add_note_in_locked_screen")
 }

@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
 fun Notes(
@@ -39,7 +41,12 @@ fun Notes(
 
     viewModel.getAllNotes()
     var listOfNotesFromDB = viewModel.listOfNotes
-
+    var listOfPinnedNotes = SnapshotStateList<Note>()
+    for (i in listOfNotesFromDB) {
+        if (i.notePinned) {
+            listOfPinnedNotes.add(i)
+        }
+    }
 
 
 //    if (listOfNotesFromDB.isEmpty()) {
@@ -71,6 +78,27 @@ fun Notes(
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
 
+        }
+        if (listOfPinnedNotes.size > 0) {
+            item {
+                Text(
+                    text = "PINNED",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+            }
+        }
+        items(listOfPinnedNotes) { note ->
+            SingleItemNoteList(note = note, navHostController = navHostController)
+        }
+        item {
+            Text(
+                text = "ALL NOTES",
+                fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+            )
         }
         items(
             listOfNotesFromDB ?: emptyList()

@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,6 +40,7 @@ import com.google.api.Distribution.BucketOptions.Linear
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
+import com.pzbdownloaders.scribble.login_and_signup_feature.presentation.components.AlertBoxWhyLogIn
 import googleSignInButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +52,7 @@ fun LoginScreen(
 ) {
 
     var showGoogleSignIn = remember { mutableStateOf(false) }
+    var showWhyLoginDialogBox = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,6 +60,12 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        if (showWhyLoginDialogBox.value) {
+            AlertBoxWhyLogIn {
+                showWhyLoginDialogBox.value = false
+            }
+        }
 //        var email by remember {
 //            mutableStateOf("")
 //        }
@@ -311,13 +321,25 @@ fun LoginScreen(
 //    }
 
         val context = LocalContext.current
-        Text(
-            text = "Login",
-            fontSize = 55.sp,
-            fontFamily = FontFamily.fontFamilyExtraLight,
-            modifier = Modifier.padding(20.dp),
-            color = MaterialTheme.colors.onPrimary
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text(
+                text = "Login",
+                fontSize = 55.sp,
+                fontFamily = FontFamily.fontFamilyExtraLight,
+                modifier = Modifier.padding(20.dp),
+                color = MaterialTheme.colors.onPrimary
+            )
+            Text(
+                text = "but why ?",
+                fontFamily = FontFamily.fontFamilyBold,
+                fontSize =12.sp,
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier.clickable {
+                    showWhyLoginDialogBox.value = true
+                },
+                color = MaterialTheme.colors.onPrimary
+            )
+        }
 
         var login = "Sign in with Google"
         var signingIn = "Signing in..."

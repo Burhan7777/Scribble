@@ -11,7 +11,8 @@ import com.pzbdownloaders.scribble.add_note_feature.presentation.screens.AddNote
 import com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen.ArchiveNotesScreen
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNoteScreen
-import com.pzbdownloaders.scribble.locked_notes_feature.presentation.LockedNotesScreen
+import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.AddNoteInLockedScreen
+import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.AddNoteInNotebookScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
@@ -30,7 +31,7 @@ fun NavGraphBuilder.homeGraph(
     selectedNote: MutableState<Int>
 ) {
     navigation(
-        startDestination = if (result == Constant.USER_VALUE) Screens.SplashScreen.route else Screens.HomeScreen.route,
+        startDestination = Screens.HomeScreen.route,
         route = HOME_GRAPH
     ) {
         if (result == Constant.USER_VALUE) {
@@ -135,10 +136,22 @@ fun NavGraphBuilder.homeGraph(
             DeleteTrashScreen(navController, viewModel, activity, it.arguments?.getInt("id") ?: 0)
         }
 
-        composable(Screens.AddNoteInNotebookScreen.route, listOf(navArgument("notebookName"){
+        composable(Screens.AddNoteInNotebookScreen.route, listOf(navArgument("notebookName") {
             type = NavType.StringType
-        })){
-            AddNoteInNotebookScreen(viewModel,navController,activity,it.arguments?.getString("notebookName")!!)
+        })) {
+            AddNoteInNotebookScreen(
+                viewModel,
+                navController,
+                activity,
+                it.arguments?.getString("notebookName")!!
+            )
+        }
+        composable(Screens.AddNoteInLockedScreen.route) {
+            AddNoteInLockedScreen(
+                viewModel = viewModel,
+                navHostController = navController,
+                activity = activity
+            )
         }
 
 

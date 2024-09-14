@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (20/41) // MAIN - (8/13)
+FEATURES THAT NEED TO BE ADDED (24/45) // MAIN - (11/16)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -12,12 +12,12 @@ FEATURES THAT NEED TO BE ADDED (20/41) // MAIN - (8/13)
 9) Bullet points(Main): DONE
 10) CheckBox list(Main): DONE :D
 11) Colors to the background(Main): CANCELLED
-12) Pin Note(Main):
-13) Arrange notes by date created etc:
+12) Pin Note(Main): DONE
+13) Arrange notes by date created etc: 
 14) Add 30 days trial login through google: DONE
 15) Get premium bar at the top of the screen: DONE
 16) Days remaining in the premium bar: DONE
-17) Lock the whole app:
+17) Lock the whole app: 
 18) Bottom bar features like google keep(Main): DONE
 19) In-App product to buy product with one time payment: DELAYED
 20) Launch app on play-store before finishing the app for saving time at the end:
@@ -39,6 +39,10 @@ FEATURES THAT NEED TO BE ADDED (20/41) // MAIN - (8/13)
 36) Change drop down menu in add note to text view like in edit note: DONE
 37) Remove 30 days trial stuff(Main): DONE
 38) Delete Notebooks(Main):
-39) Why login dialog box on login screen:
-40) Can add notes in locked screen(Main): 
+39) Why login dialog box on login screen: DONE
+40) Can add notes in locked screen(Main): DONE
 41) Can add notes in notebooks(Main): DONE
+42) Remove Splash screen(Main):DONE
+43) Add Firebase events to everything(Main):
+44) Keep track of total words written for the achievements(Main):
+45) How long notes survive in trash in settings :

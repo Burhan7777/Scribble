@@ -1,11 +1,10 @@
-package com.pzbdownloaders.scribble.locked_notes_feature.presentation
+package com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
-import com.pzbdownloaders.scribble.archive_notes_feature.presentation.components.MainStructureArchiveScreen
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.components.MainStructureLockedNotesScreen

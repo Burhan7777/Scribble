@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
@@ -118,10 +119,16 @@ fun MainStructureEditNote(
 
     var showTrialEndedDialogBox = remember { mutableStateOf(false) }
 
+    var pinnedOrNot = remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getNoteById(id)
+        var noteFromDb = viewModel.getNoteById
+        pinnedOrNot.value = noteFromDb.value.notePinned
+    }
 
 
     LaunchedEffect(key1 = true) {
-       // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+        // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
     }
 
     LaunchedEffect(key1 = Unit) {
@@ -213,6 +220,7 @@ fun MainStructureEditNote(
                         var noteFromDb = viewModel.getNoteById
                         var archived = noteFromDb.value.archive
                         var lockedOrNote = noteFromDb.value.locked
+                        var timeCreated = noteFromDb.value.timeStamp
                         var note = Note(
                             id,
                             title,
@@ -223,7 +231,7 @@ fun MainStructureEditNote(
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
-                            timeStamp = System.currentTimeMillis()
+                            timeStamp = timeCreated
                         )
                         viewModel.updateNote(note)
                         navController.popBackStack()
@@ -233,6 +241,21 @@ fun MainStructureEditNote(
 
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Undo")
+                    }
+                    IconButton(onClick = {
+                        viewModel.getNoteById(id)
+                        var noteFromDb = viewModel.getNoteById
+                        var pinned = noteFromDb.value.notePinned
+                        var note = noteFromDb.value.copy(notePinned = !pinned)
+                        viewModel.updateNote(note)
+                        navController.popBackStack()
+
+                    }) {
+                        Icon(
+                            imageVector = if (pinnedOrNot.value) Icons.Filled.PushPin else Icons.Outlined.PushPin,
+                            contentDescription = "pin note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
                     }
                     IconButton(onClick = {
                         if (screen == Constant.HOME || screen == Constant.ARCHIVE) {

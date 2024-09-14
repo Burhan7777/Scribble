@@ -6,16 +6,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.FormatListBulleted
+import androidx.compose.material.icons.outlined.CheckBox
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -207,6 +214,47 @@ fun MainStructureLockedNotesScreen(
                     ),
                 )
 
+            },
+            bottomBar = {
+                androidx.compose.material.BottomAppBar {
+                    androidx.compose.material.BottomAppBar() {
+//                        IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
+//                            Icon(
+//                                imageVector = Icons.Outlined.CheckBox,
+//                                contentDescription = "CheckBox",
+//                                tint = MaterialTheme.colors.onPrimary
+//                            )
+//                        }
+//                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+//                            Icon(
+//                                imageVector = Icons.Filled.FormatListBulleted,
+//                                contentDescription = "Bullet point list",
+//                                tint = MaterialTheme.colors.onPrimary
+//                            )
+//                        }
+                    }
+                }
+            },
+            floatingActionButtonPosition = androidx.compose.material3.FabPosition.End,
+            floatingActionButton = {
+                FloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    onClick = {
+                        navHostController.navigate(Screens.AddNoteInLockedScreen.route)
+                    },
+                    shape = MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(15.dp),
+                        topEnd = CornerSize(15.dp),
+                        bottomStart = CornerSize(15.dp),
+                        bottomEnd = CornerSize(15.dp),
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        tint = MaterialTheme.colors.onPrimary,
+                        contentDescription = "Add Note"
+                    )
+                }
             }
         ) { paddingValues ->
             Column(

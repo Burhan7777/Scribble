@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
@@ -32,6 +33,9 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
 fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
+
+    var richTextState = rememberRichTextState()
+    var contentText = richTextState.setHtml(note.content).annotatedString.text
 
     if (note.locked && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
         Card(
@@ -79,7 +83,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = note.content,
+                text = contentText,
                 modifier = Modifier.padding(10.dp),
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
