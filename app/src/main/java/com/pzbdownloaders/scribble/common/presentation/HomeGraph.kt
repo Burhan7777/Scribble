@@ -16,6 +16,7 @@ import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.Lock
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.AddNoteInNotebookScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
 import com.pzbdownloaders.trash_bin_feature.presentation.screens.DeleteTrashScreen
@@ -152,6 +153,10 @@ fun NavGraphBuilder.homeGraph(
                 navHostController = navController,
                 activity = activity
             )
+        }
+
+        composable(Screens.BackupAndRestoreScreen.route) {
+            BackupAndRestoreScreen()
         }
 
 

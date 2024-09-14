@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.common.data.data_source
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.flow.Flow
@@ -38,4 +39,7 @@ interface Dao {
 
     @Query("DELETE FROM notes where deletedNote = :deletedNote")
     suspend fun deleteNoteFromTrash(deletedNote: Boolean)
+
+    @RawQuery
+    fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery): Int
 }

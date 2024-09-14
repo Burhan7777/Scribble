@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (24/45) // MAIN - (11/16)
+FEATURES THAT NEED TO BE ADDED (24/46) // MAIN - (11/17)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -46,3 +46,4 @@ FEATURES THAT NEED TO BE ADDED (24/45) // MAIN - (11/16)
 43) Add Firebase events to everything(Main):
 44) Keep track of total words written for the achievements(Main):
 45) How long notes survive in trash in settings :
+46) Change title of all to richtextstate(Main):

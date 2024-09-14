@@ -99,6 +99,7 @@ dependencies {
     implementation "com.google.firebase:firebase-firestore-ktx"
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-storage")
 
     // FIREBASE ANALYTICS
     implementation("com.google.firebase:firebase-analytics")
@@ -126,6 +127,8 @@ dependencies {
 
     //RICHEDITOR
     implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05")
+
+
 
 
 
