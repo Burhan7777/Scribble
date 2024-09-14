@@ -11,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
@@ -210,6 +211,26 @@ fun MainStructureNotebookScreen(
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
+                        IconButton(onClick = {
+                            navHostController.navigate(
+                                Screens.CheckboxNotebookMainScreen.checkboxNotebookMainScreenWithNotebook(
+                                    title
+                                )
+                            )
+                        }) {
+                            Icon(
+                                imageVector = Icons.Outlined.CheckBox,
+                                contentDescription = "CheckBox",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                            Icon(
+                                imageVector = Icons.Filled.FormatListBulleted,
+                                contentDescription = "Bullet point list",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
                 }
             },

@@ -16,6 +16,7 @@ import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.Lock
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.AddNoteInNotebookScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.checkboxscreen.CheckboxNoteBookMainScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
@@ -157,6 +158,16 @@ fun NavGraphBuilder.homeGraph(
 
         composable(Screens.BackupAndRestoreScreen.route) {
             BackupAndRestoreScreen()
+        }
+        composable(Screens.CheckboxNotebookMainScreen.route, listOf(navArgument("notebook") {
+            type = NavType.StringType
+        })) {
+            CheckboxNoteBookMainScreen(
+                navHostController = navController,
+                mainActivityViewModel = viewModel,
+                activity = activity,
+                it.arguments?.getString("notebook")!!
+            )
         }
 
 

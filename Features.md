@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (24/46) // MAIN - (11/17)
+FEATURES THAT NEED TO BE ADDED (25/48) // MAIN - (12/18)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -8,7 +8,7 @@ FEATURES THAT NEED TO BE ADDED (24/46) // MAIN - (11/17)
 5) Notebooks to be added in edit screen: DONE
 6) Notebook databases to be created: DONE
 7) Search feature to be added for the database(Main): DONE
-8) Backup database locally or on cloud(Main):
+8) Backup database locally or on cloud(Main): DONE
 9) Bullet points(Main): DONE
 10) CheckBox list(Main): DONE :D
 11) Colors to the background(Main): CANCELLED
@@ -47,3 +47,5 @@ FEATURES THAT NEED TO BE ADDED (24/46) // MAIN - (11/17)
 44) Keep track of total words written for the achievements(Main):
 45) How long notes survive in trash in settings :
 46) Change title of all to richtextstate(Main):
+47) Add checkbox and bulletpoints to notebooks and locked  notes:
+48) Add pinned feature to locked notes and notebooks and remove from archive(Main):

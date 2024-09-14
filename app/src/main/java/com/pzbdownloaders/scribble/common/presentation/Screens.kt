@@ -56,5 +56,10 @@ sealed class Screens(val route: String) {
     }
 
     object AddNoteInLockedScreen : Screens("add_note_in_locked_screen")
-    object BackupAndRestoreScreen:Screens("backup_and_restore_screen")
+    object BackupAndRestoreScreen : Screens("backup_and_restore_screen")
+    object CheckboxNotebookMainScreen : Screens("checkbox_notebook_main_screen/{notebook}") {
+        fun checkboxNotebookMainScreenWithNotebook(notebook: String): String {
+            return "checkbox_notebook_main_screen/$notebook"
+        }
+    }
 }
