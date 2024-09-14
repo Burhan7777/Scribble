@@ -62,4 +62,10 @@ sealed class Screens(val route: String) {
             return "checkbox_notebook_main_screen/$notebook"
         }
     }
+
+    object BulletPointsNotebook : Screens("bullet_points_notebook/{notebook}") {
+        fun bulletPointsWithNotebook(notebook: String): String {
+            return "bullet_points_notebook/$notebook"
+        }
+    }
 }

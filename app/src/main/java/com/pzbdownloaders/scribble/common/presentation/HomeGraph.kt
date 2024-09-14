@@ -14,8 +14,10 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNo
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.AddNoteInLockedScreen
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.bulletpointsScreenComponents.BulletPointNotebook
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.AddNoteInNotebookScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.NotebookMainScreen
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.bulletpointsscreen.BulletPointsNotebookMainScreen
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.checkboxscreen.CheckboxNoteBookMainScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
@@ -163,6 +165,16 @@ fun NavGraphBuilder.homeGraph(
             type = NavType.StringType
         })) {
             CheckboxNoteBookMainScreen(
+                navHostController = navController,
+                mainActivityViewModel = viewModel,
+                activity = activity,
+                it.arguments?.getString("notebook")!!
+            )
+        }
+        composable(Screens.BulletPointsNotebook.route, listOf(navArgument("notebook") {
+            type = NavType.StringType
+        })) {
+            BulletPointsNotebookMainScreen(
                 navHostController = navController,
                 mainActivityViewModel = viewModel,
                 activity = activity,

@@ -101,18 +101,18 @@ fun MainStructureCheckBoxNote(
                             mutableListOfCheckboxTexts,
                             mutableListConverted
                         )
-                            val note = Note(
-                                id = 0,
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfCheckedNotes = mutableListConverted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                timeStamp = 123
-                            )
-                            viewModel.insertNote(note)
-                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                        val note = Note(
+                            id = 0,
+                            title = title.value,
+                            notebook = notebookState.value,
+                            listOfCheckedNotes = mutableListConverted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            timeStamp = System.currentTimeMillis()
+                        )
+                        viewModel.insertNote(note)
+                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
 
                     }) {
                         Icon(

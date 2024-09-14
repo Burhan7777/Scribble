@@ -1,4 +1,4 @@
-package com.pzbdownloaders.add_bullet_points_note_feature.presentation.components
+package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.bulletpointsScreenComponents
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -35,12 +35,13 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainStructureBulletPointsNotes(
+fun MainStructureBulletPointsNotebook(
     navController: NavHostController,
     viewModel: MainActivityViewModel,
     notebookState: MutableState<String>,
     title: MutableState<String>,
-    activity: MainActivity
+    activity: MainActivity,
+    notebook: String
 ) {
     var context = LocalContext.current
 
@@ -99,17 +100,17 @@ fun MainStructureBulletPointsNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                            val note = Note(
-                                id = 0,
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfBulletPointNotes = mutableListConverted,
-                                timeStamp = System.currentTimeMillis()
-                            )
-                            viewModel.insertNote(note)
-                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                        val note = Note(
+                            id = 0,
+                            title = title.value,
+                            notebook = notebook,
+                            listOfBulletPointNotes = mutableListConverted,
+                            timeStamp = System.currentTimeMillis()
+                        )
+                        viewModel.insertNote(note)
+                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
 
                     }) {
                         Icon(
@@ -135,7 +136,7 @@ fun MainStructureBulletPointsNotes(
             }*/
     ) {
         Column(modifier = Modifier.padding(it)) {
-            BulletPointNote(
+            BulletPointNotebook(
                 viewModel,
                 navController,
                 notebookState,
