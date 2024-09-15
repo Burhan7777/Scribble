@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (32/52) // MAIN - (14/20)
+FEATURES THAT NEED TO BE ADDED (35/52) // MAIN - (16/20)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -21,7 +21,7 @@ FEATURES THAT NEED TO BE ADDED (32/52) // MAIN - (14/20)
 18) Bottom bar features like google keep(Main): DONE
 19) In-App product to buy product with one time payment: DELAYED
 20) Launch app on play-store before finishing the app for saving time at the end:
-21) Change layout from columns to grid option:
+21) Change layout from columns to grid option: 
 22) Remove fall back to destructive migration and implement proper migration: DONE
 23) Animations in lazy-column when note is deleted:
 24) Transitions between screens:
@@ -50,6 +50,6 @@ FEATURES THAT NEED TO BE ADDED (32/52) // MAIN - (14/20)
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
 49) Comment Navigation Menu in all screens except main screen: DONE
-50) Change notebook option should not be in locked notes(Main):
-51) Lock Notebook(Main):
-52) Remove at to notebook from checbox and bulletpoints:
+50) Change notebook option should not be in locked notes(Main): DONE
+51) Lock Notebook(Main): DELAYED
+52) Replace add to notebook from checkbox and bulletpoints: DONE

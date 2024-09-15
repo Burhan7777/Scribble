@@ -69,7 +69,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
         composable(route = Screens.SettingsScreen.route) {
-            SettingsScreen(navController, activity)
+            SettingsScreen(navController, activity, viewModel)
         }
         composable(Screens.ArchiveScreen.route) {
             ArchiveNotesScreen(

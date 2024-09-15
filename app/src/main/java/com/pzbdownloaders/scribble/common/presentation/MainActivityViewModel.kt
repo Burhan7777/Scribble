@@ -30,6 +30,7 @@ import com.pzbdownloaders.scribble.notebook_main_screen.data.NotebookRepository
 import com.pzbdownloaders.scribble.notebook_main_screen.domain.GetNotebookNotesUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetSearchResultUseCase
+import com.pzbdownloaders.scribble.settings_feature.screen.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class MainActivityViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
     private val editNoteRepository: EditNoteRepository,
     private val notebookRepository: NotebookRepository,
+    private val settingsRepository: SettingsRepository,
     private val authenticationSignUpUseCase: AuthenticationSignUpUseCase,
     private val signUpUserCase: SignUpUserCase,
     private val authenticationSignInUseCase: AuthenticationSignInUseCase,
@@ -133,6 +135,8 @@ class MainActivityViewModel @Inject constructor(
         private set
 
     val getNoteBooks = MutableLiveData<ArrayList<GetNoteBook?>>()
+
+    val getNoteBookByName = MutableLiveData<NoteBook>()
 
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
@@ -313,6 +317,18 @@ class MainActivityViewModel @Inject constructor(
     fun deleteNotebook(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             notebookRepository.deleteNotebook(name)
+        }
+    }
+
+    fun updateNotebook(notebook: NoteBook) {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsRepository.updateNoteBook(notebook)
+        }
+    }
+
+    fun getNotebookByName(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getNoteBookByName.postValue(settingsRepository.getNotebookByName(name))
         }
     }
 }

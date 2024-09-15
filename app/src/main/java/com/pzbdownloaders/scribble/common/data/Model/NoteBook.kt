@@ -8,4 +8,5 @@ data class NoteBook(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name:String = "",
+    val lockedOrNote:Boolean = false
 )

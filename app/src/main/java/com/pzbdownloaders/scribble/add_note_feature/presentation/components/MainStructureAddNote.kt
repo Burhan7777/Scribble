@@ -220,32 +220,4 @@ fun MainStructureAddNote(
 
 }
 
-fun makeTextBold(textFieldValue: MutableState<TextFieldValue>) {
-    val selection = textFieldValue.value.selection
-    if (!selection.collapsed) {
-        val annotatedString = buildAnnotatedString {
-            append(textFieldValue.value.annotatedString.subSequence(0, selection.start))
-
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(
-                    textFieldValue.value.annotatedString.subSequence(
-                        selection.start,
-                        selection.end
-                    )
-                )
-            }
-
-            append(
-                textFieldValue.value.annotatedString.subSequence(
-                    selection.end,
-                    textFieldValue.value.annotatedString.length
-                )
-            )
-
-
-        }
-
-        textFieldValue.value = textFieldValue.value.copy(annotatedString)
-    }
-}
 

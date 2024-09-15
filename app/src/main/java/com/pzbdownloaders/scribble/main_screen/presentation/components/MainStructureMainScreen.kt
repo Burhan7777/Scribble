@@ -203,6 +203,8 @@ fun MainStructureMainScreen(
                                             items
                                         )
                                     )
+
+
                                 },
                                 icon = {
                                     if (selectedNote.value == indexed) {

@@ -43,22 +43,27 @@ import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
+import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.settings_feature.screen.domain.checkPasswordIfMatches
 import com.pzbdownloaders.scribble.settings_feature.screen.domain.createPassword
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ChangePasswordAlertBox
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.SetPasswordAlertBox
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ShowNotebooksAlertBox
 
 @Composable
-fun SettingsScreen(navHostController: NavHostController, activity: MainActivity) {
+fun SettingsScreen(
+    navHostController: NavHostController,
+    activity: MainActivity,
+    viewModel: MainActivityViewModel
+) {
     val context = LocalContext.current
     var showPasswordDialog = remember { mutableStateOf(false) }
     var password = remember { mutableStateOf("") }
     var confirmPassword = remember { mutableStateOf("") }
     val showChangePasswordDialog = remember { mutableStateOf(false) }
-    val oldPassword = remember { mutableStateOf("") }
-    val newPassword = remember { mutableStateOf("") }
+    var showNotebooksDialogBox = remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -154,6 +159,67 @@ fun SettingsScreen(navHostController: NavHostController, activity: MainActivity)
                 }
             }
         }
+//        Card(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(80.dp)
+//                .padding(10.dp)
+//                .border(
+//                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+//                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+//                        topStart = CornerSize(10.dp),
+//                        topEnd = CornerSize(10.dp),
+//                        bottomStart = CornerSize(10.dp),
+//                        bottomEnd = CornerSize(10.dp),
+//                    )
+//                )
+//                .clickable {
+//                    showNotebooksDialogBox.value = true
+//                },
+//            shape = MaterialTheme.shapes.medium.copy(
+//                topStart = CornerSize(10.dp),
+//                topEnd = CornerSize(10.dp),
+//                bottomStart = CornerSize(10.dp),
+//                bottomEnd = CornerSize(10.dp),
+//            ),
+//            elevation = CardDefaults.cardElevation(15.dp),
+//            colors = CardDefaults.cardColors(
+//                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+//                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+//                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+//            )
+//        ) {
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.Lock,
+//                    contentDescription = "Lock icon",
+//                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+//                )
+//                Text(
+//                    text = "Lock Notebook",
+//                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+//                    fontSize = 18.sp,
+//                    fontFamily = FontFamily.fontFamilyRegular,
+//                    maxLines = 2,
+//                    overflow = TextOverflow.Ellipsis
+//                )
+//                Box(modifier = Modifier.fillMaxWidth()) {
+//                    Icon(
+//                        imageVector = Icons.Filled.ArrowForwardIos,
+//                        contentDescription = "Arrow Forward",
+//                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+//                        modifier = Modifier
+//                            .padding(top = 10.dp, end = 10.dp)
+//                            .align(Alignment.CenterEnd)
+//                    )
+//                }
+//            }
+//        }
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -308,6 +374,11 @@ fun SettingsScreen(navHostController: NavHostController, activity: MainActivity)
                 changePasswordDialog = showChangePasswordDialog,
                 activity = activity
             )
+        }
+        if (showNotebooksDialogBox.value) {
+            ShowNotebooksAlertBox(viewModel = viewModel, activity = activity) {
+                showNotebooksDialogBox.value = false
+            }
         }
     }
 }

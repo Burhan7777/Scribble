@@ -23,6 +23,7 @@ import com.pzbdownloaders.scribble.notebook_main_screen.data.NotebookRepository
 import com.pzbdownloaders.scribble.notebook_main_screen.domain.GetNotebookNotesUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetSearchResultUseCase
+import com.pzbdownloaders.scribble.settings_feature.screen.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,9 +38,9 @@ class AppModule {
 
 //ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '
 
-    var migration_10_11 = object : Migration(10, 11) {
+    var migration_11_12 = object : Migration(11, 12) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("ALTER TABLE notes ADD COLUMN notePinned INTEGER NOT NULL DEFAULT (0) ")
+            db.execSQL("ALTER TABLE notebook ADD COLUMN lockedOrNote INTEGER NOT NULL DEFAULT (0) ")
         }
     }
 
@@ -47,7 +48,7 @@ class AppModule {
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .addMigrations(migration_10_11)
+            .addMigrations(migration_11_12)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }
@@ -121,5 +122,8 @@ class AppModule {
     fun notebookRepository(@ApplicationContext context: Context) =
         NotebookRepository(createDataBase(context))
 
+    @Provides
+    fun settingsRepository(@ApplicationContext context: Context) =
+        SettingsRepository(createDataBase(context))
 
 }
