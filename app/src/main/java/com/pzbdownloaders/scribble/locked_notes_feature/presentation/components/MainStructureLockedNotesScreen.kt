@@ -225,7 +225,7 @@ fun MainStructureLockedNotesScreen(
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
-                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointsLockedNotesMainScreen.route) }) {
                             Icon(
                                 imageVector = Icons.Filled.FormatListBulleted,
                                 contentDescription = "Bullet point list",

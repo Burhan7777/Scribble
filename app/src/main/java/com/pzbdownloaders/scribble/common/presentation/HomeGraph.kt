@@ -12,6 +12,7 @@ import com.pzbdownloaders.scribble.archive_notes_feature.presentation.screen.Arc
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.screens.EditNoteScreen
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.AddNoteInLockedScreen
+import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.BulletPointsLockedNoteScreen.BulletPointsLockedNotesMainScreen
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.CheckBoxLockedNotesScreen.CheckboxLockedNotesMainScreen
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.screen.LockedNotesScreen
 import com.pzbdownloaders.scribble.main_screen.presentation.screens.NotesScreen
@@ -184,6 +185,13 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(Screens.CheckBoxLockedNotesMainScreen.route) {
             CheckboxLockedNotesMainScreen(
+                navHostController = navController,
+                mainActivityViewModel = viewModel,
+                activity = activity
+            )
+        }
+        composable(Screens.BulletPointsLockedNotesMainScreen.route) {
+            BulletPointsLockedNotesMainScreen(
                 navHostController = navController,
                 mainActivityViewModel = viewModel,
                 activity = activity

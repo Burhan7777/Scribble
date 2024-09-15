@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (25/48) // MAIN - (12/18)
+FEATURES THAT NEED TO BE ADDED (26/48) // MAIN - (12/18)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -47,5 +47,5 @@ FEATURES THAT NEED TO BE ADDED (25/48) // MAIN - (12/18)
 44) Keep track of total words written for the achievements(Main):
 45) How long notes survive in trash in settings :
 46) Change title of all to richtextstate(Main):
-47) Add checkbox and bulletpoints to notebooks and locked  notes:
+47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main):
