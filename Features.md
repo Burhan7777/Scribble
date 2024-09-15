@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (28/51) // MAIN - (14/20)
+FEATURES THAT NEED TO BE ADDED (31/51) // MAIN - (14/20)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -26,8 +26,8 @@ FEATURES THAT NEED TO BE ADDED (28/51) // MAIN - (14/20)
 23) Animations in lazy-column when note is deleted:
 24) Transitions between screens:
 25) "No Notes found" animation in main screen and notebooks screen:
-26) Rate app option while using app:
-27) Update app option:
+26) Rate app option while using app: DELAYED
+27) Update app option: DELAYED
 28) Firebase fix dialog boxes like in Instabuddy :( :
 29) Don't forget to save password of locked notes on the cloud: DONE
 30) Save note on back button also auto-save function(Main):
@@ -45,8 +45,8 @@ FEATURES THAT NEED TO BE ADDED (28/51) // MAIN - (14/20)
 42) Remove Splash screen(Main):DONE
 43) Add Firebase events to everything(Main):
 44) Keep track of total words written for the achievements(Main):
-45) How long notes survive in trash in settings :
-46) Change title of all to richtextstate(Main):
+45) How long notes survive in trash in settings : 
+46) Change title of all to richtextstate(Main): CANCELLED
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
 49) Comment Navigation Menu in all screens except main screen:

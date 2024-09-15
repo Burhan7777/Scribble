@@ -235,9 +235,9 @@ fun BackupAndRestoreScreen() {
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "If the notes don't restore when you go back to main screen , please restart the app.",
+            text = "Please restart the app after restoring the data to see the full effect.",
             fontFamily = FontFamily.fontFamilyBold,
-            fontSize = 15.sp,
+            fontSize = 20.sp,
             color = MaterialTheme.colors.onPrimary,
             fontStyle = FontStyle.Italic,
             modifier = Modifier
