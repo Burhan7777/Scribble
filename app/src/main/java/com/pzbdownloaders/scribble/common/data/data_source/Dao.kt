@@ -34,6 +34,9 @@ interface Dao {
     @Upsert
     suspend fun addNoteBook(notebook: NoteBook)
 
+    @Query("DELETE FROM notebook where name= :notebook")
+    suspend fun deleteNotebook(notebook: String)
+
     @Query("SELECT * from notebook")
     suspend fun getAllNoteBooks(): List<NoteBook>
 

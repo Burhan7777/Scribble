@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (26/48) // MAIN - (12/18)
+FEATURES THAT NEED TO BE ADDED (28/51) // MAIN - (14/20)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -38,7 +38,7 @@ FEATURES THAT NEED TO BE ADDED (26/48) // MAIN - (12/18)
 35) Pomodoro for checkboxes:
 36) Change drop down menu in add note to text view like in edit note: DONE
 37) Remove 30 days trial stuff(Main): DONE
-38) Delete Notebooks(Main):
+38) Delete Notebooks(Main): DONE
 39) Why login dialog box on login screen: DONE
 40) Can add notes in locked screen(Main): DONE
 41) Can add notes in notebooks(Main): DONE
@@ -48,4 +48,7 @@ FEATURES THAT NEED TO BE ADDED (26/48) // MAIN - (12/18)
 45) How long notes survive in trash in settings :
 46) Change title of all to richtextstate(Main):
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
-48) Add pinned feature to locked notes and notebooks and remove from archive(Main):
+48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
+49) Comment Navigation Menu in all screens except main screen:
+50) Change notebook option should not be in locked notes(Main):
+51) Lock Notebook(Main):

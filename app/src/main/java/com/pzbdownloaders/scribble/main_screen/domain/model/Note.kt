@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 
 @Entity(tableName = "notes")
 data class Note(
@@ -12,7 +13,7 @@ data class Note(
     val title: String = "",
     val content: String = "",
     val archive: Boolean = false,
-    val notebook: String = "Not Categorized",
+    val notebook: String = Constant.NOT_CATEGORIZED,
     val locked: Boolean = false,
     val listOfCheckedNotes: ArrayList<String> = arrayListOf(),
     val listOfCheckedBoxes: ArrayList<Boolean> = arrayListOf(),
@@ -22,5 +23,5 @@ data class Note(
     val color: Int = 0,
     val timePutInTrash: Long = 0,
     val deletedNote: Boolean = false,
-    val notePinned:Boolean = false
+    val notePinned: Boolean = false
 )

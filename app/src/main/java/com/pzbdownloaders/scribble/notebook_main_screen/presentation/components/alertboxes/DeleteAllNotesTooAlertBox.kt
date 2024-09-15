@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes
+package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -8,26 +8,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
-import com.pzbdownloaders.scribble.main_screen.domain.model.Note
-
 
 @Composable
-fun AlertDialogBoxDelete(
+fun DeleteAllNotesToo(
     viewModel: MainActivityViewModel,
-    id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
-    note: Note,
+    name: String,
+    showDeleteNotebookDialogBox: MutableState<Boolean>,
     onDismiss: () -> Unit
 ) {
-    val context = LocalContext.current
     androidx.compose.material3.AlertDialog(onDismissRequest = {
         onDismiss()
     },
@@ -44,15 +43,15 @@ fun AlertDialogBoxDelete(
 
         title = {
             Text(
-                text = "Move to Trash Bin?",
+                text = "What about notes...",
                 fontFamily = FontFamily.fontFamilyBold,
-                fontSize = 20.sp,
+                fontSize = 15.sp,
                 color = MaterialTheme.colors.onPrimary
             )
         },
         text = {
             Text(
-                text = "Are you sure you want to move it to the trash bin ? ",
+                text = "If yes then this will move notes to trash ",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -60,12 +59,20 @@ fun AlertDialogBoxDelete(
         confirmButton = {
             Button(
                 onClick = {
-                    //viewModel.deleteNoteById(id)
-                    var note =
-                        note.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
-                    viewModel.updateNote(note)
+                    viewModel.getAllNotesByNotebook(name)
+                    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
+                        for (i in it) {
+                            val notebook = i.copy(
+                                deletedNote = true,
+                                timePutInTrash = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(notebook)
+                        }
+                    }
                     onDismiss()
-                    navHostController.popBackStack()
+                    showDeleteNotebookDialogBox.value = true
+
+
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -78,12 +85,24 @@ fun AlertDialogBoxDelete(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Move to Trash", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Delete notes", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {
             OutlinedButton(
-                onClick = { onDismiss() },
+                onClick = {
+                    viewModel.getAllNotesByNotebook(name)
+                    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
+                        for (i in it) {
+                            val notebook = i.copy(
+                                notebook = Constant.NOT_CATEGORIZED
+                            )
+                            viewModel.updateNote(notebook)
+                        }
+                    }
+                    onDismiss()
+                    showDeleteNotebookDialogBox.value = true
+                },
                 shape = MaterialTheme.shapes.medium.copy(
                     topStart = CornerSize(15.dp),
                     topEnd = CornerSize(15.dp),
@@ -96,7 +115,7 @@ fun AlertDialogBoxDelete(
                     contentColor = MaterialTheme.colors.onPrimary
                 ),
             ) {
-                Text(text = "Cancel", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Save notes", fontFamily = FontFamily.fontFamilyRegular)
             }
         }
     )

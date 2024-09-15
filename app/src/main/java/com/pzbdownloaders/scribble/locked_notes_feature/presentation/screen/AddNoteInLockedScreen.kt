@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.pzbdownloaders.scribble.add_note_feature.presentation.components.MainStructureAddNote
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.locked_notes_feature.presentation.components.MainStructureAddNoteLockedScreen
-import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.MainStructureAddNoteInNotebook
 
 @Composable
 fun AddNoteInLockedScreen(

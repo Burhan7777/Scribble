@@ -26,6 +26,8 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes.DeleteAllNotesToo
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes.DeleteNotebookAlertBox
 import kotlinx.coroutines.launch
 
 
@@ -48,6 +50,10 @@ fun MainStructureNotebookScreen(
     var coroutineScope = rememberCoroutineScope()
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
+
+    var showDeleteNotebookDialogBox = remember { mutableStateOf(false) }
+
+    var showDeleteNotesTooDialogBox = remember { mutableStateOf(false) }
 
     if (selectedItem.value == 0) selectedNote.value = 100000
 
@@ -207,7 +213,7 @@ fun MainStructureNotebookScreen(
                     ),
                     actions = {
                         IconButton(onClick = {
-
+                            showDeleteNotesTooDialogBox.value = true
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -291,6 +297,27 @@ fun MainStructureNotebookScreen(
                         navHostController = navHostController
                     ) {
                         showDialogToAccessLockedNotes.value = false
+                    }
+                }
+                if (showDeleteNotebookDialogBox.value) {
+                    DeleteNotebookAlertBox(
+                        viewModel = viewModel,
+                        title,
+                        navHostController,
+                        activity
+                    ) {
+                        showDeleteNotebookDialogBox.value = false
+                    }
+                }
+                if (showDeleteNotesTooDialogBox.value) {
+                    DeleteAllNotesToo(
+                        viewModel = viewModel,
+                        activity = activity,
+                        navHostController = navHostController,
+                        name = title,
+                        showDeleteNotebookDialogBox = showDeleteNotebookDialogBox
+                    ) {
+                        showDeleteNotesTooDialogBox.value = false
                     }
                 }
                 NotesNotebook(viewModel, activity, navHostController, title)

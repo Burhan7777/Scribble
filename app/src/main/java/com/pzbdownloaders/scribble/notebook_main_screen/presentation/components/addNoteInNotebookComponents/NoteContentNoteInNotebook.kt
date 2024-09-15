@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components
+package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.addNoteInNotebookComponents
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke

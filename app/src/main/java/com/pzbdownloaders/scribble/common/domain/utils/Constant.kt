@@ -18,5 +18,6 @@ object Constant {
     const val TRIAL_ONGOING = "trial_ongoing"
     const val TRIAL_NOT_STARTED = "trial_not_started"
     const val TRIAL_ENDED_OR_NOT = "trial_ended_or_not"
+    const val NOT_CATEGORIZED = "Not Categorized"
 
 }

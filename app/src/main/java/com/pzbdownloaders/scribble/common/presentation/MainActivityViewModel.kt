@@ -26,6 +26,7 @@ import com.pzbdownloaders.scribble.login_and_signup_feature.domain.usecase.SignU
 import com.pzbdownloaders.scribble.main_screen.data.repository.NoteRepository
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.GetNotesUseCase
+import com.pzbdownloaders.scribble.notebook_main_screen.data.NotebookRepository
 import com.pzbdownloaders.scribble.notebook_main_screen.domain.GetNotebookNotesUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetArchiveSearchResultUseCase
 import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.GetSearchResultUseCase
@@ -40,6 +41,7 @@ class MainActivityViewModel @Inject constructor(
     private val insertNoteRepository: InsertNoteRepository,
     private val noteRepository: NoteRepository,
     private val editNoteRepository: EditNoteRepository,
+    private val notebookRepository: NotebookRepository,
     private val authenticationSignUpUseCase: AuthenticationSignUpUseCase,
     private val signUpUserCase: SignUpUserCase,
     private val authenticationSignInUseCase: AuthenticationSignInUseCase,
@@ -305,6 +307,12 @@ class MainActivityViewModel @Inject constructor(
     fun getNotebookNote(notebook: String) {
         viewModelScope.launch {
             getNotebookNotes.value = getNotebookNotesUseCase.getNotebookNote(notebook)
+        }
+    }
+
+    fun deleteNotebook(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notebookRepository.deleteNotebook(name)
         }
     }
 }
