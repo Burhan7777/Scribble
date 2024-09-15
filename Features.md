@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (31/51) // MAIN - (14/20)
+FEATURES THAT NEED TO BE ADDED (32/52) // MAIN - (14/20)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -49,6 +49,7 @@ FEATURES THAT NEED TO BE ADDED (31/51) // MAIN - (14/20)
 46) Change title of all to richtextstate(Main): CANCELLED
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
-49) Comment Navigation Menu in all screens except main screen:
+49) Comment Navigation Menu in all screens except main screen: DONE
 50) Change notebook option should not be in locked notes(Main):
 51) Lock Notebook(Main):
+52) Remove at to notebook from checbox and bulletpoints:

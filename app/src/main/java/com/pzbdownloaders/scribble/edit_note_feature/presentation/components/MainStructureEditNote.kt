@@ -234,8 +234,8 @@ fun MainStructureEditNote(
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }
-                    if(screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
-                    IconButton(onClick = {
+                    if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
+                        IconButton(onClick = {
                             viewModel.getNoteById(id)
                             var noteFromDb = viewModel.getNoteById
                             var pinned = noteFromDb.value.notePinned
@@ -244,14 +244,14 @@ fun MainStructureEditNote(
                             navController.popBackStack()
 
                         }) {
-                        Icon(
-                            imageVector = if (pinnedOrNot.value) Icons.Filled.PushPin else Icons.Outlined.PushPin,
-                            contentDescription = "pin note",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
+                            Icon(
+                                imageVector = if (pinnedOrNot.value) Icons.Filled.PushPin else Icons.Outlined.PushPin,
+                                contentDescription = "pin note",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
-                    }
-                            IconButton (onClick = {
+                    IconButton(onClick = {
                         if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
                             val result = checkIfUserHasCreatedPassword()
                             result.observe(activity) {
@@ -291,7 +291,7 @@ fun MainStructureEditNote(
                             contentDescription = "Lock Note"
                         )
                     }
-                            IconButton (onClick = {
+                    IconButton(onClick = {
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         convertMutableStateIntoString(
                             mutableListOfBulletPoints,
@@ -389,7 +389,7 @@ fun MainStructureEditNote(
                             contentDescription = "Archive"
                         )
                     }
-                            IconButton (onClick = {
+                    IconButton(onClick = {
                         // viewModel.deleteNoteById(id)
                         dialogOpen.value = true
 
@@ -420,7 +420,8 @@ fun MainStructureEditNote(
                     activity,
                     richStateText.value,
                     { title = it },
-                    { content = it }
+                    { content = it },
+                    screen
                 )
             }
             Box(

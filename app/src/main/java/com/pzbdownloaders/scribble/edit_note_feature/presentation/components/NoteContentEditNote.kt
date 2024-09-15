@@ -60,12 +60,14 @@ import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
+@OptIn(
+    ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class
 )
 @Composable
@@ -80,9 +82,10 @@ fun NoteContent(
     listOfCheckboxes: ArrayList<Boolean>,
     listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
     activity: MainActivity,
-    richStateText:RichTextState,
+    richStateText: RichTextState,
     onChangeTitle: (String) -> Unit,
-    onChangeContent: (String) -> Unit
+    onChangeContent: (String) -> Unit,
+    screen: String
 ) {
 
     ///viewModel.getNoteBook()
@@ -102,7 +105,7 @@ fun NoteContent(
 
 
     LaunchedEffect(key1 = content) {
-     richStateText.setHtml(content)
+        richStateText.setHtml(content)
     }
     // richTextState1.setText(richTextState1.annotatedString.text)
     // println(richTextState1.annotatedString.text)
@@ -115,31 +118,32 @@ fun NoteContent(
 //    }
 
 
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(0.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (noteBook.isNotEmpty()) {
-            Text(
-                text = if (selectedNotebook.value.isEmpty()) "Notebook:$noteBook" else "New Notebook selected: ${selectedNotebook.value}",
-                color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyRegular,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 15.dp)
-            )
-        } else {
-            Text(
-                text = if (selectedNotebook.value.isEmpty()) "Add to Notebook" else "New Notebook selected: ${selectedNotebook.value}",
-                color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyRegular,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 15.dp)
-            )
-        }
+    if (screen != Constant.LOCKED_NOTE) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (noteBook.isNotEmpty()) {
+                Text(
+                    text = if (selectedNotebook.value.isEmpty()) "Notebook:$noteBook" else "New Notebook selected: ${selectedNotebook.value}",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+            } else {
+                Text(
+                    text = if (selectedNotebook.value.isEmpty()) "Add to Notebook" else "New Notebook selected: ${selectedNotebook.value}",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+            }
 
-        /*     TextField(
+            /*     TextField(
                 modifier = Modifier.wrapContentWidth(),
                  value = "Notebook:$noteBook",
                  onValueChange = { },
@@ -165,14 +169,15 @@ fun NoteContent(
                  ),
                  readOnly = true
              )*/
-        Icon(
-            imageVector = Icons.Filled.ArrowDropDown,
-            contentDescription = "Arrow DropDown",
-            modifier = Modifier.clickable {
-                isExpanded.value = true
-            })
-        if (isExpanded.value) {
-            Menu(isExpanded = isExpanded, selectedNotebook, viewModel, dialogOpen, notebookText)
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "Arrow DropDown",
+                modifier = Modifier.clickable {
+                    isExpanded.value = true
+                })
+            if (isExpanded.value) {
+                Menu(isExpanded = isExpanded, selectedNotebook, viewModel, dialogOpen, notebookText)
+            }
         }
     }
     if (listOfNotes.size == 0 && listOfBulletPointNotes.size == 0) {
