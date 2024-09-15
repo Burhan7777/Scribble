@@ -3,11 +3,13 @@ package com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -231,6 +233,24 @@ fun BackupAndRestoreScreen() {
                 }
             }
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "If the notes don't restore when you go back to main screen , please restart the app.",
+            fontFamily = FontFamily.fontFamilyBold,
+            fontSize = 15.sp,
+            color = MaterialTheme.colors.onPrimary,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colors.primaryVariant, shape = MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(20.dp),
+                        topEnd = CornerSize(20.dp),
+                        bottomStart = CornerSize(20.dp),
+                        bottomEnd = CornerSize(20.dp),
+                    )
+                )
+                .padding(20.dp)
+        )
         if (showBackUpFIleNameAlertBox.value) {
             DatabaseBackupNameAlertBox(
                 backUpFileName = backUpFileName,

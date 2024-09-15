@@ -218,20 +218,20 @@ fun MainStructureLockedNotesScreen(
             bottomBar = {
                 androidx.compose.material.BottomAppBar {
                     androidx.compose.material.BottomAppBar() {
-//                        IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
-//                            Icon(
-//                                imageVector = Icons.Outlined.CheckBox,
-//                                contentDescription = "CheckBox",
-//                                tint = MaterialTheme.colors.onPrimary
-//                            )
-//                        }
-//                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
-//                            Icon(
-//                                imageVector = Icons.Filled.FormatListBulleted,
-//                                contentDescription = "Bullet point list",
-//                                tint = MaterialTheme.colors.onPrimary
-//                            )
-//                        }
+                        IconButton(onClick = { navHostController.navigate(Screens.CheckBoxLockedNotesMainScreen.route) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.CheckBox,
+                                contentDescription = "CheckBox",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                            Icon(
+                                imageVector = Icons.Filled.FormatListBulleted,
+                                contentDescription = "Bullet point list",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
                 }
             },

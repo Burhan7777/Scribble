@@ -68,4 +68,5 @@ sealed class Screens(val route: String) {
             return "bullet_points_notebook/$notebook"
         }
     }
+    object CheckBoxLockedNotesMainScreen:Screens("checkbox_locked_notes_main_screen")
 }

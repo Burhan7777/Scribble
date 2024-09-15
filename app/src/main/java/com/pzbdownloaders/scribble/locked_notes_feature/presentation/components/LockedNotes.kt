@@ -51,21 +51,24 @@ fun LockedNotes(
         }
 
     }
-    Text(
-        text = "My",
-        fontFamily = fontFamilyExtraLight,
-        fontSize = 65.sp,
-        color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(horizontal = 10.dp)
-    )
-    Text(
-        text = "Locked Notes",
-        fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
-        color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(horizontal = 10.dp)
-    )
 
     LazyColumn() {
+        item {
+            Text(
+                text = "My",
+                fontFamily = fontFamilyExtraLight,
+                fontSize = 65.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = "Locked Notes",
+                fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+
+        }
         items(listOfNotes ?: emptyList()) { note ->
             SingleItemLockedNoteList(note = note, navHostController)
         }

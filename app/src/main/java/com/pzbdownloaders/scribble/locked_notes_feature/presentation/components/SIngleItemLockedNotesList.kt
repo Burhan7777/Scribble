@@ -160,7 +160,8 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                                        disabledUncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )
@@ -189,7 +190,8 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                                        disabledUncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )
@@ -206,7 +208,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                 }
             }
         }
-    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.locked){
+    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.locked) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

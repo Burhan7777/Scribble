@@ -205,6 +205,17 @@ fun MainStructureNotebookScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colors.primary
                     ),
+                    actions = {
+                        IconButton(onClick = {
+
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete Notebook",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
+                    }
                 )
 
             },
@@ -265,7 +276,7 @@ fun MainStructureNotebookScreen(
                         contentDescription = "Add Note"
                     )
                 }
-            }
+            },
         ) { paddingValues ->
             Column(
                 modifier = Modifier
