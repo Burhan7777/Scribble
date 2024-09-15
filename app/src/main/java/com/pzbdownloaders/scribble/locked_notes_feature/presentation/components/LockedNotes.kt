@@ -11,6 +11,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
@@ -19,8 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
 
 @Composable
 fun LockedNotes(
@@ -37,6 +41,12 @@ fun LockedNotes(
 
     viewModel.getAllNotes()
     var listOfNotes = viewModel.listOfNotes
+    var listOfPinnedNotes = SnapshotStateList<Note>()
+    for (i in listOfNotes) {
+        if (i.notePinned && i.locked) {
+            listOfPinnedNotes.add(i)
+        }
+    }
 
 
     if (listOfNotes == null) {
@@ -68,6 +78,27 @@ fun LockedNotes(
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
 
+        }
+        if (listOfPinnedNotes.size > 0) {
+            item {
+                Text(
+                    text = "PINNED",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+            }
+        }
+        items(listOfPinnedNotes) { note ->
+            SingleItemLockedNoteList(note = note, navHostController = navHostController)
+        }
+        item {
+            Text(
+                text = "ALL NOTES",
+                fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+            )
         }
         items(listOfNotes ?: emptyList()) { note ->
             SingleItemLockedNoteList(note = note, navHostController)

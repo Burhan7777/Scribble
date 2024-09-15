@@ -19,8 +19,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.locked_notes_feature.presentation.components.SingleItemLockedNoteList
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
@@ -40,9 +42,15 @@ fun NotesNotebook(
     viewModel.getAllNotesByNotebook(title)
     //var listOfNotes = viewModel.listOfNotesByNotebook
     var listOfNotesBooks = SnapshotStateList<Note>()
+    var listOfPinnedNotes = ArrayList<Note>()
     viewModel.listOfNotesByNotebookLiveData.observe(activity) {
         listOfNotesBooks = it.toMutableStateList()
-        println(listOfNotesBooks.size)
+
+        for (i in listOfNotesBooks) {
+            if (i.notePinned) {
+                listOfPinnedNotes.add(i)
+            }
+        }
     }
 
 
@@ -63,7 +71,27 @@ fun NotesNotebook(
                 color = MaterialTheme.colors.onPrimary,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
-
+        }
+        if (listOfPinnedNotes.size > 0) {
+            item {
+                Text(
+                    text = "PINNED",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+            }
+        }
+        items(listOfPinnedNotes) { note ->
+            SingleItemNotebookList(note = note, navHostController = navHostController,title)
+        }
+        item {
+            Text(
+                text = "ALL NOTES",
+                fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+            )
         }
         items(
             listOfNotesBooks ?: emptyList()

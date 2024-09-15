@@ -1,10 +1,8 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -12,31 +10,25 @@ import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.common.presentation.*
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxDelete
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPassword
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -240,24 +232,26 @@ fun MainStructureEditNote(
 
 
                     }) {
-                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Undo")
+                        Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }
+                    if(screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                     IconButton(onClick = {
-                        viewModel.getNoteById(id)
-                        var noteFromDb = viewModel.getNoteById
-                        var pinned = noteFromDb.value.notePinned
-                        var note = noteFromDb.value.copy(notePinned = !pinned)
-                        viewModel.updateNote(note)
-                        navController.popBackStack()
+                            viewModel.getNoteById(id)
+                            var noteFromDb = viewModel.getNoteById
+                            var pinned = noteFromDb.value.notePinned
+                            var note = noteFromDb.value.copy(notePinned = !pinned)
+                            viewModel.updateNote(note)
+                            navController.popBackStack()
 
-                    }) {
+                        }) {
                         Icon(
                             imageVector = if (pinnedOrNot.value) Icons.Filled.PushPin else Icons.Outlined.PushPin,
                             contentDescription = "pin note",
                             tint = MaterialTheme.colors.onPrimary
                         )
                     }
-                    IconButton(onClick = {
+                    }
+                            IconButton (onClick = {
                         if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
                             val result = checkIfUserHasCreatedPassword()
                             result.observe(activity) {
@@ -297,7 +291,7 @@ fun MainStructureEditNote(
                             contentDescription = "Lock Note"
                         )
                     }
-                    IconButton(onClick = {
+                            IconButton (onClick = {
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         convertMutableStateIntoString(
                             mutableListOfBulletPoints,
@@ -395,7 +389,7 @@ fun MainStructureEditNote(
                             contentDescription = "Archive"
                         )
                     }
-                    IconButton(onClick = {
+                            IconButton (onClick = {
                         // viewModel.deleteNoteById(id)
                         dialogOpen.value = true
 

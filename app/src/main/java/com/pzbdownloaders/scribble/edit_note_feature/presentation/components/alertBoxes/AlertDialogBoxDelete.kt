@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
+package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -10,18 +10,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
-import com.pzbdownloaders.scribble.common.presentation.Screens
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 
 @Composable
-fun AlertDialogBoxPassword(
+fun AlertDialogBoxDelete(
     viewModel: MainActivityViewModel,
+    id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
+    note: Note,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -39,9 +42,17 @@ fun AlertDialogBoxPassword(
                      Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
               }*/
 
+        title = {
+            Text(
+                text = "Move to Trash Bin?",
+                fontFamily = FontFamily.fontFamilyBold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colors.onPrimary
+            )
+        },
         text = {
             Text(
-                text = " It looks like you haven't setup the password protection yet. Please go to settings and set it up and then you can lock your notes. ",
+                text = "Are you sure you want to move it to the trash bin ? ",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -49,8 +60,12 @@ fun AlertDialogBoxPassword(
         confirmButton = {
             Button(
                 onClick = {
+                    //viewModel.deleteNoteById(id)
+                    var note =
+                        note.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
+                    viewModel.insertNote(note)
                     onDismiss()
-                    navHostController.navigate(Screens.SettingsScreen.route)
+                    navHostController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -63,7 +78,7 @@ fun AlertDialogBoxPassword(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Go to settings", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Move to Trash", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {

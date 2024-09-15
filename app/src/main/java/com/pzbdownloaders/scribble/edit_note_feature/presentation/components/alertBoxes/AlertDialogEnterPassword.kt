@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
+package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes
 
 
 import android.widget.Toast
@@ -13,7 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -30,15 +29,15 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 
 @Composable
-fun AlertDialogBoxEnterPasswordToUnlock(
+fun AlertDialogBoxEnterPassword(
     viewModel: MainActivityViewModel,
     id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
     title: String,
     content: String,
-    listOfCheckedNotes: ArrayList<String>,
-    listOfCheckBoxes: ArrayList<Boolean>,
+    convertedMutableList: ArrayList<String>,
+    listOfCheckboxes: ArrayList<Boolean>,
     listOfBulletPoints: ArrayList<String>,
     onDismiss: () -> Unit
 ) {
@@ -60,7 +59,7 @@ fun AlertDialogBoxEnterPasswordToUnlock(
         text = {
             Column {
                 Text(
-                    text = "Enter password to unlock the note. ",
+                    text = "Enter password to lock the note. ",
                     fontFamily = FontFamily.fontFamilyRegular,
                     color = MaterialTheme.colors.onPrimary
                 )
@@ -100,6 +99,7 @@ fun AlertDialogBoxEnterPasswordToUnlock(
         confirmButton = {
             Button(
                 onClick = {
+                    println(convertedMutableList)
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
@@ -107,17 +107,17 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                                 id = id,
                                 title,
                                 content = content,
-                                locked = false,
+                                locked = true,
                                 archive = false,
-                                listOfCheckedNotes = listOfCheckedNotes,
-                                listOfCheckedBoxes = listOfCheckBoxes,
-                                listOfBulletPointNotes = listOfBulletPoints,
+                                listOfCheckedBoxes = listOfCheckboxes,
+                                listOfCheckedNotes = convertedMutableList,
+                               listOfBulletPointNotes =  listOfBulletPoints,
                                 timeStamp = System.currentTimeMillis()
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(
                                 activity,
-                                "Note has been unlocked",
+                                "Note has been locked",
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
@@ -144,7 +144,7 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Unlock Note", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Lock Note", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {
