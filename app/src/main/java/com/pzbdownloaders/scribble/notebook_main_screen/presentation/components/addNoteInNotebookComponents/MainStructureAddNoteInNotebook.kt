@@ -106,7 +106,8 @@ fun MainStructureAddNoteInNotebook(
                             notebookName,
                             timeStamp = System.currentTimeMillis(),
                             deletedNote = false,
-                            locked = false
+                            locked = false,
+                            timeModified = System.currentTimeMillis()
 
                         )
                         viewModel.insertNote(note)

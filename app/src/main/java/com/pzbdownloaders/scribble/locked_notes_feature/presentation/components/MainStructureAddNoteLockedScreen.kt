@@ -149,7 +149,8 @@ fun MainStructureAddNoteLockedScreen(
                             false,
                             timeStamp = System.currentTimeMillis(),
                             deletedNote = false,
-                            locked = true
+                            locked = true,
+                            timeModified = System.currentTimeMillis()
 
                         )
                         viewModel.insertNote(note)

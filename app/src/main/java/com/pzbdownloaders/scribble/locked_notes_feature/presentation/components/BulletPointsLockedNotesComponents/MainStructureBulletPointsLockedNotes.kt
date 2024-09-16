@@ -104,7 +104,8 @@ fun MainStructureBulletPointsLockedNotes(
                             title = title.value,
                             listOfBulletPointNotes = mutableListConverted,
                             timeStamp = System.currentTimeMillis(),
-                            locked = true
+                            locked = true,
+                            timeModified = System.currentTimeMillis()
                         )
                         viewModel.insertNote(note)
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)

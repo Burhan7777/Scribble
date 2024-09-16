@@ -13,7 +13,7 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: Note)
 
-    @Query("SELECT * from notes")
+    @Query("SELECT * from notes ORDER BY timeStamp DESC")
     fun getAllNotes(): List<Note>
 
     @Delete
@@ -28,7 +28,7 @@ interface Dao {
     @Update
     suspend fun updateNote(note: Note)
 
-    @Query("SELECT * FROM notes where notebook= :notebook")
+    @Query("SELECT * FROM notes where notebook= :notebook ORDER BY timeStamp DESC")
     suspend fun getNoteByNotebook(notebook: String): List<Note>
 
     @Upsert

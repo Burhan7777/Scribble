@@ -104,7 +104,10 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                         if (it == enteredPassword.value.trim()) {
                             viewModel.getNoteById(id)
                             val note = viewModel.getNoteById
-                            val newNote = note.value.copy(locked = false)
+                            val newNote = note.value.copy(
+                                locked = false,
+                                timeModified = System.currentTimeMillis()
+                            )
                             viewModel.updateNote(newNote)
                             Toast.makeText(
                                 activity,

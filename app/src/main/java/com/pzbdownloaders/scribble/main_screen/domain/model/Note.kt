@@ -23,5 +23,6 @@ data class Note(
     val color: Int = 0,
     val timePutInTrash: Long = 0,
     val deletedNote: Boolean = false,
-    val notePinned: Boolean = false
+    val notePinned: Boolean = false,
+    val timeModified :Long = 0
 )

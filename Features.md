@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/20)
+FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/19)
 =====================================
 
 1) Archive notes to be added: DONE

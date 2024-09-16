@@ -105,7 +105,8 @@ fun MainStructureBulletPointsNotebook(
                             title = title.value,
                             notebook = notebook,
                             listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis()
+                            timeStamp = System.currentTimeMillis(),
+                            timeModified = System.currentTimeMillis()
                         )
                         viewModel.insertNote(note)
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)

@@ -38,9 +38,9 @@ class AppModule {
 
 //ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '
 
-    var migration_11_12 = object : Migration(11, 12) {
+    var migration_12_13 = object : Migration(12, 13) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("ALTER TABLE notebook ADD COLUMN lockedOrNote INTEGER NOT NULL DEFAULT (0) ")
+            db.execSQL("ALTER TABLE notes ADD COLUMN timeModified INTEGER NOT NULL DEFAULT (0) ")
         }
     }
 
@@ -48,7 +48,7 @@ class AppModule {
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .addMigrations(migration_11_12)
+            .addMigrations(migration_12_13)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }

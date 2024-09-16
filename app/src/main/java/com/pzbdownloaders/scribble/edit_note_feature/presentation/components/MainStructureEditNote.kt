@@ -223,7 +223,8 @@ fun MainStructureEditNote(
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
-                            timeStamp = timeCreated
+                            timeStamp = timeCreated,
+                            timeModified = System.currentTimeMillis()
                         )
                         viewModel.updateNote(note)
                         navController.popBackStack()
@@ -239,7 +240,10 @@ fun MainStructureEditNote(
                             viewModel.getNoteById(id)
                             var noteFromDb = viewModel.getNoteById
                             var pinned = noteFromDb.value.notePinned
-                            var note = noteFromDb.value.copy(notePinned = !pinned)
+                            var note = noteFromDb.value.copy(
+                                notePinned = !pinned,
+                                timeModified = System.currentTimeMillis()
+                            )
                             viewModel.updateNote(note)
                             navController.popBackStack()
 
@@ -300,7 +304,10 @@ fun MainStructureEditNote(
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                             viewModel.getNoteById(id)
                             var noteFromDb = viewModel.getNoteById
-                            var note = noteFromDb.value.copy(archive = true)
+                            var note = noteFromDb.value.copy(
+                                archive = true,
+                                timeModified = System.currentTimeMillis()
+                            )
                             viewModel.updateNote(note)
                             Toast.makeText(
                                 activity,
@@ -335,7 +342,10 @@ fun MainStructureEditNote(
                         } else if (screen == Constant.ARCHIVE) {
                             viewModel.getNoteById(id)
                             var noteFromDb = viewModel.getNoteById
-                            var note = noteFromDb.value.copy(archive = false)
+                            var note = noteFromDb.value.copy(
+                                archive = false,
+                                timeModified = System.currentTimeMillis()
+                            )
                             viewModel.updateNote(note)
                             Toast.makeText(
                                 activity,

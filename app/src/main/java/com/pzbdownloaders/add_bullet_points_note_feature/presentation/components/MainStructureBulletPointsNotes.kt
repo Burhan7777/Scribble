@@ -99,17 +99,18 @@ fun MainStructureBulletPointsNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                            val note = Note(
-                                id = 0,
-                                title = title.value,
-                                notebook = notebookState.value,
-                                listOfBulletPointNotes = mutableListConverted,
-                                timeStamp = System.currentTimeMillis()
-                            )
-                            viewModel.insertNote(note)
-                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.popBackStack()
+                        val note = Note(
+                            id = 0,
+                            title = title.value,
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            timeStamp = System.currentTimeMillis(),
+                            timeModified = System.currentTimeMillis()
+                        )
+                        viewModel.insertNote(note)
+                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
 
                     }) {
                         Icon(

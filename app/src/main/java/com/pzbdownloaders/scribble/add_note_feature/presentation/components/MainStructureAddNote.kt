@@ -121,8 +121,7 @@ fun MainStructureAddNote(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
 
-
-  // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+    // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
 
     Scaffold(
@@ -149,7 +148,8 @@ fun MainStructureAddNote(
                             notebookState.value,
                             timeStamp = System.currentTimeMillis(),
                             deletedNote = false,
-                            locked = false
+                            locked = false,
+                            timeModified = System.currentTimeMillis()
 
                         )
                         viewModel.insertNote(note)

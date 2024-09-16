@@ -107,7 +107,8 @@ fun MainStructureCheckBoxLockedNotes(
                             listOfCheckedNotes = mutableListConverted,
                             listOfCheckedBoxes = mutableListOfCheckBoxes,
                             timeStamp = System.currentTimeMillis(),
-                            locked = true
+                            locked = true,
+                            timeModified = System.currentTimeMillis()
                         )
                         viewModel.insertNote(note)
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
