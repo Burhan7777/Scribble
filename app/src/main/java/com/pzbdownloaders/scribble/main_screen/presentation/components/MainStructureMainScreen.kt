@@ -1,8 +1,6 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -58,11 +56,9 @@ fun MainStructureMainScreen(
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
 
 
-    val prefs: SharedPreferences =
-        activity.getSharedPreferences(Constant.LIST_PREFERENCE, MODE_PRIVATE)
-    val name = prefs.getBoolean(Constant.LIST_OR_GRID, false) //"Blank Name" the default value.
 
-    var showGridOrLinearNotes = remember { mutableStateOf(name) }
+
+
 
 
 
@@ -303,7 +299,13 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBar(navHostController, drawerState, viewModel, showGridOrLinearNotes,activity)
+                TopSearchBar(
+                    navHostController,
+                    drawerState,
+                    viewModel,
+                    viewModel.showGridOrLinearNotes,
+                    activity
+                )
                 // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
@@ -314,7 +316,7 @@ fun MainStructureMainScreen(
                         showDialogToAccessLockedNotes.value = false
                     }
                 }
-                Notes(viewModel, activity, navHostController, showGridOrLinearNotes)
+                Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)
             }
         }
     }

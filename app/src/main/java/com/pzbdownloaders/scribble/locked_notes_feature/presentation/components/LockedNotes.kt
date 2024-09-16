@@ -1,12 +1,17 @@
 package com.pzbdownloaders.scribble.locked_notes_feature.presentation.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,46 +67,100 @@ fun LockedNotes(
 
     }
 
-    LazyColumn() {
-        item {
-            Text(
-                text = "My",
-                fontFamily = fontFamilyExtraLight,
-                fontSize = 65.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-            Text(
-                text = "Locked Notes",
-                fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
+    if (viewModel.showGridOrLinearNotes.value) {
+        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(160.dp)) {
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
 
-        }
-        if (listOfPinnedNotes.size > 0) {
-            item {
+                    Text(
+                        text = "Locked Notes",
+                        fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+
+            if (listOfPinnedNotes.size > 0) {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Text(
+                        text = "PINNED",
+                        fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            items(listOfPinnedNotes) { note ->
+                SingleItemLockedNoteList(note = note, navHostController = navHostController)
+            }
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
-                    text = "PINNED",
-                    fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                    text = "ALL NOTES",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
                     color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.padding(horizontal = 10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
                 )
             }
+            items(
+                listOfNotes ?: emptyList()
+            ) { note ->
+                SingleItemLockedNoteList(note = note, navHostController)
+            }
         }
-        items(listOfPinnedNotes) { note ->
-            SingleItemLockedNoteList(note = note, navHostController = navHostController)
-        }
-        item {
-            Text(
-                text = "ALL NOTES",
-                fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
-            )
-        }
-        items(listOfNotes ?: emptyList()) { note ->
-            SingleItemLockedNoteList(note = note, navHostController)
+    } else {
+        LazyColumn() {
+            item {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+
+                    Text(
+                        text = "Locked Notes",
+                        fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            if (listOfPinnedNotes.size > 0) {
+                item {
+                    Text(
+                        text = "PINNED",
+                        fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            items(listOfPinnedNotes) { note ->
+                SingleItemLockedNoteList(note = note, navHostController = navHostController)
+            }
+            item {
+                Text(
+                    text = "ALL NOTES",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+                )
+            }
+            items(
+                listOfNotes ?: emptyList()
+            ) { note ->
+                SingleItemLockedNoteList(note = note, navHostController)
+            }
         }
     }
 }

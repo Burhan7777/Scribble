@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,50 +57,100 @@ fun NotesNotebook(
         }
     }
 
+    if (viewModel.showGridOrLinearNotes.value) {
+        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(160.dp)) {
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
 
-    LazyColumn() {
-        item {
-            Text(
-                text = "My",
-                fontFamily = fontFamilyExtraLight,
-                fontSize = 65.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-        }
-        item {
-            Text(
-                text = title,
-                fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-        }
-        if (listOfPinnedNotes.size > 0) {
-            item {
+                    Text(
+                        text = title,
+                        fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+
+            if (listOfPinnedNotes.size > 0) {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Text(
+                        text = "PINNED",
+                        fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            items(listOfPinnedNotes) { note ->
+                SingleItemNotebookList(note = note, navHostController = navHostController,title)
+            }
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
-                    text = "PINNED",
-                    fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                    text = "ALL NOTES",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
                     color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.padding(horizontal = 10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
                 )
             }
+            items(
+                listOfNotesBooks ?: emptyList()
+            ) { note ->
+                SingleItemNotebookList(note = note, navHostController,title)
+            }
         }
-        items(listOfPinnedNotes) { note ->
-            SingleItemNotebookList(note = note, navHostController = navHostController,title)
-        }
-        item {
-            Text(
-                text = "ALL NOTES",
-                fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
-            )
-        }
-        items(
-            listOfNotesBooks ?: emptyList()
-        ) { note ->
-            SingleItemNotebookList(note = note, navHostController, title)
+    } else {
+        LazyColumn() {
+            item {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+
+                    Text(
+                        text =title,
+                        fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            if (listOfPinnedNotes.size > 0) {
+                item {
+                    Text(
+                        text = "PINNED",
+                        fontFamily = FontFamily.fontFamilyBold, fontSize = 15.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            items(listOfPinnedNotes) { note ->
+                SingleItemNotebookList(note = note, navHostController = navHostController,title)
+            }
+            item {
+                Text(
+                    text = "ALL NOTES",
+                    fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+                )
+            }
+            items(
+                listOfNotesBooks ?: emptyList()
+            ) { note ->
+                SingleItemNotebookList(note = note, navHostController,title)
+            }
         }
     }
 }

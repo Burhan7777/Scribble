@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,8 +23,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
 
 @Composable
 fun Notes(
@@ -51,23 +57,58 @@ fun Notes(
         }
 
     }
-    Text(
-        text = "My",
-        fontFamily = fontFamilyExtraLight,
-        fontSize = 65.sp,
-        color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(horizontal = 10.dp)
-    )
-    Text(
-        text = "Archive",
-        fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
-        color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.padding(horizontal = 10.dp)
-    )
+    if (viewModel.showGridOrLinearNotes.value) {
+        LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(160.dp)) {
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
 
-    LazyColumn() {
-        items(listOfNotes ?: emptyList()) { note ->
-            SingleItemArchiveNoteList(note = note, navHostController,activity)
+                    Text(
+                        text = "Archive",
+                        fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+            items(
+                listOfNotes ?: emptyList()
+            ) { note ->
+                SingleItemArchiveNoteList(note = note, navHostController,activity)
+            }
+        }
+    } else {
+        LazyColumn() {
+            item {
+                Column {
+                    Text(
+                        text = "My",
+                        fontFamily = fontFamilyExtraLight,
+                        fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+
+                    Text(
+                        text = "Archive",
+                        fontFamily = fontFamilyExtraLight, fontSize = 65.sp,
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+            }
+
+            items(
+                listOfNotes ?: emptyList()
+            ) { note ->
+                SingleItemArchiveNoteList(note = note, navHostController,activity)
+            }
         }
     }
 }

@@ -1,10 +1,15 @@
 package com.pzbdownloaders.scribble.common.presentation
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +21,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.AddNotebookUs
 import com.pzbdownloaders.scribble.add_note_feature.domain.usecase.GetNoteBookUseCase
 import com.pzbdownloaders.scribble.archive_notes_feature.domain.GetArchiveNotesUseCase
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.GetResult
 import com.pzbdownloaders.scribble.edit_note_feature.data.repository.EditNoteRepository
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.*
@@ -60,8 +66,9 @@ class MainActivityViewModel @Inject constructor(
     private val getArchiveSearchResultUseCase: GetArchiveSearchResultUseCase,
     private val addNotebookUseCase: AddNotebookUseCase,
     private val getNotebookUseCase: GetNoteBookUseCase,
-    private val getNotebookNotesUseCase: GetNotebookNotesUseCase
-) : ViewModel() {
+    private val getNotebookNotesUseCase: GetNotebookNotesUseCase,
+    private var application: Application
+) : AndroidViewModel(application) {
 
     var listOfNotes = mutableStateListOf<Note>()
         private set
@@ -141,6 +148,11 @@ class MainActivityViewModel @Inject constructor(
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
   */
+    val prefs: SharedPreferences =
+        application.getSharedPreferences(Constant.LIST_PREFERENCE, Context.MODE_PRIVATE)
+    val name = prefs.getBoolean(Constant.LIST_OR_GRID, false)
+
+    var showGridOrLinearNotes = mutableStateOf(name)
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             insertNoteRepository.insertNote(note)
