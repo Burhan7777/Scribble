@@ -103,18 +103,10 @@ fun AlertDialogBoxEnterPassword(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            var note = Note(
-                                id = id,
-                                title,
-                                content = content,
-                                locked = true,
-                                archive = false,
-                                listOfCheckedBoxes = listOfCheckboxes,
-                                listOfCheckedNotes = convertedMutableList,
-                               listOfBulletPointNotes =  listOfBulletPoints,
-                                timeStamp = System.currentTimeMillis()
-                            )
-                            viewModel.updateNote(note)
+                            viewModel.getNoteById(id)
+                            var note = viewModel.getNoteById
+                            var newNote = note.value.copy(locked = true)
+                            viewModel.updateNote(newNote)
                             Toast.makeText(
                                 activity,
                                 "Note has been locked",

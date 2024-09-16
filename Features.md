@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (35/52) // MAIN - (16/20)
+FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/20)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -21,7 +21,7 @@ FEATURES THAT NEED TO BE ADDED (35/52) // MAIN - (16/20)
 18) Bottom bar features like google keep(Main): DONE
 19) In-App product to buy product with one time payment: DELAYED
 20) Launch app on play-store before finishing the app for saving time at the end:
-21) Change layout from columns to grid option: 
+21) Change layout from columns to grid option: DONE
 22) Remove fall back to destructive migration and implement proper migration: DONE
 23) Animations in lazy-column when note is deleted:
 24) Transitions between screens:

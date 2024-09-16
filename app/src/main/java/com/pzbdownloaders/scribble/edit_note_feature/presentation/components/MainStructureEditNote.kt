@@ -298,16 +298,9 @@ fun MainStructureEditNote(
                             convertedBulletPoints
                         )
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
-                            var note = (Note(
-                                id,
-                                title,
-                                content,
-                                listOfCheckedNotes = converted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                listOfBulletPointNotes = convertedBulletPoints,
-                                archive = true,
-                                timeStamp = System.currentTimeMillis()
-                            ))
+                            viewModel.getNoteById(id)
+                            var noteFromDb = viewModel.getNoteById
+                            var note = noteFromDb.value.copy(archive = true)
                             viewModel.updateNote(note)
                             Toast.makeText(
                                 activity,
@@ -340,16 +333,9 @@ fun MainStructureEditNote(
 //                                }
 //                            }
                         } else if (screen == Constant.ARCHIVE) {
-                            var note = (Note(
-                                id,
-                                title,
-                                content,
-                                archive = false,
-                                timeStamp = System.currentTimeMillis(),
-                                listOfCheckedNotes = converted,
-                                listOfCheckedBoxes = mutableListOfCheckBoxes,
-                                listOfBulletPointNotes = convertedBulletPoints,
-                            ))
+                            viewModel.getNoteById(id)
+                            var noteFromDb = viewModel.getNoteById
+                            var note = noteFromDb.value.copy(archive = false)
                             viewModel.updateNote(note)
                             Toast.makeText(
                                 activity,
@@ -512,6 +498,7 @@ fun MainStructureEditNote(
             listOfBulletPoints = convertedBulletPoints,
             content = content
         ) {
+            enterPasswordToUnLockDialogBox.value = false
 
         }
     }

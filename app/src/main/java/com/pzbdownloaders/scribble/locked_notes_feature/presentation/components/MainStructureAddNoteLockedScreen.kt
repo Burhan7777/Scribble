@@ -159,11 +159,6 @@ fun MainStructureAddNoteLockedScreen(
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }
-                    if (showTrialEndedDialogBox.value) {
-                        AlertDialogBoxTrialEnded {
-                            showTrialEndedDialogBox.value = false
-                        }
-                    }
                 }
             )
         }
