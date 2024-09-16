@@ -1,6 +1,8 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -11,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -19,13 +20,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -58,6 +56,13 @@ fun MainStructureMainScreen(
     var coroutineScope = rememberCoroutineScope()
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
+
+
+    val prefs: SharedPreferences =
+        activity.getSharedPreferences(Constant.LIST_PREFERENCE, MODE_PRIVATE)
+    val name = prefs.getBoolean(Constant.LIST_OR_GRID, false) //"Blank Name" the default value.
+
+    var showGridOrLinearNotes = remember { mutableStateOf(name) }
 
 
 
@@ -231,6 +236,25 @@ fun MainStructureMainScreen(
     ) {
         Scaffold(
             modifier = Modifier.background(MaterialTheme.colors.primary),
+//            topBar = {
+//                androidx.compose.material.TopAppBar(actions = {
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.GridOn,
+//                            contentDescription = "Grid On",
+//                            tint = MaterialTheme.colors.onPrimary
+//                        )
+//                    }
+//                },
+//                    title = {
+//                        androidx.compose.material3.Text(
+//                            text = "SQIUGGLY",
+//                            fontSize = 20.sp,
+//                            fontFamily = FontFamily.fontFamilyBold,
+//                            color = MaterialTheme.colors.onPrimary
+//                        )
+//                    })
+//            },
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
@@ -279,7 +303,7 @@ fun MainStructureMainScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                TopSearchBar(navHostController, drawerState, viewModel)
+                TopSearchBar(navHostController, drawerState, viewModel, showGridOrLinearNotes,activity)
                 // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
                     AlertDialogBoxEnterPasswordToOpenLockedNotes(
@@ -290,7 +314,7 @@ fun MainStructureMainScreen(
                         showDialogToAccessLockedNotes.value = false
                     }
                 }
-                Notes(viewModel, activity, navHostController)
+                Notes(viewModel, activity, navHostController, showGridOrLinearNotes)
             }
         }
     }

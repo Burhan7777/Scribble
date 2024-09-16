@@ -1,8 +1,10 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
@@ -10,8 +12,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.GridOn
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,18 +23,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseAuth
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
+import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopSearchBar(
     navHostController: NavHostController,
     drawerState: DrawerState,
-    viewModel: MainActivityViewModel
+    viewModel: MainActivityViewModel,
+    showGridOrLinearNotes: MutableState<Boolean>,
+    activity: MainActivity
 ) {
 
     var text by remember { mutableStateOf("") }
@@ -88,16 +95,30 @@ fun TopSearchBar(
                 },
             )
         },
-        /*  trailingIcon = {
-              Icon(
-                  imageVector = Icons.Filled.Clear,
-                  contentDescription = "Clear",
-                  modifier = Modifier.clickable {
-
-                  },
-
-                  )
-          },*/
+        trailingIcon = {
+            Row() {
+                IconButton(onClick = {
+                    showGridOrLinearNotes.value = !showGridOrLinearNotes.value
+                    val editor: SharedPreferences.Editor =
+                        activity.getSharedPreferences(Constant.LIST_PREFERENCE, MODE_PRIVATE).edit()
+                    editor.putBoolean(Constant.LIST_OR_GRID, showGridOrLinearNotes.value)
+                    editor.apply()
+                }) {
+                    Icon(
+                        imageVector = if (showGridOrLinearNotes.value) Icons.Filled.List else Icons.Filled.GridOn,
+                        contentDescription = "Menu",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Filled.Sort,
+                        contentDescription = "Menu",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
+            }
+        },
         placeholder = {
             Text(
                 text = "Search notes",
