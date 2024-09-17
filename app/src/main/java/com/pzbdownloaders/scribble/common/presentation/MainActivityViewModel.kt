@@ -145,6 +145,8 @@ class MainActivityViewModel @Inject constructor(
 
     val getNoteBookByName = MutableLiveData<NoteBook>()
 
+    var generatedNoteId = MutableLiveData<Long>()
+
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
   */
@@ -160,7 +162,7 @@ class MainActivityViewModel @Inject constructor(
     var dataModifiedOldestFirst = mutableStateOf(false)
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
-            insertNoteRepository.insertNote(note)
+            generatedNoteId.postValue(insertNoteRepository.insertNote(note))
         }
     }
 

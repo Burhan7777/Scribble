@@ -160,9 +160,10 @@ fun MainStructureEditNote(
                 title = title,
                 content = richStateText.value.toHtml(),
                 timeModified = System.currentTimeMillis(),
-                listOfBulletPointNotes = convertedBulletPoints,
-                listOfCheckedNotes = converted,
-                listOfCheckedBoxes = mutableListOfCheckBoxes
+                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
 
             )
             viewModel.updateNote(note)

@@ -32,8 +32,11 @@ import androidx.compose.material.icons.filled.TextIncrease
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -74,6 +77,9 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import io.ktor.util.reflect.typeInfoImpl
+import kotlinx.coroutines.delay
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -100,6 +106,8 @@ fun MainStructureAddNote(
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
 
+    var generatedNoteId = remember { mutableStateOf<Long>(0) }
+
     var annotatedString = remember { mutableStateOf(AnnotatedString("")) }
 
     var textFieldValue =
@@ -121,8 +129,50 @@ fun MainStructureAddNote(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
 
-    // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+    LaunchedEffect(key1 = Unit) {
 
+    }
+
+    DisposableEffect(Unit) {
+        var note = Note(
+            0,
+            title = title.value,
+            content = richTextState.value.toHtml(),
+            timeModified = System.currentTimeMillis(),
+            notebook = notebookState.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+        )
+        viewModel.insertNote(note)
+        viewModel.generatedNoteId.observe(activity) {
+            generatedNoteId.value = it
+        }
+        val timer = Timer()
+        // Schedule a task to run every 10 seconds
+        timer.schedule(delay = 3000L, period = 2000L) {
+            //viewModel.getNoteById(note.id)
+            // var noteFromDb = viewModel.getNoteById
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookState.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+            )
+            viewModel.updateNote(note1)
+        }
+
+        // Clean up the timer when the composable leaves the composition
+        onDispose {
+            timer.cancel() // Stop the timer
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -140,19 +190,19 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
-                        var note = Note(
-                            0,
-                            title.value,
+                        var note2 = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
                             content = richTextState.value.toHtml(),
-                            false,
-                            notebookState.value,
+                            archive = false,
+                            notebook = notebookState.value,
                             timeStamp = System.currentTimeMillis(),
                             deletedNote = false,
                             locked = false,
                             timeModified = System.currentTimeMillis()
 
                         )
-                        viewModel.insertNote(note)
+                        viewModel.updateNote(note2)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                             .show()
                         navController.popBackStack()

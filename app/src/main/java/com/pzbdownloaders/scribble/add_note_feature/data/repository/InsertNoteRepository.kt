@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class InsertNoteRepository @Inject constructor(private val noteDatabase: NoteDatabase) {
 
-    suspend fun insertNote(note: Note) {
-        noteDatabase.getDao().insertNote(note)
+    suspend fun insertNote(note: Note):Long {
+       return noteDatabase.getDao().insertNote(note)
     }
 
     suspend fun addNoteBook(notebook: NoteBook) {

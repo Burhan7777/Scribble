@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @androidx.room.Dao
 interface Dao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note)
+    @Upsert
+    suspend fun insertNote(note: Note):Long
 
     @Query("SELECT * from notes ORDER BY timeStamp DESC")
     fun getAllNotes(): List<Note>
