@@ -20,7 +20,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -29,6 +32,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,18 +41,27 @@ fun MainStructureCheckBoxNote(
     viewModel: MainActivityViewModel,
     notebookState: MutableState<String>,
     title: MutableState<String>,
-    activity: MainActivity
+    activity: MainActivity,
+    note: SnapshotStateList<MutableState<String>>,
+    mutableListConverted: ArrayList<String>,
+    mutableListOfCheckBoxes: ArrayList<Boolean>
 ) {
     var context = LocalContext.current
 
-    var mutableListOfCheckboxTexts = remember {
-        mutableStateListOf<MutableState<String>>()
-    }
+//    var mutableListOfCheckboxTexts = remember {
+//        mutableStateListOf<MutableState<String>>()
+//    }
 
-    var mutableListConverted = remember {
-        ArrayList<String>()
-    }
-    var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }
+
+//    if(equate.value) {
+//        mutableListOfCheckboxTexts = RememberSaveableSnapshotStateList()
+//       equate.value = false
+    // }
+
+//    LaunchedEffect(key1 = Unit) {
+//        mutableListOfCheckBoxes.add(false)
+//        mutableListOfCheckBoxes.removeLast()
+//    }
 
     var showTrialEndedDialogBox = remember {
         mutableStateOf(
@@ -56,15 +69,7 @@ fun MainStructureCheckBoxNote(
         )
     }
 
-    LaunchedEffect(key1 = true) {
-        mutableListOfCheckboxTexts.add(mutableStateOf(""))
 
-    }
-
-    LaunchedEffect(key1 = mutableListOfCheckboxTexts.size) {
-        mutableListOfCheckBoxes.add(false)
-
-    }
 
     if (showTrialEndedDialogBox.value) {
         AlertDialogBoxTrialEnded {
@@ -98,7 +103,7 @@ fun MainStructureCheckBoxNote(
                 actions = {
                     IconButton(onClick = {
                         convertMutableStateIntoString(
-                            mutableListOfCheckboxTexts,
+                            note,
                             mutableListConverted
                         )
                         val note = Note(
@@ -144,7 +149,7 @@ fun MainStructureCheckBoxNote(
                 navController,
                 notebookState,
                 title,
-                mutableListOfCheckboxTexts,
+                note,
                 mutableListOfCheckBoxes
             )
         }
@@ -159,3 +164,4 @@ fun convertMutableStateIntoString(
         mutableListConverted.add(i.value)
     }
 }
+
