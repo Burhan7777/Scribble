@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,8 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -57,6 +60,7 @@ fun MainStructureAddNoteInNotebook(
     var boldText = remember { mutableStateOf(false) }
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
+    var generatedNoteId = remember { mutableStateOf<Long>(0) }
 
     var annotatedString = remember { mutableStateOf(AnnotatedString("")) }
 
@@ -79,6 +83,47 @@ fun MainStructureAddNoteInNotebook(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
 
+    DisposableEffect(Unit) {
+        var note = Note(
+            0,
+            title = title.value,
+            content = richTextState.value.toHtml(),
+            timeModified = System.currentTimeMillis(),
+            notebook = notebookName,
+            timeStamp = System.currentTimeMillis()
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+        )
+        viewModel.insertNote(note)
+        viewModel.generatedNoteId.observe(activity) {
+            generatedNoteId.value = it
+        }
+        val timer = Timer()
+        // Schedule a task to run every 10 seconds
+        timer.schedule(delay = 3000L, period = 1000L) {
+            viewModel.getNoteById(generatedNoteId.value.toInt())
+            var noteFromDb = viewModel.getNoteById
+            var note1 = noteFromDb.value.copy(
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookName,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+            )
+            viewModel.updateNote(note1)
+        }
+
+        // Clean up the timer when the composable leaves the composition
+        onDispose {
+            timer.cancel() // Stop the timer
+        }
+    }
+
     // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
 
@@ -98,19 +143,20 @@ fun MainStructureAddNoteInNotebook(
                 },
                 actions = {
                     IconButton(onClick = {
-                        var note = Note(
-                            0,
-                            title.value,
+                        viewModel.getNoteById(generatedNoteId.value.toInt())
+                        var noteFromDb = viewModel.getNoteById
+                        var note2 = noteFromDb.value.copy(
+                            title = title.value,
                             content = richTextState.value.toHtml(),
-                            false,
-                            notebookName,
-                            timeStamp = System.currentTimeMillis(),
-                            deletedNote = false,
-                            locked = false,
-                            timeModified = System.currentTimeMillis()
+                            timeModified = System.currentTimeMillis(),
+                            notebook = notebookName,
+                            timeStamp = System.currentTimeMillis()
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
 
                         )
-                        viewModel.insertNote(note)
+                        viewModel.updateNote(note2)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                             .show()
                         navController.popBackStack()

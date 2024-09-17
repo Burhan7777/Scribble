@@ -140,6 +140,7 @@ fun MainStructureAddNote(
             content = richTextState.value.toHtml(),
             timeModified = System.currentTimeMillis(),
             notebook = notebookState.value,
+            timeStamp = System.currentTimeMillis()
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
@@ -151,11 +152,10 @@ fun MainStructureAddNote(
         }
         val timer = Timer()
         // Schedule a task to run every 10 seconds
-        timer.schedule(delay = 3000L, period = 2000L) {
-            //viewModel.getNoteById(note.id)
-            // var noteFromDb = viewModel.getNoteById
-            var note1 = Note(
-                id = generatedNoteId.value.toInt(),
+        timer.schedule(delay = 3000L, period = 1000L) {
+            viewModel.getNoteById(generatedNoteId.value.toInt())
+            var noteFromDb = viewModel.getNoteById
+            var note1 = noteFromDb.value.copy(
                 title = title.value,
                 content = richTextState.value.toHtml(),
                 timeModified = System.currentTimeMillis(),
@@ -190,8 +190,9 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
-                        var note2 = Note(
-                            id = generatedNoteId.value.toInt(),
+                        viewModel.getNoteById(generatedNoteId.value.toInt())
+                        var noteFromDb = viewModel.getNoteById
+                        var note2 = noteFromDb.value.copy(
                             title = title.value,
                             content = richTextState.value.toHtml(),
                             archive = false,

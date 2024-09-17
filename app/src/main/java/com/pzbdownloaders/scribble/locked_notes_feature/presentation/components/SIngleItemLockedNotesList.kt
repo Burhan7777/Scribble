@@ -37,7 +37,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
     var richTextState = rememberRichTextState()
     var contentText = richTextState.setHtml(note.content).annotatedString.text
 
-    if (note.locked && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
+    if (note.locked && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote)  {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,7 +90,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                 fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyLight
             )
         }
-    } else if (note.listOfCheckedNotes.size > 0 && note.locked && note.listOfBulletPointNotes.size == 0) {
+    } else if (note.listOfCheckedNotes.size > 0 && note.locked && note.listOfBulletPointNotes.size == 0 && !note.deletedNote) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -208,7 +208,7 @@ fun SingleItemLockedNoteList(note: Note, navHostController: NavHostController) {
                 }
             }
         }
-    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.locked) {
+    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.locked && !note.deletedNote) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

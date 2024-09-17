@@ -71,13 +71,24 @@ class AppModule {
             db.execSQL("ALTER TABLE dummyTable ADD COLUMN something1 INTEGER NOT NULL DEFAULT (0) ")
         }
     }
+    var migration_18_19 = object : Migration(18, 19) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE dummyTable ADD COLUMN something2 INTEGER NOT NULL DEFAULT (0) ")
+        }
+    }
 
 
     @Provides
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .addMigrations(migration_14_15, migration_15_16, migration_16_17, migration_17_18)
+            .addMigrations(
+                migration_14_15,
+                migration_15_16,
+                migration_16_17,
+                migration_17_18,
+                migration_18_19
+            )
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }

@@ -10,6 +10,7 @@ data class DummyTable(
     val name: String = "",
     val timeModified: Long = 0,
     val timeStamp: Long = 0,
-    val something:Long = 0,
-    val something1:Long = 0
+    val something: Long = 0,
+    val something1: Long = 0,
+    val something2: Long = 0
 )

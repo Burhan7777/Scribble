@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.TextIncrease
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -76,6 +77,8 @@ import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import io.ktor.util.reflect.typeInfoImpl
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -119,9 +122,53 @@ fun MainStructureAddNoteLockedScreen(
     var isUnOrderedListActivated = remember { mutableStateOf(false) }
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
+    var generatedNoteId = remember { mutableStateOf<Long>(0) }
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
+
+    DisposableEffect(Unit) {
+        var note = Note(
+            0,
+            title = title.value,
+            content = richTextState.value.toHtml(),
+            timeModified = System.currentTimeMillis(),
+            notebook = notebookState.value,
+            locked = true,
+            timeStamp = System.currentTimeMillis()
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+        )
+        viewModel.insertNote(note)
+        viewModel.generatedNoteId.observe(activity) {
+            generatedNoteId.value = it
+        }
+        val timer = Timer()
+        // Schedule a task to run every 10 seconds
+        timer.schedule(delay = 3000L, period = 1000L) {
+            viewModel.getNoteById(generatedNoteId.value.toInt())
+            var noteFromDb = viewModel.getNoteById
+            var note1 = noteFromDb.value.copy(
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                locked = true
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+            )
+            viewModel.updateNote(note1)
+        }
+
+        // Clean up the timer when the composable leaves the composition
+        onDispose {
+            timer.cancel() // Stop the timer
+        }
+    }
 
     // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
@@ -142,18 +189,20 @@ fun MainStructureAddNoteLockedScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        var note = Note(
-                            0,
-                            title.value,
+                        viewModel.getNoteById(generatedNoteId.value.toInt())
+                        var noteFromDb = viewModel.getNoteById
+                        var note1 = noteFromDb.value.copy(
+                            title = title.value,
                             content = richTextState.value.toHtml(),
-                            false,
-                            timeStamp = System.currentTimeMillis(),
-                            deletedNote = false,
-                            locked = true,
-                            timeModified = System.currentTimeMillis()
+                            timeModified = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            locked = true
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
 
                         )
-                        viewModel.insertNote(note)
+                        viewModel.updateNote(note1)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                             .show()
                         navController.popBackStack()
