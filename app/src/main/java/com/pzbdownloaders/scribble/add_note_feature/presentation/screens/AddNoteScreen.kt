@@ -2,6 +2,7 @@ package com.pzbdownloaders.scribble.add_note_feature.presentation.screens
 
 import android.text.Html
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,7 @@ fun AddNoteScreen(
     activity: MainActivity
 ) {
 
-    var title = remember {
+    var title = rememberSaveable {
         mutableStateOf("")
     }
 

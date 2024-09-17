@@ -153,6 +153,11 @@ class MainActivityViewModel @Inject constructor(
     val name = prefs.getBoolean(Constant.LIST_OR_GRID, false)
 
     var showGridOrLinearNotes = mutableStateOf(name)
+
+    var dateCreatedNewestFirst = mutableStateOf(false)
+    var dateCreatedOldestFirst = mutableStateOf(false)
+    var dateModifiedNewestFirst = mutableStateOf(false)
+    var dataModifiedOldestFirst = mutableStateOf(false)
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             insertNoteRepository.insertNote(note)

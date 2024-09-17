@@ -38,17 +38,46 @@ class AppModule {
 
 //ALTER TABLE notes ADD COLUMN editTime TEXT NOT NULL DEFAULT ' '
 
-    var migration_12_13 = object : Migration(12, 13) {
+    var migration_14_15 = object : Migration(14, 15) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("ALTER TABLE notes ADD COLUMN timeModified INTEGER NOT NULL DEFAULT (0) ")
+            db.execSQL("ALTER TABLE dummyTable ADD COLUMN timeModified INTEGER NOT NULL DEFAULT (0) ")
         }
     }
+    var migration_14_17 = object : Migration(14, 16) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            migration_14_15.migrate(db)
+            migration_15_16.migrate(db)
+            migration_16_17.migrate(db)
+        }
+    }
+    var migration_15_16 = object : Migration(15, 16) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE dummyTable ADD COLUMN timeStamp INTEGER NOT NULL DEFAULT (0) ")
+        }
+    }
+    var migration_16_17 = object : Migration(16, 17) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE dummyTable ADD COLUMN something INTEGER NOT NULL DEFAULT (0) ")
+        }
+    }
+    var migration_15_17 = object : Migration(15, 17) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            migration_15_16.migrate(db)
+            migration_16_17.migrate(db)
+        }
+    }
+    var migration_17_18 = object : Migration(17, 18) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE dummyTable ADD COLUMN something1 INTEGER NOT NULL DEFAULT (0) ")
+        }
+    }
+
 
     @Provides
     @Singleton
     fun createDataBase(@ApplicationContext context: Context): NoteDatabase {
         return Room.databaseBuilder(context, NoteDatabase::class.java, "notes")
-            .addMigrations(migration_12_13)
+            .addMigrations(migration_14_15, migration_15_16, migration_16_17, migration_17_18)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }

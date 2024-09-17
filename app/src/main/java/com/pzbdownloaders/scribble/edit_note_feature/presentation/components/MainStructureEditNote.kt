@@ -29,6 +29,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,6 +117,7 @@ fun MainStructureEditNote(
         viewModel.getNoteById(id)
         var noteFromDb = viewModel.getNoteById
         pinnedOrNot.value = noteFromDb.value.notePinned
+
     }
 
 
@@ -145,6 +147,31 @@ fun MainStructureEditNote(
         content = note.value.content ?: "Failed to get the contents.Please try again"
         notebook = note.value.notebook
 
+    }
+
+    DisposableEffect(Unit) {
+
+        val timer = Timer()
+        // Schedule a task to run every 10 seconds
+        timer.schedule(delay = 3000L, period = 3000L) {
+            viewModel.getNoteById(id)
+            var noteFromDb = viewModel.getNoteById
+            var note = noteFromDb.value.copy(
+                title = title,
+                content = richStateText.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                listOfBulletPointNotes = convertedBulletPoints,
+                listOfCheckedNotes = converted,
+                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+            )
+            viewModel.updateNote(note)
+        }
+
+        // Clean up the timer when the composable leaves the composition
+        onDispose {
+            timer.cancel() // Stop the timer
+        }
     }
 
 
@@ -306,7 +333,8 @@ fun MainStructureEditNote(
                             var noteFromDb = viewModel.getNoteById
                             var note = noteFromDb.value.copy(
                                 archive = true,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                notebook = Constant.NOT_CATEGORIZED
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(
@@ -344,7 +372,8 @@ fun MainStructureEditNote(
                             var noteFromDb = viewModel.getNoteById
                             var note = noteFromDb.value.copy(
                                 archive = false,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                notebook = Constant.NOT_CATEGORIZED
                             )
                             viewModel.updateNote(note)
                             Toast.makeText(
@@ -522,6 +551,8 @@ fun convertMutableStateIntoString(
         mutableListConverted.add(i.value)
     }
 }
+
+
 
 
 

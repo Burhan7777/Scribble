@@ -47,6 +47,7 @@ fun Notes(
     }
 
 
+
 //    if (listOfNotesFromDB.isEmpty()) {
 //        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
 //            CircularProgressIndicator(

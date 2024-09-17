@@ -55,6 +55,8 @@ fun MainStructureMainScreen(
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
 
+    var showOrderDialogBox = remember { mutableStateOf(false) }
+
 
 
 
@@ -304,7 +306,8 @@ fun MainStructureMainScreen(
                     drawerState,
                     viewModel,
                     viewModel.showGridOrLinearNotes,
-                    activity
+                    activity,
+                    showOrderDialogBox
                 )
                 // ShowPremiumBar(activity)
                 if (showDialogToAccessLockedNotes.value) {
@@ -314,6 +317,11 @@ fun MainStructureMainScreen(
                         navHostController = navHostController,
                     ) {
                         showDialogToAccessLockedNotes.value = false
+                    }
+                }
+                if (showOrderDialogBox.value) {
+                    SortNotesAlertBox(viewModel = viewModel, activity = activity) {
+                        showOrderDialogBox.value = false
                     }
                 }
                 Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)

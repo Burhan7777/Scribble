@@ -107,7 +107,8 @@ fun AlertDialogBoxEnterPassword(
                             var note = viewModel.getNoteById
                             var newNote = note.value.copy(
                                 locked = true,
-                                timeModified = System.currentTimeMillis()
+                                timeModified = System.currentTimeMillis(),
+                                notebook = Constant.NOT_CATEGORIZED
                             )
                             viewModel.updateNote(newNote)
                             Toast.makeText(

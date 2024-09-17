@@ -37,7 +37,8 @@ fun TopSearchBar(
     drawerState: DrawerState,
     viewModel: MainActivityViewModel,
     showGridOrLinearNotes: MutableState<Boolean>,
-    activity: MainActivity
+    activity: MainActivity,
+    showOrderDialogBox: MutableState<Boolean>
 ) {
 
     var text by remember { mutableStateOf("") }
@@ -110,13 +111,13 @@ fun TopSearchBar(
                         tint = MaterialTheme.colors.onPrimary
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Filled.Sort,
-                        contentDescription = "Menu",
-                        tint = MaterialTheme.colors.onPrimary
-                    )
-                }
+//                IconButton(onClick = { showOrderDialogBox.value = true }) {
+//                    Icon(
+//                        imageVector = Icons.Filled.Sort,
+//                        contentDescription = "Menu",
+//                        tint = MaterialTheme.colors.onPrimary
+//                    )
+//                }
             }
         },
         placeholder = {

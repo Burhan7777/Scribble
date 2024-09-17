@@ -118,7 +118,7 @@ fun NoteContent(
 //    }
 
 
-    if (screen != Constant.LOCKED_NOTE) {
+    if (screen != Constant.LOCKED_NOTE && screen != Constant.ARCHIVE) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp),
             verticalAlignment = Alignment.CenterVertically

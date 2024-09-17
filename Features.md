@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/19)
+FEATURES THAT NEED TO BE ADDED (40/54) // MAIN - (16/21)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -13,7 +13,7 @@ FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/19)
 10) CheckBox list(Main): DONE :D
 11) Colors to the background(Main): CANCELLED
 12) Pin Note(Main): DONE
-13) Arrange notes by date created etc: 
+13) Arrange notes by date created etc: DELAYED
 14) Add 30 days trial login through google: DONE
 15) Get premium bar at the top of the screen: DONE
 16) Days remaining in the premium bar: DONE
@@ -33,9 +33,9 @@ FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/19)
 30) Save note on back button also auto-save function(Main):
 31) Text formatting features(Main): DONE
 32) Buy App Bar should not be visible to users who bought app: CANCELLED
-33) Export to PDF and other documents:
-34) Reminder for notes:
-35) Pomodoro for checkboxes:
+33) Export to PDF and other documents: DELAYED
+34) Reminder for notes: DELAYED
+35) Pomodoro for checkboxes: DELAYED
 36) Change drop down menu in add note to text view like in edit note: DONE
 37) Remove 30 days trial stuff(Main): DONE
 38) Delete Notebooks(Main): DONE
@@ -53,3 +53,5 @@ FEATURES THAT NEED TO BE ADDED (36/52) // MAIN - (16/19)
 50) Change notebook option should not be in locked notes(Main): DONE
 51) Lock Notebook(Main): DELAYED
 52) Replace add to notebook from checkbox and bulletpoints: DONE
+53) Forgot password option(Main):
+54) Hide textformatting bar when title textfield is in focus(Main):
