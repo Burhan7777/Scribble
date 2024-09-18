@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -42,9 +43,10 @@ fun SingleRowCheckBoxLockedNotes(
     text: MutableState<String>,
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
-    index: Int
+    index: Int,
+    count: MutableState<Int>
 ) {
-    var checkBox = remember { mutableStateOf(false) }
+    var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
@@ -77,7 +79,10 @@ fun SingleRowCheckBoxLockedNotes(
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
-                onNext = { mutableList.add(mutableStateOf("")) }
+                onNext = {
+                    count.value++
+                    mutableList.add(mutableStateOf(""))
+                }
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colors.primary,

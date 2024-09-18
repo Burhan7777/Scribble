@@ -39,7 +39,8 @@ fun CheckboxLockedNotes(
     notebookState: MutableState<String>,
     title: MutableState<String>,
     mutableListOfCheckBoxTexts: SnapshotStateList<MutableState<String>>,
-    mutableListOfCheckBoxes: ArrayList<Boolean>
+    mutableListOfCheckBoxes: ArrayList<Boolean>,
+    count: MutableState<Int>
 ) {
 
     var dialogOpen = remember {
@@ -101,7 +102,8 @@ fun CheckboxLockedNotes(
                     text = item,
                     mutableListOfCheckBoxTexts,
                     mutableListOfCheckBoxes,
-                    indexed
+                    indexed,
+                    count
                 )
             }
         }
