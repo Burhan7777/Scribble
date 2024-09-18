@@ -31,11 +31,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,7 +45,8 @@ fun SingleRowCheckBox(
     text: MutableState<String>,
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
-    index: Int
+    index: Int,
+    count: MutableState<Int>
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -57,6 +60,7 @@ fun SingleRowCheckBox(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -78,7 +82,10 @@ fun SingleRowCheckBox(
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
-                onNext = { mutableList.add(mutableStateOf("")) }
+                onNext = {
+                    count.value++
+                    mutableList.add(mutableStateOf(""))
+                }
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colors.primary,
@@ -97,6 +104,10 @@ fun SingleRowCheckBox(
                 .onFocusChanged {
                     if (it.isFocused) {
                         keyboardController?.show()
+                    }
+                    if (!it.isFocused) {
+
+                        count.value++
                     }
                 },
             trailingIcon = {

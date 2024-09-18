@@ -89,7 +89,8 @@ class AppModule {
                 migration_17_18,
                 migration_18_19
             )
-            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            //.setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
             .build()
     }
 
