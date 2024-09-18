@@ -47,7 +47,8 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 fun SingleRowBulletPoint(
     text: MutableState<String>,
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
-    index: Int
+    index: Int,
+    count:MutableState<Int>
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -72,7 +73,9 @@ fun SingleRowBulletPoint(
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
-                onNext = { mutableListOfBulletPointsNotes.add(mutableStateOf("")) }
+                onNext = {
+                    count.value++
+                    mutableListOfBulletPointsNotes.add(mutableStateOf("")) }
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colors.primary,

@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (40/54) // MAIN - (16/21)
+FEATURES THAT NEED TO BE ADDED (40/56) // MAIN - (16/23)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -55,3 +55,5 @@ FEATURES THAT NEED TO BE ADDED (40/54) // MAIN - (16/21)
 52) Replace add to notebook from checkbox and bulletpoints: DONE
 53) Forgot password option(Main):
 54) Hide textformatting bar when title textfield is in focus(Main):
+55) Add a discard note button in add notes , checkboxes and bullet-points(Main):
+56) Trashbin main screen should display checkboxes and bullet-points(Main):

@@ -137,11 +137,11 @@ fun MainStructureCheckBoxNote(
             id = generatedNoteId.value.toInt(),
             title = title.value,
             timeModified = System.currentTimeMillis(),
+            timeStamp = System.currentTimeMillis(),
             notebook = notebookState.value,
             listOfCheckedNotes = mutableListConverted,
             listOfCheckedBoxes = mutableListOfCheckBoxes,
         )
-        println("triggered")
         viewModel.updateNote(note1)
     }
 
@@ -154,7 +154,7 @@ fun MainStructureCheckBoxNote(
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
             count.value++
-            delay(1000)
+            delay(800)
             navController.popBackStack()
         }
     }

@@ -3,6 +3,7 @@ package com.pzbdownloaders.add_bullet_points_note_feature.presentation.screens
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.add_bullet_points_note_feature.presentation.components.MainStructureBulletPointsNotes
 import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components.MainStructureCheckBoxNote
@@ -17,11 +18,11 @@ fun BulletPointsNoteMainScreen(
     activity: MainActivity
 ) {
 
-    var notebookState = remember {
+    var notebookState = rememberSaveable {
         mutableStateOf("")
     }
 
-    var title = remember {
+    var title = rememberSaveable {
         mutableStateOf("")
     }
 

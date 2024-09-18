@@ -1,6 +1,7 @@
 package com.pzbdownloaders.add_bullet_points_note_feature.presentation.components
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +35,9 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,11 +51,9 @@ fun MainStructureBulletPointsNotes(
 ) {
     var context = LocalContext.current
 
-    var mutableListOfBulletPointsNotes = remember {
-        mutableStateListOf<MutableState<String>>()
-    }
+    var mutableListOfBulletPointsNotes = RememberSaveableSnapshotStateList()
 
-    var mutableListConverted = remember {
+    var mutableListConverted = rememberSaveable {
         ArrayList<String>()
     }
 
@@ -58,8 +63,17 @@ fun MainStructureBulletPointsNotes(
         )
     }
 
+    var generatedNoteId = rememberSaveable { mutableStateOf<Long>(0) }
+
+    var count = rememberSaveable {
+        mutableStateOf(0)
+
+    }
+
     LaunchedEffect(key1 = true) {
-        mutableListOfBulletPointsNotes.add(mutableStateOf(""))
+        if (mutableListOfBulletPointsNotes.isEmpty()) {
+            mutableListOfBulletPointsNotes.add(mutableStateOf(""))
+        }
 
     }
 
@@ -67,6 +81,66 @@ fun MainStructureBulletPointsNotes(
     if (showTrialEndedDialogBox.value) {
         AlertDialogBoxTrialEnded {
             showTrialEndedDialogBox.value = false
+        }
+    }
+
+    if (generatedNoteId.value.toInt() == 0) {
+        LaunchedEffect(key1 = true) {
+            var note = Note(
+                0,
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                timeStamp = System.currentTimeMillis(),
+//            listOfCheckedNotes = mutableListConverted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+
+            )
+            viewModel.insertNote(note)
+
+        }
+    }
+    viewModel.generatedNoteId.observe(activity) {
+        generatedNoteId.value = it
+        // Schedule a task to run every 10 seconds
+    }
+
+    //   println("LIST:${listOfCheckedNotes.size}")
+    LaunchedEffect(key1 = count.value) {
+        convertMutableStateIntoString(
+            mutableListOfBulletPointsNotes,
+            mutableListConverted
+        )
+        delay(500)
+
+//        for (i in listOfCheckedNotes) {
+//            println("TEXT1:${i.value}")
+//        }
+//
+//        for (i in mutableListConverted) {
+//            println("TEXT2:${i}")
+//        }
+
+        mutableListConverted.removeAll { it == "" }
+
+        var note1 = Note(
+            id = generatedNoteId.value.toInt(),
+            title = title.value,
+            timeModified = System.currentTimeMillis(),
+            timeStamp = System.currentTimeMillis(),
+            notebook = notebookState.value,
+            listOfBulletPointNotes = mutableListConverted
+        )
+        viewModel.updateNote(note1)
+    }
+
+    var remember = rememberCoroutineScope()
+    BackHandler {
+        // keyboardController?.hide()
+        remember.launch(Dispatchers.Main) {
+            count.value++
+            delay(800)
+            navController.popBackStack()
         }
     }
 
@@ -85,7 +159,24 @@ fun MainStructureBulletPointsNotes(
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        convertMutableStateIntoString(
+                            mutableListOfBulletPointsNotes,
+                            mutableListConverted
+                        )
+                        val note = Note(
+                            id = generatedNoteId.value.toInt(),
+                            title = title.value,
+                            notebook = notebookState.value,
+                            listOfBulletPointNotes = mutableListConverted,
+                            timeStamp = System.currentTimeMillis(),
+                            timeModified = System.currentTimeMillis()
+                        )
+                        viewModel.insertNote(note)
+                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Undo",
@@ -95,12 +186,12 @@ fun MainStructureBulletPointsNotes(
                 },
                 actions = {
                     IconButton(onClick = {
-                        com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components.convertMutableStateIntoString(
+                        convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
                         val note = Note(
-                            id = 0,
+                            id = generatedNoteId.value.toInt(),
                             title = title.value,
                             notebook = notebookState.value,
                             listOfBulletPointNotes = mutableListConverted,
@@ -141,7 +232,8 @@ fun MainStructureBulletPointsNotes(
                 navController,
                 notebookState,
                 title,
-                mutableListOfBulletPointsNotes
+                mutableListOfBulletPointsNotes,
+                count
             )
         }
     }
@@ -152,6 +244,28 @@ fun convertMutableStateIntoString(
     mutableListConverted: ArrayList<String>
 ) {
     for (i in mutableList) {
-        mutableListConverted.add(i.value)
+        if (!mutableListConverted.contains(i.value)) {
+            mutableListConverted.add(i.value)
+        }
+    }
+}
+
+@Composable
+fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
+    // Create a custom saver for SnapshotStateList<Mutable<String>>
+    val listSaver = Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
+        save = { snapshotStateList ->
+            // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
+            snapshotStateList.map { state -> listOf(state.value) }
+        },
+        restore = { savedList ->
+            // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
+            val restoredList = savedList.map { mutableStateOf(it.first()) }
+            SnapshotStateList<MutableState<String>>().apply {
+                addAll(restoredList)
+            }
+        })
+    return rememberSaveable(saver = listSaver) {
+        mutableStateListOf<MutableState<String>>() // Initial state
     }
 }
