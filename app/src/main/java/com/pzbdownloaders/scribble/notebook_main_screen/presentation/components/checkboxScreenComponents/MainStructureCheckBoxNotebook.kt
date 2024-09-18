@@ -246,7 +246,8 @@ fun MainStructureCheckBoxNotebook(
                 title,
                 mutableListOfCheckboxTexts,
                 mutableListOfCheckBoxes,
-                count
+                count,
+                mutableListConverted
             )
         }
     }

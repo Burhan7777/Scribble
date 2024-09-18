@@ -44,7 +44,9 @@ fun SingleRowCheckBoxNotebook(
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
     index: Int,
-    count: MutableState<Int>
+    count: MutableState<Int>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -54,10 +56,10 @@ fun SingleRowCheckBoxNotebook(
         mutableListOfCheckBoxes[index] = checkBox.value
     }
 
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+//    val focusRequester = remember { FocusRequester() }
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -104,7 +106,10 @@ fun SingleRowCheckBoxNotebook(
                     }
                 },
             trailingIcon = {
-                IconButton(onClick = { mutableList.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+                    mutableList.removeAt(index)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",

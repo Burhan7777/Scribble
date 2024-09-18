@@ -48,16 +48,18 @@ fun SingleRowBulletPoint(
     text: MutableState<String>,
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
     index: Int,
-    count:MutableState<Int>
+    count:MutableState<Int>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+//    val focusRequester = remember { FocusRequester() }
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -97,7 +99,9 @@ fun SingleRowBulletPoint(
                     }
                 },
             trailingIcon = {
-                IconButton(onClick = { mutableListOfBulletPointsNotes.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+                    mutableListOfBulletPointsNotes.removeAt(index) }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",

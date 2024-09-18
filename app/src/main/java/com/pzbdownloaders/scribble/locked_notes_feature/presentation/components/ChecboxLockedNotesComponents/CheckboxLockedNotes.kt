@@ -103,7 +103,8 @@ fun CheckboxLockedNotes(
                     mutableListOfCheckBoxTexts,
                     mutableListOfCheckBoxes,
                     indexed,
-                    count
+                    count,
+
                 )
             }
         }

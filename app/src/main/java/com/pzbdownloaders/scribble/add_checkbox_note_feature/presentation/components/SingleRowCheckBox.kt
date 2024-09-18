@@ -1,9 +1,17 @@
 package com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CheckboxDefaults
@@ -31,6 +39,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -39,27 +48,31 @@ import androidx.compose.ui.unit.dp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun SingleRowCheckBox(
     text: MutableState<String>,
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListOfCheckBoxes: ArrayList<Boolean>,
     index: Int,
-    count: MutableState<Int>
+    count: MutableState<Int>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 ) {
     var checkBox = rememberSaveable { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+
 
 
     LaunchedEffect(key1 = checkBox.value) {
         mutableListOfCheckBoxes[index] = checkBox.value
     }
 
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+//    val focusRequester = remember { FocusRequester() }
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -76,6 +89,8 @@ fun SingleRowCheckBox(
                 uncheckedColor = MaterialTheme.colors.onPrimary
             )
         )
+
+
         OutlinedTextField(
             value = text.value, onValueChange = { text.value = it },
             keyboardOptions = KeyboardOptions(
@@ -105,13 +120,12 @@ fun SingleRowCheckBox(
                     if (it.isFocused) {
                         keyboardController?.show()
                     }
-                    if (!it.isFocused) {
-
-                        count.value++
-                    }
                 },
             trailingIcon = {
-                IconButton(onClick = { mutableList.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",
@@ -120,6 +134,5 @@ fun SingleRowCheckBox(
                 }
             }
         )
-
     }
 }

@@ -233,7 +233,8 @@ fun MainStructureBulletPointsNotes(
                 notebookState,
                 title,
                 mutableListOfBulletPointsNotes,
-                count
+                count,
+                mutableListConverted
             )
         }
     }

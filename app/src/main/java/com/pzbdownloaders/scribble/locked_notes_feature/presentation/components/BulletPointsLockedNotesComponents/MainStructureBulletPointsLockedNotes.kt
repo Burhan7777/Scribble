@@ -235,7 +235,8 @@ fun MainStructureBulletPointsLockedNotes(
                 notebookState,
                 title,
                 mutableListOfBulletPointsNotes,
-                count
+                count,
+                mutableListConverted
             )
         }
     }
