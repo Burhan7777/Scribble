@@ -39,6 +39,7 @@ fun BulletPointNotebook(
     notebookState: MutableState<String>,
     title: MutableState<String>,
     mutableListOfBulletPointsNotes: SnapshotStateList<MutableState<String>>,
+    count:MutableState<Int>
 ) {
 
     var dialogOpen = remember {
@@ -99,7 +100,8 @@ fun BulletPointNotebook(
                 SingleRowBulletPointNotebook(
                     text = item,
                     mutableListOfBulletPointsNotes,
-                    indexed
+                    indexed,
+                    count
                 )
             }
         }
