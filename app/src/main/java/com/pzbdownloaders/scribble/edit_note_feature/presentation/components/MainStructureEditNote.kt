@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,9 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
@@ -69,7 +75,7 @@ fun MainStructureEditNote(
     viewModel.getNoteById(id)
     var note = viewModel.getNoteById
 
-    var title by remember {
+    var title by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -78,15 +84,14 @@ fun MainStructureEditNote(
         mutableStateOf("")
     }
 
-    var mutableListOfCheckboxTexts = remember {
-        mutableStateListOf<MutableState<String>>()
-    }
+    var mutableListOfCheckboxTexts = RememberSaveableSnapshotStateList()
 
-    var converted = remember { ArrayList<String>() }
+    var converted = rememberSaveable { ArrayList<String>() }
 // This is the list of checkbox notes which we saved in checkboxes
-    var mutableListOfCheckBoxes = remember { ArrayList<Boolean>() }// This is the llst of checkboxes
+    var mutableListOfCheckBoxes =
+        rememberSaveable { ArrayList<Boolean>() }// This is the llst of checkboxes
 
-    var convertedBulletPoints = remember { ArrayList<String>() }
+    var convertedBulletPoints = rememberSaveable { ArrayList<String>() }
 
     var notebook by remember {
         mutableStateOf("")
@@ -104,13 +109,17 @@ fun MainStructureEditNote(
         mutableStateOf(false)
     }
 
-    var mutableListOfBulletPoints = remember { mutableStateListOf<MutableState<String>>() }
+    var mutableListOfBulletPoints = RememberSaveableSnapshotStateList()
 
     var enterPasswordToLockDialogBox = remember { mutableStateOf(false) }
 
     var enterPasswordToUnLockDialogBox = remember { mutableStateOf(false) }
 
     var showTrialEndedDialogBox = remember { mutableStateOf(false) }
+
+    var count = rememberSaveable { mutableStateOf(0) }
+
+    var countBullet = rememberSaveable { mutableStateOf(0) }
 
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
@@ -127,14 +136,37 @@ fun MainStructureEditNote(
 
     LaunchedEffect(key1 = Unit) {
         for (i in note.value.listOfCheckedNotes) {
-            mutableListOfCheckboxTexts.add(mutableStateOf(i))
-        }
+            val value = mutableStateOf(i).value
 
+            // Extract the string values from the SnapshotStateList
+            val stringList = mutableListOfCheckboxTexts.map { it.value }
+
+            // Check if the string value is already present
+            if (!stringList.contains(value)) {
+                mutableListOfCheckboxTexts.add(mutableStateOf(i))
+            }
+        }
     }
+
+
+
+//    LaunchedEffect(key1 = Unit) {
+//        for (i in note.value.listOfBulletPointNotes) {
+//            mutableListOfBulletPoints.add(mutableStateOf(i))
+//        }
+//    }
 
     LaunchedEffect(key1 = Unit) {
         for (i in note.value.listOfBulletPointNotes) {
-            mutableListOfBulletPoints.add(mutableStateOf(i))
+            val value = mutableStateOf(i).value
+
+            // Extract the string values from the SnapshotStateList
+            val stringList = mutableListOfBulletPoints.map { it.value }
+
+            // Check if the string value is already present
+            if (!stringList.contains(value)) {
+                mutableListOfBulletPoints.add(mutableStateOf(i))
+            }
         }
     }
 
@@ -143,35 +175,146 @@ fun MainStructureEditNote(
     }
 
     LaunchedEffect(key1 = true) {
-        title = note.value.title ?: ""
-        content = note.value.content ?: "Failed to get the contents.Please try again"
+        if (title == "" && content == "") {
+            title = note.value.title ?: ""
+            content = note.value.content ?: "Failed to get the contents.Please try again"
+        }
         notebook = note.value.notebook
 
     }
 
-    DisposableEffect(Unit) {
+    if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
+        DisposableEffect(Unit) {
 
-        val timer = Timer()
-        // Schedule a task to run every 10 seconds
-        timer.schedule(delay = 3000L, period = 3000L) {
-            viewModel.getNoteById(id)
-            var noteFromDb = viewModel.getNoteById
-            var note = noteFromDb.value.copy(
-                title = title,
-                content = richStateText.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+            val timer = Timer()
+            // Schedule a task to run every 10 seconds
+            timer.schedule(delay = 3000L, period = 1000L) {
+                println("TRIGGERED")
+                viewModel.getNoteById(id)
+                var noteFromDb = viewModel.getNoteById
+                var note = noteFromDb.value.copy(
+                    title = title,
+                    content = richStateText.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-            )
-            viewModel.updateNote(note)
-        }
+                )
+                viewModel.updateNote(note)
+            }
 
-        // Clean up the timer when the composable leaves the composition
-        onDispose {
-            timer.cancel() // Stop the timer
+            // Clean up the timer when the composable leaves the composition
+            onDispose {
+                timer.cancel() // Stop the timer
+            }
+        }
+    }
+
+    if (mutableListOfCheckboxTexts.size > 0) {
+        LaunchedEffect(key1 = count.value) {
+            delay(500)
+
+            viewModel.getNoteById(id)
+            var noteFromDb = viewModel.getNoteById
+
+//        for (i in listOfCheckedNotes) {
+//            println("TEXT1:${i.value}")
+//        }
+//
+//        for (i in mutableListConverted) {
+//            println("TEXT2:${i}")
+//        }
+            var listOfNotes = noteFromDb.value.listOfCheckedNotes
+
+//            for (i in listOfNotes) {
+//                if (!converted.contains(i)) {
+//                    converted.add(i)
+//                }
+//            }
+//            var listOFCheckBoxes = noteFromDb.value.listOfCheckedBoxes
+//            for (i in listOFCheckBoxes) {
+//                if (!mutableListOfCheckBoxes.contains(i)) {
+//                    mutableListOfCheckBoxes.add(i)
+//                }
+//            }
+            convertMutableStateIntoString(
+                mutableListOfCheckboxTexts,
+                converted
+            )
+            //println("TEXT2:$listOFCheckBoxes")
+            //  println("TEXT1:$converted")
+            // println("TEXT2:${mutableListOfCheckboxTexts.toCollection(ArrayList())}")
+            //println(mutableListOfCheckBoxes)
+            converted.removeAll { it == "" }
+            var note1 = noteFromDb.value.copy(
+                title = title,
+                timeModified = System.currentTimeMillis(),
+                //timeStamp = System.currentTimeMillis(),
+                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                listOfCheckedNotes = converted,
+                listOfCheckedBoxes = mutableListOfCheckBoxes,
+            )
+            viewModel.updateNote(note1)
+        }
+    }
+
+    if (mutableListOfBulletPoints.size > 0) {
+        LaunchedEffect(key1 = countBullet.value) {
+            delay(500)
+
+            viewModel.getNoteById(id)
+            var noteFromDb = viewModel.getNoteById
+
+//        for (i in listOfCheckedNotes) {
+//            println("TEXT1:${i.value}")
+//        }
+//
+//        for (i in mutableListConverted) {
+//            println("TEXT2:${i}")
+//        }
+            var listOfNotes = noteFromDb.value.listOfBulletPointNotes
+
+//            for (i in listOfNotes) {
+//                if (!converted.contains(i)) {
+//                    converted.add(i)
+//                }
+//            }
+//            var listOFCheckBoxes = noteFromDb.value.listOfCheckedBoxes
+//            for (i in listOFCheckBoxes) {
+//                if (!mutableListOfCheckBoxes.contains(i)) {
+//                    mutableListOfCheckBoxes.add(i)
+//                }
+//            }
+            convertMutableStateIntoString(
+                mutableListOfBulletPoints,
+                convertedBulletPoints
+            )
+            //println("TEXT2:$listOFCheckBoxes")
+            //  println("TEXT1:$converted")
+            // println("TEXT2:${mutableListOfCheckboxTexts.toCollection(ArrayList())}")
+            //println(mutableListOfCheckBoxes)
+            convertedBulletPoints.removeAll { it == "" }
+            var note1 = noteFromDb.value.copy(
+                title = title,
+                timeModified = System.currentTimeMillis(),
+                //timeStamp = System.currentTimeMillis(),
+                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                listOfBulletPointNotes = convertedBulletPoints
+            )
+            viewModel.updateNote(note1)
+        }
+    }
+
+    var remember = rememberCoroutineScope()
+    BackHandler {
+        // keyboardController?.hide()
+        remember.launch(Dispatchers.Main) {
+            count.value++
+            countBullet.value++
+            delay(800)
+            navController.popBackStack()
         }
     }
 
@@ -192,7 +335,35 @@ fun MainStructureEditNote(
                     containerColor = MaterialTheme.colors.primary
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
+                        convertMutableStateIntoString(
+                            mutableListOfBulletPoints,
+                            convertedBulletPoints
+                        )
+                        viewModel.getNoteById(id)
+                        var noteFromDb = viewModel.getNoteById
+                        var archived = noteFromDb.value.archive
+                        var lockedOrNote = noteFromDb.value.locked
+                        var timeCreated = noteFromDb.value.timeStamp
+                        var note = Note(
+                            id,
+                            title,
+                            richStateText.value.toHtml(),
+                            archived,
+                            locked = lockedOrNote,
+                            listOfCheckedNotes = converted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            listOfBulletPointNotes = convertedBulletPoints,
+                            timeStamp = timeCreated,
+                            timeModified = System.currentTimeMillis()
+                        )
+                        viewModel.updateNote(note)
+                        Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack()
+                    }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
                     }
                 },
@@ -230,6 +401,7 @@ fun MainStructureEditNote(
 //                                }
 //                            }
 //                        }
+
 
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         convertMutableStateIntoString(
@@ -445,33 +617,40 @@ fun MainStructureEditNote(
                     mutableListOfBulletPoints,
                     activity,
                     richStateText.value,
+                    count,
+                    converted,
+                    countBullet,
+                    convertedBulletPoints,
                     { title = it },
                     { content = it },
                     screen
                 )
             }
-            Box(
-                modifier =
-                Modifier
-                    .padding(WindowInsets.ime.asPaddingValues())
-                    .padding(15.dp)
-                    .background(MaterialTheme.colors.primaryVariant)
-                    .fillMaxWidth()
-                    .height(if (showFontSize.value) 100.dp else 50.dp)
-                    .align(
-                        Alignment.BottomCenter
+            if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
+                Box(
+                    modifier =
+                    Modifier
+                        .padding(WindowInsets.ime.asPaddingValues())
+                        .padding(15.dp)
+                        .background(MaterialTheme.colors.primaryVariant)
+                        .fillMaxWidth()
+                        .height(if (showFontSize.value) 100.dp else 50.dp)
+                        .align(
+                            Alignment.BottomCenter
+                        )
+                ) {
+
+                    BottomTextFormattingBar(
+                        showFontSize = showFontSize,
+                        fontSize = fontSize,
+                        richTextState = richStateText,
+                        isBoldActivated = isBoldActivated,
+                        isUnderlineActivated = isUnderlineActivated,
+                        isItalicActivated = isItalicActivated,
+                        isOrderedListActivated = isOrderedListActivated,
+                        isUnOrderedListActivated = isUnOrderedListActivated
                     )
-            ) {
-                BottomTextFormattingBar(
-                    showFontSize = showFontSize,
-                    fontSize = fontSize,
-                    richTextState = richStateText,
-                    isBoldActivated = isBoldActivated,
-                    isUnderlineActivated = isUnderlineActivated,
-                    isItalicActivated = isItalicActivated,
-                    isOrderedListActivated = isOrderedListActivated,
-                    isUnOrderedListActivated = isUnOrderedListActivated
-                )
+                }
             }
         }
     }
@@ -548,11 +727,33 @@ fun convertMutableStateIntoString(
     mutableList: SnapshotStateList<MutableState<String>>,
     mutableListConverted: ArrayList<String>
 ) {
+    mutableListConverted.clear()
     for (i in mutableList) {
-        mutableListConverted.add(i.value)
+        if (!mutableListConverted.contains(i.value)) {
+            mutableListConverted.add(i.value)
+        }
     }
 }
 
+@Composable
+fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>> {
+    // Create a custom saver for SnapshotStateList<Mutable<String>>
+    val listSaver = Saver<SnapshotStateList<MutableState<String>>, List<List<String>>>(
+        save = { snapshotStateList ->
+            // Convert SnapshotStateList<Mutable<String>> to List<List<String>> for saving
+            snapshotStateList.map { state -> listOf(state.value) }
+        },
+        restore = { savedList ->
+            // Convert List<List<String>> back to SnapshotStateList<Mutable<String>> on restore
+            val restoredList = savedList.map { mutableStateOf(it.first()) }
+            SnapshotStateList<MutableState<String>>().apply {
+                addAll(restoredList)
+            }
+        })
+    return rememberSaveable(saver = listSaver) {
+        mutableStateListOf<MutableState<String>>() // Initial state
+    }
+}
 
 
 

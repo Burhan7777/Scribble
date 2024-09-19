@@ -47,7 +47,6 @@ fun EditNoteScreen(
         activity,
         screen
     )
-    Log.i("stuff", "stuff")
 }
 
 

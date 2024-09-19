@@ -1,64 +1,43 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextState
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
-import com.pzbdownloaders.scribble.R
-import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
@@ -83,6 +62,10 @@ fun NoteContent(
     listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
     activity: MainActivity,
     richStateText: RichTextState,
+    count: MutableState<Int>,
+    converted: ArrayList<String>,
+    countBullet: MutableState<Int>,
+    convertedBulletPoints: ArrayList<String>,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit,
     screen: String
@@ -256,15 +239,64 @@ fun NoteContent(
             ),
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )
-        println(listOfNotes.size)
-        println(listOfCheckboxes.size)
-        LazyColumn() {
-            itemsIndexed(listOfNotes) { index, note ->
-                SingleRowCheckBoxNotes(note = note, index, listOfCheckboxes, listOfNotes)
+        // println(listOfNotes.size)
+        //println(listOfCheckboxes.size)
+        val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
 
+        val imeVisible = WindowInsets.isImeVisible
+
+        val lazyListState = rememberLazyListState()
+        Column(
+            modifier = Modifier
+                .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
+        ) {
+            LazyColumn(state = lazyListState, modifier = Modifier.fillMaxSize()) {
+                itemsIndexed(listOfNotes) { index, note ->
+                    if (index >= focusRequesters.size) {
+                        focusRequesters.add(FocusRequester())
+                    }
+                    val focusRequester = focusRequesters[index]
+                    SingleRowCheckBoxNotes(note = note,
+                        index,
+                        listOfCheckboxes,
+                        listOfNotes,
+                        count,
+                        focusRequester,
+                        onDelete = {
+                            try {
+                                focusRequesters.removeAt(index)
+                                convertedBulletPoints.removeAt(index)
+                            } catch (exception: IndexOutOfBoundsException) {
+
+                            }
+                        })
+
+                }
+            }
+        }
+        LaunchedEffect(count.value) {
+            if (listOfNotes.size > 1) {
+                lazyListState.animateScrollToItem(listOfNotes.size - 1)
+                focusRequesters.lastOrNull()
+                    ?.requestFocus()  // Move focus to the last added checkbox
+            }
+        }
+        LaunchedEffect(focusRequesters, listOfNotes) {
+            if (listOfNotes.isNotEmpty()) {
+                // Delay focus request to ensure the UI is composed
+                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+                    // Add a small delay to ensure everything is composed
+                    kotlinx.coroutines.delay(100)
+                    firstFocusRequester.requestFocus()
+                }
             }
         }
     } else if (listOfBulletPointNotes.size > 0) {
+        val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
+
+        val imeVisible = WindowInsets.isImeVisible
+
+        val lazyListState = rememberLazyListState()
         androidx.compose.material3.TextField(
             value = title,
             onValueChange = { onChangeTitle(it) },
@@ -288,10 +320,50 @@ fun NoteContent(
             textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 25.sp)
         )
 
-        LazyColumn() {
-            itemsIndexed(listOfBulletPointNotes) { index, note ->
-                SingleRoaBulletPointNotes(note = note, index, listOfBulletPointNotes)
+        Column(
+            modifier = Modifier
+                .padding(bottom = if (imeVisible) WindowInsets.ime.getBottom((LocalDensity.current)).dp else 0.dp)
+        ) {
+            LazyColumn(state = lazyListState, modifier = Modifier.fillMaxSize()) {
+                itemsIndexed(listOfBulletPointNotes) { index, note ->
+                    if (index >= focusRequesters.size) {
+                        focusRequesters.add(FocusRequester())
+                    }
+                    val focusRequester = focusRequesters[index]
+                    SingleRoaBulletPointNotes(
+                        note = note,
+                        index,
+                        listOfBulletPointNotes,
+                        countBullet,
+                        focusRequester,
+                        onDelete = {
+                            try {
+                                focusRequesters.removeAt(index)
+                                converted.removeAt(index)
+                            } catch (exception: IndexOutOfBoundsException) {
 
+                            }
+                        }
+                    )
+
+                }
+            }
+        }
+        LaunchedEffect(countBullet.value) {
+            if (listOfBulletPointNotes.size > 1) {
+                lazyListState.animateScrollToItem(listOfBulletPointNotes.size - 1)
+                focusRequesters.lastOrNull()
+                    ?.requestFocus()  // Move focus to the last added checkbox
+            }
+        }
+        LaunchedEffect(focusRequesters, listOfBulletPointNotes) {
+            if (listOfBulletPointNotes.isNotEmpty()) {
+                // Delay focus request to ensure the UI is composed
+                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+                    // Add a small delay to ensure everything is composed
+                    kotlinx.coroutines.delay(100)
+                    firstFocusRequester.requestFocus()
+                }
             }
         }
     }

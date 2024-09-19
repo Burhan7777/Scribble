@@ -45,14 +45,17 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 fun SingleRoaBulletPointNotes(
     note: MutableState<String>,
     index: Int,
-    listOfBulletPoints: SnapshotStateList<MutableState<String>>
+    listOfBulletPoints: SnapshotStateList<MutableState<String>>,
+    countBullet: MutableState<Int>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+//    val focusRequester = remember { FocusRequester() }
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
 
 
     Row(
@@ -72,7 +75,10 @@ fun SingleRoaBulletPointNotes(
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
-                onNext = { listOfBulletPoints.add(mutableStateOf("")) }
+                onNext = {
+                    countBullet.value++
+                    listOfBulletPoints.add(mutableStateOf(""))
+                }
             ),
             colors = androidx.compose.material3.TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colors.primary,
@@ -97,7 +103,10 @@ fun SingleRoaBulletPointNotes(
                     }
                 },
             trailingIcon = {
-                IconButton(onClick = { listOfBulletPoints.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+                    listOfBulletPoints.removeAt(index)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",

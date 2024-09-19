@@ -22,7 +22,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,6 +38,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -42,34 +47,34 @@ fun SingleRowCheckBoxNotes(
     note: MutableState<String>,
     index: Int,
     listOfCheckboxes: ArrayList<Boolean>,
-    listOfCheckboxText: SnapshotStateList<MutableState<String>>
+    listOfCheckboxText: SnapshotStateList<MutableState<String>>,
+    count: MutableState<Int>,
+    focusRequester: FocusRequester,
+    onDelete: () -> Unit
 
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
+//    val focusRequester = remember { FocusRequester() }
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
 
     LaunchedEffect(key1 = listOfCheckboxText.size) {
         listOfCheckboxes.add(false)
 
     }
+    var coroutine = rememberCoroutineScope()
 
-    println(listOfCheckboxes)
-    for(i in listOfCheckboxText) {
-        println(i.value)
-    }
+    // println("TEXT:$listOfCheckboxes")
 
-    var checkBox = remember { mutableStateOf(false) }
-    for(i in listOfCheckboxes) {
-       checkBox.value = listOfCheckboxes[index]
+    var checkBox = rememberSaveable { mutableStateOf(false) }
+    for (i in listOfCheckboxes) {
+        checkBox.value = listOfCheckboxes[index]
     }
 //    for(i in listOfCheckboxes)
 //    LaunchedEffect(key1 = i) {
 //        listOfCheckboxes[index] = i
 //    }
-
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -80,22 +85,41 @@ fun SingleRowCheckBoxNotes(
             onCheckedChange = {
                 checkBox.value = it
                 listOfCheckboxes[index] = it
+//                coroutine.launch {
+//                    delay(300)
+//                    count.value++
+//                }
             },
             colors = CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colors.onPrimary,
                 checkmarkColor = MaterialTheme.colors.onSecondary,
                 uncheckedColor = MaterialTheme.colors.onPrimary
-            )
+            ),
+            modifier = Modifier.clickable {
+
+
+            }
         )
         OutlinedTextField(
             value = note.value, onValueChange = {
                 note.value = it
+
+                // Extract the string values from the SnapshotStateList
+                // val stringList = listOfCheckboxText.map { value }
+
+                // Check if the string value is already present
+                listOfCheckboxText[index].value = it
+              ///  println("INDEX:$index")
+              //  println("TEXT2:${listOfCheckboxText.toCollection(ArrayList())}")
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
             ),
             keyboardActions = KeyboardActions(
-                onNext = { listOfCheckboxText.add(mutableStateOf("")) }
+                onNext = {
+                    count.value++
+                    listOfCheckboxText.add(mutableStateOf(""))
+                }
             ),
             colors = androidx.compose.material3.TextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colors.primary,
@@ -120,7 +144,10 @@ fun SingleRowCheckBoxNotes(
                     }
                 },
             trailingIcon = {
-                IconButton(onClick = { listOfCheckboxText.removeAt(index) }) {
+                IconButton(onClick = {
+                    onDelete()
+                    listOfCheckboxText.removeAt(index)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,
                         contentDescription = "Clear checkbox",
