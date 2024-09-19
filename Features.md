@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (46/61) // MAIN - (19/27)
+FEATURES THAT NEED TO BE ADDED (47/61) // MAIN - (20/27)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -56,7 +56,7 @@ FEATURES THAT NEED TO BE ADDED (46/61) // MAIN - (19/27)
 53) Forgot password option(Main):
 54) Hide textformatting bar when title textfield is in focus(Main):
 55) Add a discard note button in add notes , checkboxes and bullet-points(Main): DONE
-56) Trashbin main screen should display checkboxes and bullet-points(Main):
+56) Trashbin main screen should display checkboxes and bullet-points(Main): DONE
 57) Ad crashlytics(Main):
 58) Add theme change in settings:
 59) Test on light theme(Main):

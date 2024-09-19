@@ -97,7 +97,7 @@ fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
 
         println(notesInTrash.value.size)
         for (i in notesInTrash.value) {
-            if ((System.currentTimeMillis() - i.timePutInTrash) > 60000) {
+            if ((System.currentTimeMillis() - i.timePutInTrash) > 1209600000 ) {
                 viewModel.deleteNoteById(i.id)
               //  Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
             }
