@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (40/56) // MAIN - (16/23)
+FEATURES THAT NEED TO BE ADDED (41/61) // MAIN - (17/27)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -30,7 +30,7 @@ FEATURES THAT NEED TO BE ADDED (40/56) // MAIN - (16/23)
 27) Update app option: DELAYED
 28) Firebase fix dialog boxes like in Instabuddy :( :
 29) Don't forget to save password of locked notes on the cloud: DONE
-30) Save note on back button also auto-save function(Main):
+30) Save note on back button also auto-save function(Main): DONE (FINALLY AFTER 3 FREAKING DAYS PHEW!!!)
 31) Text formatting features(Main): DONE
 32) Buy App Bar should not be visible to users who bought app: CANCELLED
 33) Export to PDF and other documents: DELAYED
@@ -45,7 +45,7 @@ FEATURES THAT NEED TO BE ADDED (40/56) // MAIN - (16/23)
 42) Remove Splash screen(Main):DONE
 43) Add Firebase events to everything(Main):
 44) Keep track of total words written for the achievements(Main):
-45) How long notes survive in trash in settings : 
+45) How long notes survive in trash in settings (Main): 
 46) Change title of all to richtextstate(Main): CANCELLED
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
@@ -57,3 +57,8 @@ FEATURES THAT NEED TO BE ADDED (40/56) // MAIN - (16/23)
 54) Hide textformatting bar when title textfield is in focus(Main):
 55) Add a discard note button in add notes , checkboxes and bullet-points(Main):
 56) Trashbin main screen should display checkboxes and bullet-points(Main):
+57) Ad crashlytics(Main):
+58) Add theme change in settings:
+59) Test on light theme(Main):
+60) Text on Tab - Make Adjustment for tab(Main):
+61) Make only Portrait(Main):

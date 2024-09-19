@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlignHorizontalCenter
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.FormatAlignJustify
 import androidx.compose.material.icons.filled.FormatAlignLeft
@@ -39,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -105,6 +107,8 @@ fun MainStructureAddNote(
     var boldText = remember { mutableStateOf(false) }
     var underlineText = remember { mutableStateOf(false) }
     var italicText = remember { mutableStateOf(false) }
+
+    var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 
     var generatedNoteId = remember { mutableStateOf<Long>(0) }
 
@@ -190,6 +194,15 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
+                        showDiscardNoteAlertBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Discard Note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
                         viewModel.getNoteById(generatedNoteId.value.toInt())
                         var noteFromDb = viewModel.getNoteById
                         var note2 = noteFromDb.value.copy(
@@ -230,6 +243,16 @@ fun MainStructureAddNote(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(it)) {
+                if (showDiscardNoteAlertBox.value) {
+                    DiscardNoteAlertBox(
+                        viewModel = viewModel,
+                        navHostController = navController,
+                        activity = activity,
+                        id = generatedNoteId.value.toInt()
+                    ) {
+                        showDiscardNoteAlertBox.value = false
+                    }
+                }
                 NoteContent(
                     title,
                     content,
