@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components.CheckboxNote
+import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -70,6 +72,9 @@ fun MainStructureBulletPointsLockedNotes(
     var count = rememberSaveable {
         mutableStateOf(0)
     }
+
+
+    var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         if (mutableListOfBulletPointsNotes.isEmpty()) {
@@ -188,6 +193,15 @@ fun MainStructureBulletPointsLockedNotes(
                 },
                 actions = {
                     IconButton(onClick = {
+                        showDiscardNoteAlertBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Discard Note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
                         convertMutableStateIntoString(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
@@ -229,6 +243,16 @@ fun MainStructureBulletPointsLockedNotes(
             }*/
     ) {
         Column(modifier = Modifier.padding(it)) {
+            if (showDiscardNoteAlertBox.value) {
+                DiscardNoteAlertBox(
+                    viewModel = viewModel,
+                    navHostController = navController,
+                    activity = activity,
+                    id = generatedNoteId.value.toInt()
+                ) {
+                    showDiscardNoteAlertBox.value = false
+                }
+            }
             BulletPointLockedNotes(
                 viewModel,
                 navController,

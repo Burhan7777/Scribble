@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
+import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
@@ -63,6 +65,8 @@ fun MainStructureAddNoteInNotebook(
     var generatedNoteId = remember { mutableStateOf<Long>(0) }
 
     var annotatedString = remember { mutableStateOf(AnnotatedString("")) }
+
+    var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     var textFieldValue =
         remember { mutableStateOf<TextFieldValue>(TextFieldValue(annotatedString.value)) }
@@ -143,6 +147,15 @@ fun MainStructureAddNoteInNotebook(
                 },
                 actions = {
                     IconButton(onClick = {
+                        showDiscardNoteAlertBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Discard Note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
                         viewModel.getNoteById(generatedNoteId.value.toInt())
                         var noteFromDb = viewModel.getNoteById
                         var note2 = noteFromDb.value.copy(
@@ -183,6 +196,16 @@ fun MainStructureAddNoteInNotebook(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(it)) {
+                if (showDiscardNoteAlertBox.value) {
+                    DiscardNoteAlertBox(
+                        viewModel = viewModel,
+                        navHostController = navController,
+                        activity = activity,
+                        id = generatedNoteId.value.toInt()
+                    ) {
+                        showDiscardNoteAlertBox.value = false
+                    }
+                }
                 NoteContentNoteInNotebook(
                     title,
                     content,
@@ -222,34 +245,5 @@ fun MainStructureAddNoteInNotebook(
         }
     }
 
-}
-
-fun makeTextBold(textFieldValue: MutableState<TextFieldValue>) {
-    val selection = textFieldValue.value.selection
-    if (!selection.collapsed) {
-        val annotatedString = buildAnnotatedString {
-            append(textFieldValue.value.annotatedString.subSequence(0, selection.start))
-
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(
-                    textFieldValue.value.annotatedString.subSequence(
-                        selection.start,
-                        selection.end
-                    )
-                )
-            }
-
-            append(
-                textFieldValue.value.annotatedString.subSequence(
-                    selection.end,
-                    textFieldValue.value.annotatedString.length
-                )
-            )
-
-
-        }
-
-        textFieldValue.value = textFieldValue.value.copy(annotatedString)
-    }
 }
 

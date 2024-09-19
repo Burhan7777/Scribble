@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AlignHorizontalCenter
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.FormatAlignJustify
 import androidx.compose.material.icons.filled.FormatAlignLeft
@@ -69,6 +70,7 @@ import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
+import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -106,6 +108,8 @@ fun MainStructureAddNoteLockedScreen(
     var italicText = remember { mutableStateOf(false) }
 
     var annotatedString = remember { mutableStateOf(AnnotatedString("")) }
+
+    var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     var textFieldValue =
         remember { mutableStateOf<TextFieldValue>(TextFieldValue(annotatedString.value)) }
@@ -183,11 +187,37 @@ fun MainStructureAddNoteLockedScreen(
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        viewModel.getNoteById(generatedNoteId.value.toInt())
+                        var noteFromDb = viewModel.getNoteById
+                        var note1 = noteFromDb.value.copy(
+                            title = title.value,
+                            content = richTextState.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = notebookState.value,
+                            locked = true
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                        )
+                        viewModel.updateNote(note1)
+                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.popBackStack() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showDiscardNoteAlertBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Discard Note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                     IconButton(onClick = {
                         viewModel.getNoteById(generatedNoteId.value.toInt())
                         var noteFromDb = viewModel.getNoteById
@@ -216,6 +246,16 @@ fun MainStructureAddNoteLockedScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(it)) {
+                if (showDiscardNoteAlertBox.value) {
+                    DiscardNoteAlertBox(
+                        viewModel = viewModel,
+                        navHostController = navController,
+                        activity = activity,
+                        id = generatedNoteId.value.toInt()
+                    ) {
+                        showDiscardNoteAlertBox.value = false
+                    }
+                }
                 NoteContentNoteInLockedScreen(
                     title,
                     content,

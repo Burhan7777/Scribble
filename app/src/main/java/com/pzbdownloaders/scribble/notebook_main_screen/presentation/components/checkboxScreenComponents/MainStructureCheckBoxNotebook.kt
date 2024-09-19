@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -69,6 +71,8 @@ fun MainStructureCheckBoxNotebook(
             false
         )
     }
+
+    var showDiscardNoteAlertBox = remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         if (mutableListOfCheckboxTexts.isEmpty()) {
@@ -197,6 +201,15 @@ fun MainStructureCheckBoxNotebook(
                 },
                 actions = {
                     IconButton(onClick = {
+                        showDiscardNoteAlertBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "Discard Note",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
                         convertMutableStateIntoString(
                             mutableListOfCheckboxTexts,
                             mutableListConverted
@@ -239,6 +252,16 @@ fun MainStructureCheckBoxNotebook(
             }*/
     ) {
         Column(modifier = Modifier.padding(it)) {
+            if (showDiscardNoteAlertBox.value) {
+                DiscardNoteAlertBox(
+                    viewModel = viewModel,
+                    navHostController = navController,
+                    activity = activity,
+                    id = generatedNoteId.value.toInt()
+                ) {
+                    showDiscardNoteAlertBox.value = false
+                }
+            }
             CheckboxNotebook(
                 viewModel,
                 navController,

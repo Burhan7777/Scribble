@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (41/61) // MAIN - (17/27)
+FEATURES THAT NEED TO BE ADDED (46/61) // MAIN - (19/27)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -17,14 +17,14 @@ FEATURES THAT NEED TO BE ADDED (41/61) // MAIN - (17/27)
 14) Add 30 days trial login through google: DONE
 15) Get premium bar at the top of the screen: DONE
 16) Days remaining in the premium bar: DONE
-17) Lock the whole app: 
+17) Lock the whole app: DELAYED
 18) Bottom bar features like google keep(Main): DONE
 19) In-App product to buy product with one time payment: DELAYED
 20) Launch app on play-store before finishing the app for saving time at the end:
 21) Change layout from columns to grid option: DONE
 22) Remove fall back to destructive migration and implement proper migration: DONE
-23) Animations in lazy-column when note is deleted:
-24) Transitions between screens:
+23) Animations in lazy-column when note is deleted:DELAYED
+24) Transitions between screens:DELAYED
 25) "No Notes found" animation in main screen and notebooks screen:
 26) Rate app option while using app: DELAYED
 27) Update app option: DELAYED
@@ -55,10 +55,10 @@ FEATURES THAT NEED TO BE ADDED (41/61) // MAIN - (17/27)
 52) Replace add to notebook from checkbox and bulletpoints: DONE
 53) Forgot password option(Main):
 54) Hide textformatting bar when title textfield is in focus(Main):
-55) Add a discard note button in add notes , checkboxes and bullet-points(Main):
+55) Add a discard note button in add notes , checkboxes and bullet-points(Main): DONE
 56) Trashbin main screen should display checkboxes and bullet-points(Main):
 57) Ad crashlytics(Main):
 58) Add theme change in settings:
 59) Test on light theme(Main):
 60) Text on Tab - Make Adjustment for tab(Main):
-61) Make only Portrait(Main):
+61) Make only Portrait(Main): DONE

@@ -17,6 +17,7 @@
         android:theme="@style/Theme.Scribble"
         tools:targetApi="31">
         <activity
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:name=".common.presentation.MainActivity"
             android:exported="true"

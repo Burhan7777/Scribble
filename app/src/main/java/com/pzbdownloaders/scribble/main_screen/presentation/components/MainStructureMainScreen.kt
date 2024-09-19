@@ -78,7 +78,7 @@ fun MainStructureMainScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     androidx.compose.material.Text(
-                        text = "SCRIBBLE",
+                        text = "SQUIGGLY",
                         color = MaterialTheme.colors.onPrimary,
                         fontFamily = FontFamily.fontFamilyBold,
                         modifier = Modifier.padding(20.dp),

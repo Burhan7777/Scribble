@@ -55,6 +55,7 @@ fun MainStructureNotebookScreen(
 
     var showDeleteNotesTooDialogBox = remember { mutableStateOf(false) }
 
+
 //    if (selectedItem.value == 0) selectedNote.value = 100000
 //
 //    ModalNavigationDrawer(
