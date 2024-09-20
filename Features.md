@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (50/65) // MAIN - (22/29)
+FEATURES THAT NEED TO BE ADDED (53/68) // MAIN - (25/31)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -45,7 +45,7 @@ FEATURES THAT NEED TO BE ADDED (50/65) // MAIN - (22/29)
 42) Remove Splash screen(Main):DONE
 43) Add Firebase events to everything(Main):
 44) Keep track of total words written for the achievements(Main):
-45) How long notes survive in trash in settings (Main): 
+45) How long notes survive in trash in settings (Main):  CANCELLED(14 days it is)
 46) Change title of all to richtextstate(Main): CANCELLED
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
 48) Add pinned feature to locked notes and notebooks and remove from archive(Main): DONE
@@ -62,7 +62,10 @@ FEATURES THAT NEED TO BE ADDED (50/65) // MAIN - (22/29)
 59) Test on light theme(Main):
 60) Text on Tab - Make Adjustment for tab(Main):
 61) Make only Portrait(Main): DONE
-62) Long notes just like in keep in grid mode(Main):
+62) Long notes just like in keep in grid mode(Main): DELAYED
 63) Auto backup option(Main):
-64) Discard changes in editText:
-65) Undo and redo functionality:
+64) Discard changes in edit screen:
+65) Undo and redo functionality: DELAYED
+66) Empty note is not to be saved(Main): DELAYED
+67) Trash delete all notes(Main):
+68) Long click select note in Trash:

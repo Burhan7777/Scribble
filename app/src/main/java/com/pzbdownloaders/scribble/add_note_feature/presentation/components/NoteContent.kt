@@ -107,6 +107,12 @@ fun NoteContent(
     val imeVisible = WindowInsets.isImeVisible
 
     var focusRequester = remember { FocusRequester() }
+    //val titleFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
 
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())

@@ -130,6 +130,9 @@ dependencies {
     //RICHEDITOR
     implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05")
 
+    //WORK MANAGER
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
+
 
 
 

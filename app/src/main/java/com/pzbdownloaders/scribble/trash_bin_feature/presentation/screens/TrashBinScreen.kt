@@ -1,4 +1,4 @@
-package com.pzbdownloaders.trash_bin_feature.presentation.screens
+package com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.presentation.components.MainStructureMainScreen
-import com.pzbdownloaders.trash_bin_feature.presentation.components.MainStructureTrashBinScreen
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.MainStructureTrashBinScreen
 
 @Composable
 fun TrashBinScreen(

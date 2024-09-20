@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -104,7 +105,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 fontFamily = FontFamily.fontFamilyLight
             )
         }
-    } else if (note.listOfCheckedNotes.size > 0 && !note.deletedNote &&!note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
+    } else if (note.listOfCheckedNotes.size > 0 && !note.deletedNote && !note.archive && !note.locked && note.listOfBulletPointNotes.size == 0) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

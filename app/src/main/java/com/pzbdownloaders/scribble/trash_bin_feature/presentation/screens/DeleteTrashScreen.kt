@@ -1,4 +1,4 @@
-package com.pzbdownloaders.trash_bin_feature.presentation.screens
+package com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,8 +47,8 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
-import com.pzbdownloaders.trash_bin_feature.presentation.components.AlertBoxToDeleteTrashNotes
-import com.pzbdownloaders.trash_bin_feature.presentation.components.AlertBoxToRestoreTrashNotes
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxToDeleteTrashNotes
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxToRestoreTrashNotes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

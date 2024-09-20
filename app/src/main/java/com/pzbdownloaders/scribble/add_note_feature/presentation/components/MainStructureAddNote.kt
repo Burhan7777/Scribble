@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -138,7 +139,7 @@ fun MainStructureAddNote(
 
     }
 
-    DisposableEffect(Unit) {
+    DisposableEffect(content.value.isNotEmpty()) {
         var note = Note(
             0,
             title = title.value,
@@ -151,7 +152,7 @@ fun MainStructureAddNote(
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
         )
-        viewModel.insertNote(note)
+            viewModel.insertNote(note)
         viewModel.generatedNoteId.observe(activity) {
             generatedNoteId.value = it
         }
@@ -178,6 +179,7 @@ fun MainStructureAddNote(
             timer.cancel() // Stop the timer
         }
     }
+
 
     Scaffold(
         topBar = {

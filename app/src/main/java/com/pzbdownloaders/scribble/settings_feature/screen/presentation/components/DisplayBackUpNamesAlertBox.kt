@@ -57,7 +57,7 @@ fun DisplayBackupNamesAlertBox(
         ),
         containerColor = androidx.compose.material.MaterialTheme.colors.primaryVariant,
         title = {
-            Column {
+            Column(modifier = Modifier.height(300.dp)) {
                 Text(
                     text = "Select the backup file to restore",
                     fontStyle = FontStyle.Italic,

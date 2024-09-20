@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -19,11 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.pzbdownloaders.scribble.auto_save_firebase_backup_feature.BackupWorker
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
-import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.ui.theme.ScribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -41,7 +46,12 @@ class MainActivity : ComponentActivity() {
         val netInfo = conMgr.activeNetworkInfo
         Log.i("network", netInfo.toString())
         deleteTrashNotes(viewModel, this)
+        val prefs = getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE)
+        val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, false)
 
+        if (autoSave) {
+            firebaseBackUp(this)
+        }
 
         setContent {
             var showTrialEndedDialogBox = remember {
@@ -88,7 +98,7 @@ fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
     viewModel.getAllNotes()
     viewModel.listOfNotesLiveData.observe(activity) {
         var notesInTrash = mutableStateOf(SnapshotStateList<Note>())
-       // println(it.size)
+        // println(it.size)
         for (i in it) {
             if (i.deletedNote) {
                 notesInTrash.value.add(i)
@@ -97,11 +107,29 @@ fun deleteTrashNotes(viewModel: MainActivityViewModel, activity: MainActivity) {
 
         println(notesInTrash.value.size)
         for (i in notesInTrash.value) {
-            if ((System.currentTimeMillis() - i.timePutInTrash) > 1209600000 ) {
+            if ((System.currentTimeMillis() - i.timePutInTrash) > 1209600000) {
                 viewModel.deleteNoteById(i.id)
-              //  Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
+                //  Toast.makeText(activity, "Trash cleared", Toast.LENGTH_SHORT).show()
             }
         }
     }
+}
+
+fun firebaseBackUp(context: Context) {
+    val backupRequest = PeriodicWorkRequestBuilder<BackupWorker>(72, TimeUnit.HOURS)
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // Only run if connected to the internet
+                .build()
+        )
+        .build()
+
+    WorkManager.getInstance(context)
+        .enqueueUniquePeriodicWork(
+            "firebaseAutoSave",
+            ExistingPeriodicWorkPolicy.KEEP,
+            backupRequest
+        )
+
 }
 

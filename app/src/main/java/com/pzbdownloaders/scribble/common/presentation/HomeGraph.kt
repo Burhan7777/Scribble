@@ -24,8 +24,8 @@ import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.chec
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
-import com.pzbdownloaders.trash_bin_feature.presentation.screens.DeleteTrashScreen
-import com.pzbdownloaders.trash_bin_feature.presentation.screens.TrashBinScreen
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens.DeleteTrashScreen
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens.TrashBinScreen
 
 
 fun NavGraphBuilder.homeGraph(
@@ -161,7 +161,7 @@ fun NavGraphBuilder.homeGraph(
         }
 
         composable(Screens.BackupAndRestoreScreen.route) {
-            BackupAndRestoreScreen()
+            BackupAndRestoreScreen(navController)
         }
         composable(Screens.CheckboxNotebookMainScreen.route, listOf(navArgument("notebook") {
             type = NavType.StringType

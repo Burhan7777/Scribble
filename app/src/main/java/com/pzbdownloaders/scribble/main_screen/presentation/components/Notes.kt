@@ -46,6 +46,13 @@ fun Notes(
         }
     }
 
+//    viewModel.listOfNotesLiveData.observe(activity) {
+//        for (note in listOfNotesFromDB) {
+//            if (note.title.isEmpty() && note.content.isEmpty()) {
+//                viewModel.deleteNoteById(note.id)
+//            }
+//        }
+//    }
 
 
 //    if (listOfNotesFromDB.isEmpty()) {

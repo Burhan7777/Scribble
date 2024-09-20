@@ -1,4 +1,4 @@
-package com.pzbdownloaders.trash_bin_feature.presentation.components
+package com.pzbdownloaders.scribble.trash_bin_feature.presentation.components
 
 import android.content.Context
 import android.widget.Toast
