@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Looks
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Card
@@ -49,6 +50,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserH
 import com.pzbdownloaders.scribble.settings_feature.screen.domain.checkPasswordIfMatches
 import com.pzbdownloaders.scribble.settings_feature.screen.domain.createPassword
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ChangePasswordAlertBox
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ChangeThemeDialogBox
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.SetPasswordAlertBox
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ShowNotebooksAlertBox
 
@@ -64,7 +66,7 @@ fun SettingsScreen(
     var confirmPassword = remember { mutableStateOf("") }
     val showChangePasswordDialog = remember { mutableStateOf(false) }
     var showNotebooksDialogBox = remember { mutableStateOf(false) }
-
+    var showChangeThemeDialogBox = remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { navHostController.popBackStack() }) {
@@ -361,6 +363,67 @@ fun SettingsScreen(
                 }
             }
         }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+                    showChangeThemeDialogBox.value = true
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Looks,
+                    contentDescription = "Change theme",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Change Theme",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
         if (showPasswordDialog.value) {
             SetPasswordAlertBox(
                 password = password,
@@ -378,6 +441,11 @@ fun SettingsScreen(
         if (showNotebooksDialogBox.value) {
             ShowNotebooksAlertBox(viewModel = viewModel, activity = activity) {
                 showNotebooksDialogBox.value = false
+            }
+        }
+        if (showChangeThemeDialogBox.value) {
+            ChangeThemeDialogBox(showChangeThemeDialogBox) {
+                showChangeThemeDialogBox.value = false
             }
         }
     }

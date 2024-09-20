@@ -21,5 +21,10 @@ object Constant {
     const val NOT_CATEGORIZED = "Not Categorized"
     const val LIST_PREFERENCE = "list_preference"
     const val LIST_OR_GRID = "list_or_grid"
+    const val CHANGE_THEME = "change_theme"
+    const val THEME_KEY = "theme_key"
+    const val SYSTEM_DEFAULT = "system_default"
+    const val DARK_THEME = "dark_theme"
+    const val LIGHT_THEME = "light_theme"
 
 }
