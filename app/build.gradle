@@ -5,6 +5,7 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -104,9 +105,10 @@ dependencies {
     // FIREBASE ANALYTICS
     implementation("com.google.firebase:firebase-analytics")
 
-    //DATASTORE
-    implementation "androidx.datastore:datastore-preferences:1.1.0-alpha04"
-    implementation("androidx.datastore:datastore-core:1.0.0-beta01")
+    // CRASHLYTICS
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+
 
     //ALGOLIA
     implementation "com.algolia:algoliasearch-client-kotlin:2.0.0"
