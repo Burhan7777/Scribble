@@ -27,6 +27,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -66,6 +68,7 @@ fun NoteContent(
     converted: ArrayList<String>,
     countBullet: MutableState<Int>,
     convertedBulletPoints: ArrayList<String>,
+    hideFormattingTextBar: MutableState<Boolean>,
     onChangeTitle: (String) -> Unit,
     onChangeContent: (String) -> Unit,
     screen: String
@@ -85,6 +88,7 @@ fun NoteContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val imeVisible = WindowInsets.isImeVisible
 
+    var focusRequester = FocusRequester()
 
 
     LaunchedEffect(key1 = content) {
@@ -182,7 +186,12 @@ fun NoteContent(
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
                 cursorColor = MaterialTheme.colors.onPrimary
             ),
-            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp)
+            textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    hideFormattingTextBar.value = it.isFocused
+                }
         )
 
         Column(

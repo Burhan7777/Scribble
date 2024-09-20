@@ -28,6 +28,9 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -69,7 +72,8 @@ fun NoteContent(
     showCircularProgress: MutableState<Boolean>,
     textFieldValue: MutableState<TextFieldValue>,
     boldText: MutableState<Boolean>,
-    richStateText: RichTextState
+    richStateText: RichTextState,
+    hideFormattingTextBar: MutableState<Boolean>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -101,6 +105,8 @@ fun NoteContent(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val imeVisible = WindowInsets.isImeVisible
+
+    var focusRequester = remember { FocusRequester() }
 
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
@@ -161,6 +167,11 @@ fun NoteContent(
             cursorColor = MaterialTheme.colors.onPrimary
         ),
         textStyle = TextStyle(fontFamily = FontFamily.fontFamilyBold, fontSize = 20.sp),
+        modifier = Modifier
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                    hideFormattingTextBar.value = it.isFocused
+            }
     )
 
     Column(

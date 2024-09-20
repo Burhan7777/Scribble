@@ -121,6 +121,8 @@ fun MainStructureEditNote(
 
     var countBullet = rememberSaveable { mutableStateOf(0) }
 
+    var hideFormattingTextBarWhenTitleIsInFocus = remember { mutableStateOf(true) }
+
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         viewModel.getNoteById(id)
@@ -147,7 +149,6 @@ fun MainStructureEditNote(
             }
         }
     }
-
 
 
 //    LaunchedEffect(key1 = Unit) {
@@ -621,12 +622,13 @@ fun MainStructureEditNote(
                     converted,
                     countBullet,
                     convertedBulletPoints,
+                    hideFormattingTextBarWhenTitleIsInFocus,
                     { title = it },
                     { content = it },
                     screen
                 )
             }
-            if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
+            if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0 && !hideFormattingTextBarWhenTitleIsInFocus.value) {
                 Box(
                     modifier =
                     Modifier

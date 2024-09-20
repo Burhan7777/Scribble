@@ -130,6 +130,7 @@ fun MainStructureAddNoteLockedScreen(
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
+    var hideFormattingTextBarWhileTitleIsInFocus = remember{ mutableStateOf(true) }
 
     DisposableEffect(Unit) {
         var note = Note(
@@ -265,32 +266,35 @@ fun MainStructureAddNoteLockedScreen(
                     textFieldValue,
                     boldText,
                     richTextState.value,
+                    hideFormattingTextBarWhileTitleIsInFocus
 //                notebook,
 //                notebookFromDB)
                 )
             }
-            Box(
-                modifier =
-                Modifier
-                    .padding(WindowInsets.ime.asPaddingValues())
-                    .padding(15.dp)
-                    .background(MaterialTheme.colors.primaryVariant)
-                    .fillMaxWidth()
-                    .height(if (showFontSize.value) 100.dp else 50.dp)
-                    .align(
-                        Alignment.BottomCenter
+            if (!hideFormattingTextBarWhileTitleIsInFocus.value) {
+                Box(
+                    modifier =
+                    Modifier
+                        .padding(WindowInsets.ime.asPaddingValues())
+                        .padding(15.dp)
+                        .background(MaterialTheme.colors.primaryVariant)
+                        .fillMaxWidth()
+                        .height(if (showFontSize.value) 100.dp else 50.dp)
+                        .align(
+                            Alignment.BottomCenter
+                        )
+                ) {
+                    BottomTextFormattingBarLockedNote(
+                        showFontSize = showFontSize,
+                        fontSize = fontSize,
+                        richTextState = richTextState,
+                        isBoldActivated = isBoldActivated,
+                        isUnderlineActivated = isUnderlineActivated,
+                        isItalicActivated = isItalicActivated,
+                        isOrderedListActivated = isOrderedListActivated,
+                        isUnOrderedListActivated = isUnOrderedListActivated
                     )
-            ) {
-                BottomTextFormattingBarLockedNote(
-                    showFontSize = showFontSize,
-                    fontSize = fontSize,
-                    richTextState = richTextState,
-                    isBoldActivated = isBoldActivated,
-                    isUnderlineActivated = isUnderlineActivated,
-                    isItalicActivated = isItalicActivated,
-                    isOrderedListActivated = isOrderedListActivated,
-                    isUnOrderedListActivated = isUnOrderedListActivated
-                )
+                }
             }
         }
     }

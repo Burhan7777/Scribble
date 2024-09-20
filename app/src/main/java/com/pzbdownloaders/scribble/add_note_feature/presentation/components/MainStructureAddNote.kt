@@ -119,6 +119,7 @@ fun MainStructureAddNote(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    var hideTextFomattingBarWhenTitleIsInFocus = remember { mutableStateOf(true) }
 
     var boldSelection = remember { mutableStateOf(false) }
 
@@ -262,32 +263,35 @@ fun MainStructureAddNote(
                     textFieldValue,
                     boldText,
                     richTextState.value,
+                    hideTextFomattingBarWhenTitleIsInFocus
 //                notebook,
 //                notebookFromDB)
                 )
             }
-            Box(
-                modifier =
-                Modifier
-                    .padding(WindowInsets.ime.asPaddingValues())
-                    .padding(15.dp)
-                    .background(MaterialTheme.colors.primaryVariant)
-                    .fillMaxWidth()
-                    .height(if (showFontSize.value) 100.dp else 50.dp)
-                    .align(
-                        Alignment.BottomCenter
+            if (!hideTextFomattingBarWhenTitleIsInFocus.value) {
+                Box(
+                    modifier =
+                    Modifier
+                        .padding(WindowInsets.ime.asPaddingValues())
+                        .padding(15.dp)
+                        .background(MaterialTheme.colors.primaryVariant)
+                        .fillMaxWidth()
+                        .height(if (showFontSize.value) 100.dp else 50.dp)
+                        .align(
+                            Alignment.BottomCenter
+                        )
+                ) {
+                    BottomTextFormattingBar(
+                        showFontSize = showFontSize,
+                        fontSize = fontSize,
+                        richTextState = richTextState,
+                        isBoldActivated = isBoldActivated,
+                        isUnderlineActivated = isUnderlineActivated,
+                        isItalicActivated = isItalicActivated,
+                        isOrderedListActivated = isOrderedListActivated,
+                        isUnOrderedListActivated = isUnOrderedListActivated
                     )
-            ) {
-                BottomTextFormattingBar(
-                    showFontSize = showFontSize,
-                    fontSize = fontSize,
-                    richTextState = richTextState,
-                    isBoldActivated = isBoldActivated,
-                    isUnderlineActivated = isUnderlineActivated,
-                    isItalicActivated = isItalicActivated,
-                    isOrderedListActivated = isOrderedListActivated,
-                    isUnOrderedListActivated = isUnOrderedListActivated
-                )
+                }
             }
         }
     }

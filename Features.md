@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (49/61) // MAIN - (21/27)
+FEATURES THAT NEED TO BE ADDED (50/65) // MAIN - (22/29)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -54,7 +54,7 @@ FEATURES THAT NEED TO BE ADDED (49/61) // MAIN - (21/27)
 51) Lock Notebook(Main): DELAYED
 52) Replace add to notebook from checkbox and bulletpoints: DONE
 53) Forgot password option(Main):
-54) Hide textformatting bar when title textfield is in focus(Main):
+54) Hide textformatting bar when title textfield is in focus(Main): DONE
 55) Add a discard note button in add notes , checkboxes and bullet-points(Main): DONE
 56) Trashbin main screen should display checkboxes and bullet-points(Main): DONE
 57) Ad crashlytics(Main): DONE
@@ -62,3 +62,7 @@ FEATURES THAT NEED TO BE ADDED (49/61) // MAIN - (21/27)
 59) Test on light theme(Main):
 60) Text on Tab - Make Adjustment for tab(Main):
 61) Make only Portrait(Main): DONE
+62) Long notes just like in keep in grid mode(Main):
+63) Auto backup option(Main):
+64) Discard changes in editText:
+65) Undo and redo functionality:
