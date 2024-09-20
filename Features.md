@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (53/68) // MAIN - (25/31)
+FEATURES THAT NEED TO BE ADDED (54/68) // MAIN - (26/31)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -63,7 +63,7 @@ FEATURES THAT NEED TO BE ADDED (53/68) // MAIN - (25/31)
 60) Text on Tab - Make Adjustment for tab(Main):
 61) Make only Portrait(Main): DONE
 62) Long notes just like in keep in grid mode(Main): DELAYED
-63) Auto backup option(Main):
+63) Auto backup option(Main): DONE
 64) Discard changes in edit screen:
 65) Undo and redo functionality: DELAYED
 66) Empty note is not to be saved(Main): DELAYED
