@@ -23,6 +23,8 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.pzbdownloaders.scribble.auto_save_firebase_backup_feature.BackupWorker
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
@@ -51,6 +53,10 @@ class MainActivity : ComponentActivity() {
 
         if (autoSave) {
             firebaseBackUp(this)
+        }
+
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
         }
 
         setContent {
