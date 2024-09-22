@@ -56,16 +56,18 @@ fun googleSignInButton(navHostController: NavHostController, context: Context) {
             var firebase = Firebase.auth
             firebase.signInWithCredential(googleAuthProvider).addOnSuccessListener { user ->
                 val sharedPreferences = context.getSharedPreferences(
-                                Constant.SHARED_PREP_NAME,
-                                Context.MODE_PRIVATE
-                            )
-                            val editor = sharedPreferences.edit()
-                            editor.apply {
-                                putString(Constant.USER_KEY, Constant.USER_VALUE)
-                            }.apply()
+                    Constant.SHARED_PREP_NAME,
+                    Context.MODE_PRIVATE
+                )
+                val editor = sharedPreferences.edit()
+                editor.apply {
+                    putString(Constant.USER_KEY, Constant.USER_VALUE)
+                }.apply()
                 Toast.makeText(context, "Welcome ${user.user?.displayName}", Toast.LENGTH_SHORT)
                     .show()
+                navHostController.popBackStack()
                 navHostController.navigate(Screens.HomeScreen.route)
+
 //                var calendar = Calendar.getInstance()
 //                var timeInSeconds = calendar.timeInMillis / 1000L
 //                var remainingTime = timeInSeconds + 2592000

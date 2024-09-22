@@ -39,6 +39,8 @@ import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.Get
 import com.pzbdownloaders.scribble.settings_feature.screen.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -91,6 +93,7 @@ class MainActivityViewModel @Inject constructor(
     var getNoteById = mutableStateOf<Note>(Note())
 
     var getNoteByIdLivData = MutableLiveData<Note>()
+    var getNoteByIdLivData2 = MutableLiveData<Note>()
 
 
     var getResultFromSignUp: MutableLiveData<String> = MutableLiveData<String>()
@@ -168,12 +171,17 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
+    var _listOfNotesFlow = MutableStateFlow<ArrayList<Note>>(arrayListOf())
+    var listOFNotesFLow: StateFlow<ArrayList<Note>> = _listOfNotesFlow
     fun getAllNotes() {
         viewModelScope.launch(Dispatchers.IO) {
             listOfNotes = noteRepository.getAllNotes().toMutableStateList()
             listOfNotesLiveData.postValue(noteRepository.getAllNotes().toCollection(ArrayList()))
+            _listOfNotesFlow.value = noteRepository.getAllNotes().toCollection(ArrayList())
+
         }
     }
+
 
     fun getAllNotesByNotebook(notebook: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -184,10 +192,15 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
+    private val _getNoteByIdFlow = MutableStateFlow<Note>(Note())
+    val getNoteByIdFlow: StateFlow<Note?> = _getNoteByIdFlow
+
     fun getNoteById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            getNoteById.value = editNoteRepository.getNotesById(id)
-            getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
+          //  getNoteById.value = editNoteRepository.getNotesById(id)
+            //  getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
+            _getNoteByIdFlow.value = editNoteRepository.getNotesById(id)
+            getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
         }
     }
 

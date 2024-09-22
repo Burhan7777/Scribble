@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface Dao {
 
     @Upsert
-    suspend fun insertNote(note: Note):Long
+    suspend fun insertNote(note: Note): Long
 
     @Query("SELECT * from notes ORDER BY timeStamp DESC")
-    fun getAllNotes(): List<Note>
+    suspend fun getAllNotes(): List<Note>
 
     @Delete
     fun deleteAllNotes(list: List<Note>)

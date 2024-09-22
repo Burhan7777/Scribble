@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
@@ -35,6 +36,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.*
@@ -74,10 +76,15 @@ fun MainStructureEditNote(
 
     //viewModel.getNoteToEdit(id)
     // note = viewModel.getNoteDetailsToEdit.observeAsState().value
+    var note = mutableStateOf(Note())
 
+    var scope = rememberCoroutineScope()
     viewModel.getNoteById(id)
-    var note = viewModel.getNoteById
-
+    scope.launch {
+        activity.lifecycleScope.launch {
+            note.value = viewModel.getNoteByIdFlow.first { it != null } ?: Note()
+        }.join()
+    }
     var title by rememberSaveable {
         mutableStateOf("")
     }
@@ -525,14 +532,15 @@ fun MainStructureEditNote(
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
                             viewModel.getNoteById(id)
-                            var noteFromDb = viewModel.getNoteById
-                            var pinned = noteFromDb.value.notePinned
-                            var note = noteFromDb.value.copy(
-                                notePinned = !pinned,
-                                timeModified = System.currentTimeMillis()
-                            )
-                            viewModel.updateNote(note)
-                            navController.popBackStack()
+                            viewModel.getNoteByIdLivData.observe(activity) {
+                                var pinned = it.notePinned
+                                var note = it.copy(
+                                    notePinned = !pinned,
+                                    timeModified = System.currentTimeMillis()
+                                )
+                                viewModel.updateNote(note)
+                            }
+
 
                         }) {
                             Icon(
@@ -590,13 +598,15 @@ fun MainStructureEditNote(
                         )
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                             viewModel.getNoteById(id)
-                            var noteFromDb = viewModel.getNoteById
-                            var note = noteFromDb.value.copy(
-                                archive = true,
-                                timeModified = System.currentTimeMillis(),
-                                notebook = Constant.NOT_CATEGORIZED
-                            )
-                            viewModel.updateNote(note)
+                            activity.lifecycleScope.launch {
+                                var noteFlow = viewModel.getNoteByIdFlow.first { it != null }
+                                var note2 = noteFlow?.copy(
+                                    archive = true,
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = Constant.NOT_CATEGORIZED
+                                )
+                                viewModel.updateNote(note2 ?: Note())
+                            }
                             Toast.makeText(
                                 activity,
                                 "Note has been archived",
@@ -629,13 +639,16 @@ fun MainStructureEditNote(
 //                            }
                         } else if (screen == Constant.ARCHIVE) {
                             viewModel.getNoteById(id)
-                            var noteFromDb = viewModel.getNoteById
-                            var note = noteFromDb.value.copy(
-                                archive = false,
-                                timeModified = System.currentTimeMillis(),
-                                notebook = Constant.NOT_CATEGORIZED
-                            )
-                            viewModel.updateNote(note)
+                            activity.lifecycleScope.launch {
+                                var noteFromFlow = viewModel.getNoteByIdFlow.first { it != null }
+                                //println("NOTEFROMDB:$it")
+                                var note1 = noteFromFlow?.copy(
+                                    archive = false,
+                                    timeModified = System.currentTimeMillis(),
+                                    notebook = Constant.NOT_CATEGORIZED
+                                )
+                                viewModel.updateNote(note1!!)
+                            }
                             Toast.makeText(
                                 activity,
                                 "Note has been unarchived",
@@ -757,14 +770,14 @@ fun MainStructureEditNote(
 //            listOfCheckedBoxes = mutableListOfCheckBoxes,
 //            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //            listOfBulletPointNotes = convertedBulletPoints,
-            //timeStamp = System.currentTimeMillis()
-      //  )
+        //timeStamp = System.currentTimeMillis()
+        //  )
         AlertDialogBoxDelete(
             viewModel = viewModel,
             id = id,
             activity = activity,
             navHostController = navController,
-           // note = note
+            // note = note
         ) {
             dialogOpen.value = false
         }

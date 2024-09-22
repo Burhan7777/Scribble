@@ -26,6 +26,7 @@ import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
 
 @Composable
@@ -41,22 +42,24 @@ fun Notes(
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getArchivedNotes.observeAsState().value
 
+
     viewModel.getAllNotes()
-    var listOfNotes = viewModel.listOfNotes
+    var listOfNotes = viewModel.listOfNotesLiveData.observeAsState().value
+    println("ARCHIVE:${listOfNotes?.size}")
 
 
-    if (listOfNotes == null) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .width(30.dp)
-                    .height(30.dp),
-                color = MaterialTheme.colors.onPrimary
-            )
-        }
-
-    }
+//    if (listOfNotes == null) {
+//        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+//            CircularProgressIndicator(
+//                modifier = Modifier
+//                    .padding(8.dp)
+//                    .width(30.dp)
+//                    .height(30.dp),
+//                color = MaterialTheme.colors.onPrimary
+//            )
+//        }
+//
+//    }
     if (viewModel.showGridOrLinearNotes.value) {
         LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(160.dp)) {
             item(span = StaggeredGridItemSpan.FullLine) {
@@ -80,7 +83,7 @@ fun Notes(
             items(
                 listOfNotes ?: emptyList()
             ) { note ->
-                SingleItemArchiveNoteList(note = note, navHostController,activity)
+                SingleItemArchiveNoteList(note = note, navHostController, activity)
             }
         }
     } else {
@@ -107,7 +110,7 @@ fun Notes(
             items(
                 listOfNotes ?: emptyList()
             ) { note ->
-                SingleItemArchiveNoteList(note = note, navHostController,activity)
+                SingleItemArchiveNoteList(note = note, navHostController, activity)
             }
         }
     }

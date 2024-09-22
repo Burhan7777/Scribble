@@ -10,18 +10,22 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @Composable
 fun Notes(
@@ -37,12 +41,15 @@ fun Notes(
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getListOfNotesToShow.observeAsState().value
 
-    viewModel.getAllNotes()
-    var listOfNotesFromDB = viewModel.listOfNotes
+    var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
     var listOfPinnedNotes = SnapshotStateList<Note>()
-    for (i in listOfNotesFromDB) {
-        if (i.notePinned) {
-            listOfPinnedNotes.add(i)
+    viewModel.getAllNotes()
+    activity.lifecycleScope.launch {
+        listOfNotesFromDB = viewModel.listOFNotesFLow.first { true }.toMutableStateList()
+        for (i in listOfNotesFromDB) {
+            if (i.notePinned) {
+                listOfPinnedNotes.add(i)
+            }
         }
     }
 
@@ -110,7 +117,7 @@ fun Notes(
                 )
             }
             items(
-                listOfNotesFromDB ?: emptyList()
+                items = listOfNotesFromDB ?: emptyList()
             ) { note ->
                 SingleItemNoteList(note = note, navHostController)
             }
