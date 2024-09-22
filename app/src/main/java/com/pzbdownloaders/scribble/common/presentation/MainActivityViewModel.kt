@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class  MainActivityViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     private val insertNoteRepository: InsertNoteRepository,
     private val noteRepository: NoteRepository,
     private val editNoteRepository: EditNoteRepository,
@@ -89,6 +89,8 @@ class  MainActivityViewModel @Inject constructor(
         private set
 
     var getNoteById = mutableStateOf<Note>(Note())
+
+    var getNoteByIdLivData = MutableLiveData<Note>()
 
 
     var getResultFromSignUp: MutableLiveData<String> = MutableLiveData<String>()
@@ -185,6 +187,7 @@ class  MainActivityViewModel @Inject constructor(
     fun getNoteById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             getNoteById.value = editNoteRepository.getNotesById(id)
+            getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
         }
     }
 

@@ -56,7 +56,7 @@ fun AlertBoxToRestoreTrashNotes(
         confirmButton = {
             Button(
                 onClick = {
-                    var note = note.copy(deletedNote = false)
+                    var note = note.copy(deletedNote = false, timePutInTrash = 0L)
                     viewModel.updateNote(note)
                     onDismiss()
                     navHostController.popBackStack()

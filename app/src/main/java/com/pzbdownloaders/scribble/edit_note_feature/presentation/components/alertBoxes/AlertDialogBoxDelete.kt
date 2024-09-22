@@ -8,14 +8,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -24,10 +31,12 @@ fun AlertDialogBoxDelete(
     id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
-    note: Note,
+    //note: Note,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    var whenToPopOff = mutableStateOf(false)
+    var coroutineScope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(onDismissRequest = {
         onDismiss()
     },
@@ -60,12 +69,21 @@ fun AlertDialogBoxDelete(
         confirmButton = {
             Button(
                 onClick = {
-                    //viewModel.deleteNoteById(id)
-                    var note =
-                        note.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
-                    viewModel.updateNote(note)
-                    onDismiss()
-                    navHostController.popBackStack()
+                    // viewModel.deleteNoteById(id)
+                    viewModel.getNoteById(id)
+                    viewModel.getNoteByIdLivData.observe(activity) {
+                        var note1 =
+                            it.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
+                        viewModel.updateNote(note1)
+                        onDismiss()
+                    }
+                    activity.lifecycleScope.launch {
+                        delay(200)
+                        navHostController.popBackStack()
+                    }
+
+
+
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,

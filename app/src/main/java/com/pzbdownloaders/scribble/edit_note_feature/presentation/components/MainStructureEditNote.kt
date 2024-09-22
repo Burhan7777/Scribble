@@ -218,34 +218,36 @@ fun MainStructureEditNote(
 
     var coroutineScope = rememberCoroutineScope()
 
-    if (note.value.listOfCheckedNotes.size == 0 && note.value.listOfBulletPointNotes.size == 0) {
-        DisposableEffect(Unit) {
-            val job = coroutineScope.launch {
-                // Delay the autosave for 3 seconds, then run it every 10 seconds
-                delay(3000L)
-                while (isActive) {
-                    // Get the note by ID and update it
-                    viewModel.getNoteById(note.value.id)
-                    val noteFromDb = viewModel.getNoteById.value
-                    var note = noteFromDb.copy(
-                        title = title,
-                        content = richStateText.value.toHtml(),
-                        timeModified = System.currentTimeMillis(),
-                        notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+    if (note.value != null) {
+        if (note.value.listOfCheckedNotes.isEmpty() && note.value.listOfBulletPointNotes.isEmpty()) {
+            DisposableEffect(Unit) {
+                val job = coroutineScope.launch {
+                    // Delay the autosave for 3 seconds, then run it every 10 seconds
+                    delay(3000L)
+                    while (isActive) {
+                        // Get the note by ID and update it
+                        viewModel.getNoteById(note.value.id)
+                        val noteFromDb = viewModel.getNoteById.value
+                        var note = noteFromDb.copy(
+                            title = title,
+                            content = richStateText.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                    )
+                        )
 //
-                    viewModel.updateNote(note)
-                    delay(5000L)
-                    // Save every 10 seconds
+                        viewModel.updateNote(note)
+                        delay(5000L)
+                        // Save every 10 seconds
+                    }
                 }
-            }
 
-            onDispose {
-                job.cancel()  // Cancel the coroutine when the component is disposed
+                onDispose {
+                    job.cancel()  // Cancel the coroutine when the component is disposed
+                }
             }
         }
     }
@@ -741,28 +743,28 @@ fun MainStructureEditNote(
         }
     }
     if (dialogOpen.value) {
-        viewModel.getNoteById(id)
-        var noteFromDb = viewModel.getNoteById
-        var archived = noteFromDb.value.archive
-        var lockedOrNote = noteFromDb.value.locked
-        var note = Note(
-            id,
-            title,
-            richStateText.value.toHtml(),
-            archived,
-            locked = lockedOrNote,
-            listOfCheckedNotes = converted,
-            listOfCheckedBoxes = mutableListOfCheckBoxes,
-            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-            listOfBulletPointNotes = convertedBulletPoints,
-            timeStamp = System.currentTimeMillis()
-        )
+//        viewModel.getNoteById(id)
+//        var noteFromDb = viewModel.getNoteById
+//        var archived = noteFromDb.value.archive
+//        var lockedOrNote = noteFromDb.value.locked
+//        var note = Note(
+//            id,
+//            title,
+//            richStateText.value.toHtml(),
+//            archived,
+//            locked = lockedOrNote,
+//            listOfCheckedNotes = converted,
+//            listOfCheckedBoxes = mutableListOfCheckBoxes,
+//            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//            listOfBulletPointNotes = convertedBulletPoints,
+            //timeStamp = System.currentTimeMillis()
+      //  )
         AlertDialogBoxDelete(
             viewModel = viewModel,
             id = id,
             activity = activity,
             navHostController = navController,
-            note = note
+           // note = note
         ) {
             dialogOpen.value = false
         }
