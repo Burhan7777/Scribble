@@ -1,88 +1,43 @@
 package com.pzbdownloaders.scribble.add_note_feature.presentation.components
 
-import android.app.Activity
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AlignHorizontalCenter
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.FormatAlignCenter
-import androidx.compose.material.icons.filled.FormatAlignJustify
-import androidx.compose.material.icons.filled.FormatAlignLeft
-import androidx.compose.material.icons.filled.FormatAlignRight
-import androidx.compose.material.icons.filled.FormatBold
-import androidx.compose.material.icons.filled.FormatItalic
-import androidx.compose.material.icons.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.FormatListNumbered
-import androidx.compose.material.icons.filled.FormatSize
-import androidx.compose.material.icons.filled.FormatUnderlined
-import androidx.compose.material.icons.filled.TextDecrease
-import androidx.compose.material.icons.filled.TextIncrease
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
-import com.pzbdownloaders.scribble.common.data.Model.NoteBook
-import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
-import io.ktor.util.reflect.typeInfoImpl
 import kotlinx.coroutines.delay
-import java.util.Timer
-import kotlin.concurrent.schedule
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -111,7 +66,7 @@ fun MainStructureAddNote(
 
     var showDiscardNoteAlertBox = rememberSaveable { mutableStateOf(false) }
 
-    var generatedNoteId = remember { mutableStateOf<Long>(0) }
+    var generatedNoteId = rememberSaveable { mutableStateOf<Long>(0) }
 
     var annotatedString = remember { mutableStateOf(AnnotatedString("")) }
 
@@ -135,52 +90,127 @@ fun MainStructureAddNote(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
 
-    LaunchedEffect(key1 = Unit) {
+//    DisposableEffect(Unit) {
+//        var note = Note(
+//            title = title.value,
+//            content = richTextState.value.toHtml(),
+//            timeModified = System.currentTimeMillis(),
+//            notebook = notebookState.value,
+//            timeStamp = System.currentTimeMillis()
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
+//
+//        )
+//        viewModel.insertNote(note)
+//        viewModel.generatedNoteId.observe(activity) {
+//            generatedNoteId.value = it
+//        }
+//        val timer = Timer()
+//        // Schedule a task to run every 10 seconds
+//        timer.schedule(delay = 3000L, period = 5000L) {
+//            viewModel.getNoteById(generatedNoteId.value.toInt())
+//            var noteFromDb = viewModel.getNoteById
+//            var note1 = noteFromDb.value.copy(
+//                title = title.value,
+//                content = richTextState.value.toHtml(),
+//                timeModified = System.currentTimeMillis(),
+//                notebook = notebookState.value,
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
+//
+//            )
+//            viewModel.updateNote(note1)
+//        }
+//
+//        // Clean up the timer when the composable leaves the composition
+//        onDispose {
+//            timer.cancel() // Stop the timer
+//        }
+//    }
 
+    var coroutineScope = rememberCoroutineScope()
+
+    DisposableEffect(Unit) {
+        if (generatedNoteId.value.toInt() == 0) {
+            val note = Note(
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                timeStamp = System.currentTimeMillis()
+            )
+            viewModel.insertNote(note)
+        }
+        viewModel.generatedNoteId.observe(activity) {
+            generatedNoteId.value = it
+        }
+
+        val job = coroutineScope.launch {
+            // Delay the autosave for 3 seconds, then run it every 10 seconds
+            delay(3000L)
+            while (isActive) {
+                // Get the note by ID and update it
+                // viewModel.getNoteById(generatedNoteId.value.toInt())
+                // val noteFromDb = viewModel.getNoteById.value
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis()
+                )
+                viewModel.updateNote(updatedNote)
+                delay(5000L)
+                // Save every 10 seconds
+            }
+        }
+
+        onDispose {
+            job.cancel()  // Cancel the coroutine when the component is disposed
+        }
     }
 
-    DisposableEffect(content.value.isNotEmpty()) {
-        var note = Note(
-            0,
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Observe the lifecycle to detect when the app goes into the background
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                // Trigger autosave when app goes to background (onStop)
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookState.value,
+                    timeStamp = System.currentTimeMillis()
+                )
+                viewModel.updateNote(updatedNote)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // Cleanup the observer when the Composable is disposed
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    BackHandler {
+        val updatedNote = Note(
+            id = generatedNoteId.value.toInt(),
             title = title.value,
             content = richTextState.value.toHtml(),
             timeModified = System.currentTimeMillis(),
             notebook = notebookState.value,
             timeStamp = System.currentTimeMillis()
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
-
         )
-            viewModel.insertNote(note)
-        viewModel.generatedNoteId.observe(activity) {
-            generatedNoteId.value = it
-        }
-        val timer = Timer()
-        // Schedule a task to run every 10 seconds
-        timer.schedule(delay = 3000L, period = 1000L) {
-            viewModel.getNoteById(generatedNoteId.value.toInt())
-            var noteFromDb = viewModel.getNoteById
-            var note1 = noteFromDb.value.copy(
-                title = title.value,
-                content = richTextState.value.toHtml(),
-                timeModified = System.currentTimeMillis(),
-                notebook = notebookState.value,
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
-
-            )
-            viewModel.updateNote(note1)
-        }
-
-        // Clean up the timer when the composable leaves the composition
-        onDispose {
-            timer.cancel() // Stop the timer
-        }
+        viewModel.updateNote(updatedNote)
+        navController.popBackStack()
     }
-
-
     Scaffold(
         topBar = {
             androidx.compose.material3.TopAppBar(
@@ -206,9 +236,10 @@ fun MainStructureAddNote(
                         )
                     }
                     IconButton(onClick = {
-                        viewModel.getNoteById(generatedNoteId.value.toInt())
-                        var noteFromDb = viewModel.getNoteById
-                        var note2 = noteFromDb.value.copy(
+//                        viewModel.getNoteById(generatedNoteId.value.toInt())
+//                        var noteFromDb = viewModel.getNoteById
+                        var note2 = Note(
+                            id = generatedNoteId.value.toInt(),
                             title = title.value,
                             content = richTextState.value.toHtml(),
                             archive = false,

@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class  MainActivityViewModel @Inject constructor(
     private val insertNoteRepository: InsertNoteRepository,
     private val noteRepository: NoteRepository,
     private val editNoteRepository: EditNoteRepository,

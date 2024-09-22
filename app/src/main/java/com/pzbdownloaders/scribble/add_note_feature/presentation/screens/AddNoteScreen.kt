@@ -41,13 +41,12 @@ fun AddNoteScreen(
     //  var note = Note(0, title.value, content.value, getTimeInMilliSeconds(), 123456)
 
 
-
     MainStructureAddNote(
         navHostController,
-       title = title,
+        title = title,
         content = content,
-        viewModel= viewModel,
-       //note,
+        viewModel = viewModel,
+        //note,
         notebookState = notebookState,
         activity = activity,
         richTextState = richStateText

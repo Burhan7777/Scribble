@@ -17,7 +17,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
@@ -32,10 +35,10 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,7 +83,7 @@ fun MainStructureEditNote(
     }
 
 
-    var content by remember {
+    var content = rememberSaveable {
         mutableStateOf("")
     }
 
@@ -176,24 +179,87 @@ fun MainStructureEditNote(
     }
 
     LaunchedEffect(key1 = true) {
-        if (title == "" && content == "") {
+        if (title == "" && content.value == "") {
             title = note.value.title ?: ""
-            content = note.value.content ?: "Failed to get the contents.Please try again"
+            content.value = note.value.content ?: "Failed to get the contents.Please try again"
         }
         notebook = note.value.notebook
 
     }
 
-    if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
-        DisposableEffect(Unit) {
+//    if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
+//        DisposableEffect(Unit) {
+//
+//            val timer = Timer()
+//            // Schedule a task to run every 10 seconds
+//            timer.schedule(delay = 3000L, period = 1000L) {
+//                println("TRIGGERED")
+//                viewModel.getNoteById(id)
+//                var noteFromDb = viewModel.getNoteById
+//                var note = noteFromDb.value.copy(
+//                    title = title,
+//                    content = richStateText.value.toHtml(),
+//                    timeModified = System.currentTimeMillis(),
+//                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
+//
+//                )
+//                viewModel.updateNote(note)
+//            }
+//
+//            // Clean up the timer when the composable leaves the composition
+//            onDispose {
+//                timer.cancel() // Stop the timer
+//            }
+//        }
+//    }
 
-            val timer = Timer()
-            // Schedule a task to run every 10 seconds
-            timer.schedule(delay = 3000L, period = 1000L) {
-                println("TRIGGERED")
-                viewModel.getNoteById(id)
-                var noteFromDb = viewModel.getNoteById
-                var note = noteFromDb.value.copy(
+    var coroutineScope = rememberCoroutineScope()
+
+    if (note.value.listOfCheckedNotes.size == 0 && note.value.listOfBulletPointNotes.size == 0) {
+        DisposableEffect(Unit) {
+            val job = coroutineScope.launch {
+                // Delay the autosave for 3 seconds, then run it every 10 seconds
+                delay(3000L)
+                while (isActive) {
+                    // Get the note by ID and update it
+                    viewModel.getNoteById(note.value.id)
+                    val noteFromDb = viewModel.getNoteById.value
+                    var note = noteFromDb.copy(
+                        title = title,
+                        content = richStateText.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                    )
+//
+                    viewModel.updateNote(note)
+                    delay(5000L)
+                    // Save every 10 seconds
+                }
+            }
+
+            onDispose {
+                job.cancel()  // Cancel the coroutine when the component is disposed
+            }
+        }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Observe the lifecycle to detect when the app goes into the background
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                // Trigger autosave when app goes to background (onStop)
+                viewModel.getNoteById(note.value.id)
+                val noteFromDb = viewModel.getNoteById.value
+                var note = noteFromDb.copy(
                     title = title,
                     content = richStateText.value.toHtml(),
                     timeModified = System.currentTimeMillis(),
@@ -205,11 +271,12 @@ fun MainStructureEditNote(
                 )
                 viewModel.updateNote(note)
             }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
 
-            // Clean up the timer when the composable leaves the composition
-            onDispose {
-                timer.cancel() // Stop the timer
-            }
+        // Cleanup the observer when the Composable is disposed
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -312,8 +379,25 @@ fun MainStructureEditNote(
     BackHandler {
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
-            count.value++
-            countBullet.value++
+            if (note.value.listOfCheckedNotes.size > 0 || note.value.listOfBulletPointNotes.size > 0) {
+                count.value++
+                countBullet.value++
+            } else {
+                viewModel.getNoteById(note.value.id)
+                val noteFromDb = viewModel.getNoteById.value
+                var note = noteFromDb.copy(
+                    title = title,
+                    content = richStateText.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                )
+                viewModel.updateNote(note)
+            }
+
             delay(800)
             navController.popBackStack()
         }
@@ -617,14 +701,14 @@ fun MainStructureEditNote(
                     mutableListOfCheckBoxes,
                     mutableListOfBulletPoints,
                     activity,
-                    richStateText.value,
+                    richStateText,
                     count,
                     converted,
                     countBullet,
                     convertedBulletPoints,
                     hideFormattingTextBarWhenTitleIsInFocus,
                     { title = it },
-                    { content = it },
+                    { content.value = it },
                     screen
                 )
             }
@@ -702,7 +786,7 @@ fun MainStructureEditNote(
             convertedMutableList = converted,
             listOfCheckboxes = mutableListOfCheckBoxes,
             listOfBulletPoints = convertedBulletPoints,
-            content = content
+            content = content.value
         ) {
             enterPasswordToLockDialogBox.value = false
         }
@@ -717,7 +801,7 @@ fun MainStructureEditNote(
             listOfCheckedNotes = converted,
             listOfCheckBoxes = mutableListOfCheckBoxes,
             listOfBulletPoints = convertedBulletPoints,
-            content = content
+            content = content.value
         ) {
             enterPasswordToUnLockDialogBox.value = false
 

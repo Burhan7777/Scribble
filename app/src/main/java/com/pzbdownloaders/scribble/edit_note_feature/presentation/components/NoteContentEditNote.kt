@@ -57,13 +57,13 @@ fun NoteContent(
     isExpanded: MutableState<Boolean>,
     viewModel: MainActivityViewModel,
     title: String,
-    content: String,
+    content: MutableState<String>,
     noteBook: String,
     listOfNotes: SnapshotStateList<MutableState<String>>,
     listOfCheckboxes: ArrayList<Boolean>,
     listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
     activity: MainActivity,
-    richStateText: RichTextState,
+    richStateText: MutableState<RichTextState>,
     count: MutableState<Int>,
     converted: ArrayList<String>,
     countBullet: MutableState<Int>,
@@ -85,15 +85,32 @@ fun NoteContent(
         mutableStateOf("")
     }
 
+
+//    LaunchedEffect(key1 = content) {
+//        richStateText.value.setHtml(content)
+//        println("RICHTEXT:${richStateText.value.annotatedString.text}")
+//    }
+
+    LaunchedEffect(key1 = content) {
+        // Set the content only once when the screen opens, or if content changes externally
+        if (richStateText.value.annotatedString.text != content.value) {
+            richStateText.value.setHtml(content.value)
+        }
+    }
+
+// Update 'content' as user types in the editor
+    LaunchedEffect(key1 = richStateText.value.annotatedString) {
+        // Update content dynamically with the current text
+        content.value = richStateText.value.annotatedString.text
+        println("RICHTEXT: ${richStateText.value.annotatedString.text}")
+    }
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val imeVisible = WindowInsets.isImeVisible
 
-    var focusRequester = FocusRequester()
+    var focusRequester = remember { FocusRequester() }
 
 
-    LaunchedEffect(key1 = content) {
-        richStateText.setHtml(content)
-    }
     // richTextState1.setText(richTextState1.annotatedString.text)
     // println(richTextState1.annotatedString.text)
 
@@ -205,7 +222,7 @@ fun NoteContent(
             }
 
             RichTextEditor(
-                state = richStateText,
+                state = richStateText.value,
                 colors = RichTextEditorDefaults.richTextEditorColors(
                     containerColor = MaterialTheme.colors.primary,
                     cursorColor = MaterialTheme.colors.onPrimary,
