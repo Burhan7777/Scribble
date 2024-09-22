@@ -22,6 +22,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -37,9 +38,10 @@ fun AlertDialogBoxDelete(
     val context = LocalContext.current
     var whenToPopOff = mutableStateOf(false)
     var coroutineScope = rememberCoroutineScope()
-    androidx.compose.material3.AlertDialog(onDismissRequest = {
-        onDismiss()
-    },
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = {
+            onDismiss()
+        },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
             topEnd = CornerSize(15.dp),
@@ -71,17 +73,17 @@ fun AlertDialogBoxDelete(
                 onClick = {
                     // viewModel.deleteNoteById(id)
                     viewModel.getNoteById(id)
-                    viewModel.getNoteByIdLivData.observe(activity) {
-                        var note1 =
-                            it.copy(deletedNote = true, timePutInTrash = System.currentTimeMillis())
-                        viewModel.updateNote(note1)
-                        onDismiss()
-                    }
                     activity.lifecycleScope.launch {
-                        delay(200)
+                        var noteFromFlow = viewModel.getNoteByIdFlow.first() { true }
+                        var note1 =
+                            noteFromFlow?.copy(
+                                deletedNote = true,
+                                timePutInTrash = System.currentTimeMillis()
+                            )
+                        viewModel.updateNote(note1 ?: Note())
+                        onDismiss()
                         navHostController.popBackStack()
                     }
-
 
 
                 },
