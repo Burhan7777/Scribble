@@ -41,7 +41,7 @@ fun SingleItemArchiveNoteList(
 ) {
 
 
-    if (note.archive && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote) {
+    if (note.archive && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote &&!note.locked) {
         var richTextState = rememberRichTextState()
         var text = richTextState.setHtml(note.content).annotatedString.text
         Card(
@@ -96,7 +96,7 @@ fun SingleItemArchiveNoteList(
                 fontFamily = com.pzbdownloaders.scribble.common.presentation.FontFamily.fontFamilyLight
             )
         }
-    } else if (note.listOfCheckedNotes.size > 0 && note.archive && note.listOfBulletPointNotes.size == 0 && !note.deletedNote) {
+    } else if (note.listOfCheckedNotes.size > 0 && note.archive && note.listOfBulletPointNotes.size == 0 && !note.deletedNote &&!note.locked) {
 
         Card(
             modifier = Modifier
@@ -215,7 +215,7 @@ fun SingleItemArchiveNoteList(
                 }
             }
         }
-    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.archive && !note.deletedNote) {
+    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && note.archive && !note.deletedNote &&!note.locked) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
