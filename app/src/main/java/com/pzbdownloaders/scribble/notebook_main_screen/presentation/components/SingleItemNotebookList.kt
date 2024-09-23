@@ -43,7 +43,7 @@ fun SingleItemNotebookList(note: Note, navHostController: NavHostController, tit
     var contentText = richTextState.setHtml(note.content).annotatedString.text
 
 
-    if (note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote) {
+    if (note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote && !note.archive) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,7 +96,7 @@ fun SingleItemNotebookList(note: Note, navHostController: NavHostController, tit
                 fontFamily = FontFamily.fontFamilyLight
             )
         }
-    } else if (note.listOfCheckedNotes.size > 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote) {
+    } else if (note.listOfCheckedNotes.size > 0 && note.listOfBulletPointNotes.size == 0 && !note.deletedNote && !note.archive) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -214,7 +214,7 @@ fun SingleItemNotebookList(note: Note, navHostController: NavHostController, tit
                 }
             }
         }
-    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && !note.deletedNote) {
+    } else if (note.listOfBulletPointNotes.size > 0 && note.listOfCheckedNotes.size == 0 && !note.deletedNote && !note.archive) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

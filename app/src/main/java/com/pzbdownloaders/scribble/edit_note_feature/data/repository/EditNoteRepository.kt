@@ -21,4 +21,12 @@ class EditNoteRepository @Inject constructor(private val noteDatabase: NoteDatab
     suspend fun deleteTrashNote(deletedNote: Boolean) {
         noteDatabase.getDao().deleteNoteFromTrash(deletedNote)
     }
+
+    suspend fun moveToTrashById(deletedNote: Boolean, timePutInTrash: Long, id: Int) {
+        noteDatabase.getDao().moveToTrashById(deletedNote, timePutInTrash, id)
+    }
+
+    suspend fun moveToArchive(archive: Boolean, id: Int) {
+        noteDatabase.getDao().moveToArchive(archive, id)
+    }
 }

@@ -24,6 +24,7 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -41,15 +42,14 @@ fun Notes(
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getListOfNotesToShow.observeAsState().value
 
+
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
     var listOfPinnedNotes = SnapshotStateList<Note>()
     viewModel.getAllNotes()
-    activity.lifecycleScope.launch {
-        listOfNotesFromDB = viewModel.listOFNotesFLow.first { true }.toMutableStateList()
-        for (i in listOfNotesFromDB) {
-            if (i.notePinned) {
-                listOfPinnedNotes.add(i)
-            }
+    listOfNotesFromDB = viewModel.listOfNotes
+    for (i in listOfNotesFromDB) {
+        if (i.notePinned) {
+            listOfPinnedNotes.add(i)
         }
     }
 

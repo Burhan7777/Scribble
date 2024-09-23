@@ -45,15 +45,14 @@ fun NotesNotebook(
 
     viewModel.getAllNotesByNotebook(title)
     //var listOfNotes = viewModel.listOfNotesByNotebook
-    var listOfNotesBooks = SnapshotStateList<Note>()
+    var listOfNotesBooks = remember { SnapshotStateList<Note>() }
     var listOfPinnedNotes = ArrayList<Note>()
-    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
-        listOfNotesBooks = it.toMutableStateList()
+    listOfNotesBooks =
+        viewModel.listOfNotesByNotebook.toMutableStateList()
 
-        for (i in listOfNotesBooks) {
-            if (i.notePinned) {
-                listOfPinnedNotes.add(i)
-            }
+    for (i in listOfNotesBooks) {
+        if (i.notePinned) {
+            listOfPinnedNotes.add(i)
         }
     }
 
@@ -89,7 +88,7 @@ fun NotesNotebook(
                 }
             }
             items(listOfPinnedNotes) { note ->
-                SingleItemNotebookList(note = note, navHostController = navHostController,title)
+                SingleItemNotebookList(note = note, navHostController = navHostController, title)
             }
             item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
@@ -102,7 +101,7 @@ fun NotesNotebook(
             items(
                 listOfNotesBooks ?: emptyList()
             ) { note ->
-                SingleItemNotebookList(note = note, navHostController,title)
+                SingleItemNotebookList(note = note, navHostController, title)
             }
         }
     } else {
@@ -118,7 +117,7 @@ fun NotesNotebook(
                     )
 
                     Text(
-                        text =title,
+                        text = title,
                         fontFamily = fontFamilyExtraLight, fontSize = 45.sp,
                         color = MaterialTheme.colors.onPrimary,
                         modifier = Modifier.padding(horizontal = 10.dp)
@@ -136,7 +135,7 @@ fun NotesNotebook(
                 }
             }
             items(listOfPinnedNotes) { note ->
-                SingleItemNotebookList(note = note, navHostController = navHostController,title)
+                SingleItemNotebookList(note = note, navHostController = navHostController, title)
             }
             item {
                 Text(
@@ -149,7 +148,7 @@ fun NotesNotebook(
             items(
                 listOfNotesBooks ?: emptyList()
             ) { note ->
-                SingleItemNotebookList(note = note, navHostController,title)
+                SingleItemNotebookList(note = note, navHostController, title)
             }
         }
     }

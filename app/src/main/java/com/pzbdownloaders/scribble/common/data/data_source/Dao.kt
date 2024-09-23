@@ -14,7 +14,7 @@ interface Dao {
     suspend fun insertNote(note: Note): Long
 
     @Query("SELECT * from notes ORDER BY timeStamp DESC")
-    suspend fun getAllNotes(): List<Note>
+    fun getAllNotes(): List<Note>
 
     @Delete
     fun deleteAllNotes(list: List<Note>)
@@ -37,6 +37,19 @@ interface Dao {
     @Update
     suspend fun updateNotebook(notebook: NoteBook)
 
+    @Query(
+        """
+    UPDATE notes 
+    SET deletedNote = :deletedNote, 
+        timePutInTrash = :timePutInTrash 
+    WHERE id = :id
+"""
+    )
+    suspend fun moveToTrashById(deletedNote: Boolean, timePutInTrash: Long, id: Int)
+
+    @Query("UPDATE notes set archive= :archive WHERE id= :id")
+    suspend fun moveToArchive(archive: Boolean, id: Int)
+
     @Query("SELECT * FROM notebook where name= :name")
     suspend fun getNotebookByName(name: String): NoteBook
 
@@ -51,4 +64,10 @@ interface Dao {
 
     @RawQuery
     fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery): Int
+
+    @Transaction
+    suspend fun updateAndRefreshNote(note: Note): Note {
+        updateNote(note)
+        return getNoteById(note.id)
+    }
 }

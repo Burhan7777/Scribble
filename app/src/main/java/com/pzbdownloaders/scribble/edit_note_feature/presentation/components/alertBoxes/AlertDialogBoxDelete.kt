@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -24,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -36,8 +38,7 @@ fun AlertDialogBoxDelete(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    var whenToPopOff = mutableStateOf(false)
-    var coroutineScope = rememberCoroutineScope()
+    var scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(
         onDismissRequest = {
             onDismiss()
@@ -71,19 +72,23 @@ fun AlertDialogBoxDelete(
         confirmButton = {
             Button(
                 onClick = {
-                    // viewModel.deleteNoteById(id)
-                    viewModel.getNoteById(id)
-                    activity.lifecycleScope.launch {
-                        var noteFromFlow = viewModel.getNoteByIdFlow.first() { true }
-                        var note1 =
-                            noteFromFlow?.copy(
-                                deletedNote = true,
-                                timePutInTrash = System.currentTimeMillis()
-                            )
-                        viewModel.updateNote(note1 ?: Note())
-                        onDismiss()
-                        navHostController.popBackStack()
+
+                    scope.launch(Dispatchers.IO) {
+                        // Move the note to trash on the IO thread
+                        scope.launch {
+                            viewModel.moveToTrashById(true, System.currentTimeMillis(), id)
+                        }.join()
+
+
+                        // Now delay and popBackStack on the Main thread
+                        withContext(Dispatchers.Main) {
+                             // Navigate back after delay
+                            onDismiss()
+                            // Handle the dismissing logic
+                            navHostController.navigateUp()
+                        }
                     }
+
 
 
                 },

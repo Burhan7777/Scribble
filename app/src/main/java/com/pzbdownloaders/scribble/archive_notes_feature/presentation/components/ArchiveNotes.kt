@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
@@ -28,6 +29,8 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @Composable
 fun Notes(
@@ -43,8 +46,9 @@ fun Notes(
 //        viewModel.getArchivedNotes.observeAsState().value
 
 
+    var listOfNotes = remember { mutableStateListOf<Note>() }
     viewModel.getAllNotes()
-    var listOfNotes = viewModel.listOfNotesLiveData.observeAsState().value
+    listOfNotes = viewModel.listOfNotes
     println("ARCHIVE:${listOfNotes?.size}")
 
 

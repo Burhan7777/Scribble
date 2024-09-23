@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,7 +13,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.data.repository.InsertNoteRepository
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.add_note_feature.domain.model.GetNoteBook
@@ -41,6 +44,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -197,10 +201,10 @@ class MainActivityViewModel @Inject constructor(
 
     fun getNoteById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-          //  getNoteById.value = editNoteRepository.getNotesById(id)
-            //  getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
+            getNoteById.value = editNoteRepository.getNotesById(id)
+            //getNoteByIdLivData.postValue(editNoteRepository.getNotesById(id))
             _getNoteByIdFlow.value = editNoteRepository.getNotesById(id)
-            getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
+            // getNoteByIdLivData2.postValue(editNoteRepository.getNotesById(id))
         }
     }
 
@@ -365,5 +369,112 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             getNoteBookByName.postValue(settingsRepository.getNotebookByName(name))
         }
+    }
+
+    fun archiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            getNoteById(id)
+        }
+        var it = getNoteById.value
+        println("NOTE:$it")
+        var timeStamp = it?.timeStamp
+        var title = it?.title
+        var content = it?.content
+        var listOfCheckNotes = it?.listOfCheckedNotes
+        var listOfCheckBoxes = it?.listOfCheckedBoxes
+        var listOfBulletPoints = it?.listOfBulletPointNotes
+        var id = it?.id
+        var pinned = it.notePinned
+        var timeThrownInTrash = it.timePutInTrash
+        var deletedNote = it.deletedNote
+        var lockedOrNote = it.locked
+
+        var note2 = Note(
+            archive = true,
+            timeModified = System.currentTimeMillis(),
+            notebook = Constant.NOT_CATEGORIZED,
+            timeStamp = timeStamp!!,
+            title = title!!,
+            content = content!!,
+            listOfBulletPointNotes = listOfBulletPoints!!,
+            listOfCheckedBoxes = listOfCheckBoxes!!,
+            listOfCheckedNotes = listOfCheckNotes!!,
+            id = id!!,
+            notePinned = pinned,
+            timePutInTrash = timeThrownInTrash,
+            locked = lockedOrNote,
+            deletedNote = deletedNote
+
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            updateNote(note2!!)
+        }
+        println("NOTE1:$note2")
+        Toast.makeText(
+            application,
+            "Note has been archived",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+        navHostController.popBackStack()
+    }
+
+    suspend fun moveToTrashById(deletedNote: Boolean, timePutInTrash: Long, id: Int) {
+        editNoteRepository.moveToTrashById(deletedNote, timePutInTrash, id)
+    }
+
+    suspend fun moveToArchive(archive: Boolean, id: Int) {
+        editNoteRepository.moveToArchive(archive, id)
+    }
+
+    fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getNoteById(id)
+        }
+        var it = getNoteById.value
+        println("NOTE:$it")
+        //println("NOTEFROMDB:$it")
+        var timeStamp = it?.timeStamp
+        var title = it?.title
+        var content = it?.content
+        var listOfCheckNotes = it?.listOfCheckedNotes
+        var listOfCheckBoxes = it?.listOfCheckedBoxes
+        var listOfBulletPoints = it?.listOfBulletPointNotes
+        var id = it?.id
+        var pinned = it.notePinned
+        var timeThrownInTrash = it.timePutInTrash
+        var deletedNote = it.deletedNote
+        var lockedOrNote = it.locked
+
+        var note1 = Note(
+            archive = false,
+            timeModified = System.currentTimeMillis(),
+            notebook = Constant.NOT_CATEGORIZED,
+            timeStamp = timeStamp!!,
+            title = title!!,
+            content = content!!,
+            listOfBulletPointNotes = listOfBulletPoints!!,
+            listOfCheckedBoxes = listOfCheckBoxes!!,
+            listOfCheckedNotes = listOfCheckNotes!!,
+            id = id!!,
+            notePinned = pinned,
+            timePutInTrash = timeThrownInTrash,
+            locked = lockedOrNote,
+            deletedNote = deletedNote
+
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            updateNote(note1!!)
+        }
+        println("NOTE1:$note1")
+
+        Toast.makeText(
+            application,
+            "Note has been unarchived",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+        navHostController.popBackStack()
     }
 }

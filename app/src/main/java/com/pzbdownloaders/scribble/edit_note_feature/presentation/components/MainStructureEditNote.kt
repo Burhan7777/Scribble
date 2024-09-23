@@ -39,6 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,6 +58,8 @@ fun MainStructureEditNote(
     var dialogOpen = remember {
         mutableStateOf(false)
     }
+
+    var coroutineScope = rememberCoroutineScope()
 
     var richStateText = mutableStateOf(rememberRichTextState())
 
@@ -223,41 +226,42 @@ fun MainStructureEditNote(
 //        }
 //    }
 
-    var coroutineScope = rememberCoroutineScope()
 
-    if (note.value != null) {
-        if (note.value.listOfCheckedNotes.isEmpty() && note.value.listOfBulletPointNotes.isEmpty()) {
-            DisposableEffect(Unit) {
-                val job = coroutineScope.launch {
-                    // Delay the autosave for 3 seconds, then run it every 10 seconds
-                    delay(3000L)
-                    while (isActive) {
-                        // Get the note by ID and update it
-                        viewModel.getNoteById(note.value.id)
-                        val noteFromDb = viewModel.getNoteById.value
-                        var note = noteFromDb.copy(
-                            title = title,
-                            content = richStateText.value.toHtml(),
-                            timeModified = System.currentTimeMillis(),
-                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
-
-                        )
+//    if (note.value != null) {
+//        if (note.value.listOfCheckedNotes.isEmpty() && note.value.listOfBulletPointNotes.isEmpty()) {
+//            DisposableEffect(Unit) {
+//                val job = coroutineScope.launch(Dispatchers.IO) {
+//                    // Delay the autosave for 3 seconds, then run it every 10 seconds
+//                    delay(3000L)
+//                    while (isActive) {
+//                        // Get the note by ID and update it
+//                        viewModel.getNoteById(note.value.id)
+//                        activity.lifecycleScope.launch {
+//                            val noteFromDb = viewModel.getNoteById.value
+//                            var note = noteFromDb?.copy(
+//                                title = title,
+//                                content = richStateText.value.toHtml(),
+//                                timeModified = System.currentTimeMillis(),
+//                                notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
 //
-                        viewModel.updateNote(note)
-                        delay(5000L)
-                        // Save every 10 seconds
-                    }
-                }
-
-                onDispose {
-                    job.cancel()  // Cancel the coroutine when the component is disposed
-                }
-            }
-        }
-    }
+//                            )
+////
+//                          //  viewModel.updateNote(note!!)
+//                            delay(5000L)
+//                        }
+//                        // Save every 10 seconds
+//                    }
+//                }
+//
+//                onDispose {
+//                    job.cancel()  // Cancel the coroutine when the component is disposed
+//                }
+//            }
+//        }
+//    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -267,18 +271,20 @@ fun MainStructureEditNote(
             if (event == Lifecycle.Event.ON_STOP) {
                 // Trigger autosave when app goes to background (onStop)
                 viewModel.getNoteById(note.value.id)
-                val noteFromDb = viewModel.getNoteById.value
-                var note = noteFromDb.copy(
-                    title = title,
-                    content = richStateText.value.toHtml(),
-                    timeModified = System.currentTimeMillis(),
-                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                activity.lifecycleScope.launch {
+                    val noteFromDb = viewModel.getNoteByIdFlow.first() { true }
+                    var note = noteFromDb?.copy(
+                        title = title,
+                        content = richStateText.value.toHtml(),
+                        timeModified = System.currentTimeMillis(),
+                        notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                )
-                viewModel.updateNote(note)
+                    )
+                    viewModel.updateNote(note!!)
+                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -597,23 +603,14 @@ fun MainStructureEditNote(
                             convertedBulletPoints
                         )
                         if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
-                            viewModel.getNoteById(id)
-                            activity.lifecycleScope.launch {
-                                var noteFlow = viewModel.getNoteByIdFlow.first { it != null }
-                                var note2 = noteFlow?.copy(
-                                    archive = true,
-                                    timeModified = System.currentTimeMillis(),
-                                    notebook = Constant.NOT_CATEGORIZED
-                                )
-                                viewModel.updateNote(note2 ?: Note())
+                            //  viewModel.archiveNote(id, navHostController = navController,activity)
+                            scope.launch(Dispatchers.IO) {
+                                viewModel.moveToArchive(true, id)
+                                withContext(Dispatchers.Main) {
+                                    delay(100)
+                                    navController.navigateUp()
+                                }
                             }
-                            Toast.makeText(
-                                activity,
-                                "Note has been archived",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            navController.popBackStack()
 //                            var hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = true
                             //   viewModel.archiveNotes(id, hashmap)
@@ -638,24 +635,14 @@ fun MainStructureEditNote(
 //                                }
 //                            }
                         } else if (screen == Constant.ARCHIVE) {
-                            viewModel.getNoteById(id)
-                            activity.lifecycleScope.launch {
-                                var noteFromFlow = viewModel.getNoteByIdFlow.first { it != null }
-                                //println("NOTEFROMDB:$it")
-                                var note1 = noteFromFlow?.copy(
-                                    archive = false,
-                                    timeModified = System.currentTimeMillis(),
-                                    notebook = Constant.NOT_CATEGORIZED
-                                )
-                                viewModel.updateNote(note1!!)
+                            //  viewModel.unArchiveNote(id, navHostController = navController, activity)
+                            scope.launch(Dispatchers.IO) {
+                                viewModel.moveToArchive(false, id)
+                                withContext(Dispatchers.Main) {
+                                    delay(100)
+                                    navController.navigateUp()
+                                }
                             }
-                            Toast.makeText(
-                                activity,
-                                "Note has been unarchived",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            navController.popBackStack()
 //                            val hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = false
                             // viewModel.unArchiveNotes(id, hashmap)
