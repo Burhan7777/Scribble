@@ -537,14 +537,12 @@ fun MainStructureEditNote(
                     }
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
-                            viewModel.getNoteById(id)
-                            viewModel.getNoteByIdLivData.observe(activity) {
-                                var pinned = it.notePinned
-                                var note = it.copy(
-                                    notePinned = !pinned,
-                                    timeModified = System.currentTimeMillis()
-                                )
-                                viewModel.updateNote(note)
+                            scope.launch(Dispatchers.IO) {
+                                viewModel.pinOrUnpinNote(!pinnedOrNot.value, id)
+                                withContext(Dispatchers.Main) {
+                                    delay(200)
+                                    navController.navigateUp()
+                                }
                             }
 
 
@@ -596,24 +594,25 @@ fun MainStructureEditNote(
                             contentDescription = "Lock Note"
                         )
                     }
-                    IconButton(onClick = {
-                        convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
-                        convertMutableStateIntoString(
-                            mutableListOfBulletPoints,
-                            convertedBulletPoints
-                        )
-                        if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
-                            //  viewModel.archiveNote(id, navHostController = navController,activity)
-                            scope.launch(Dispatchers.IO) {
-                                viewModel.moveToArchive(true, id)
-                                withContext(Dispatchers.Main) {
-                                    delay(100)
-                                    navController.navigateUp()
+                    if(screen == Constant.HOME || screen == Constant.ARCHIVE) {
+                        IconButton(onClick = {
+                            convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
+                            convertMutableStateIntoString(
+                                mutableListOfBulletPoints,
+                                convertedBulletPoints
+                            )
+                            if (screen == Constant.HOME ) {
+                                //  viewModel.archiveNote(id, navHostController = navController,activity)
+                                scope.launch(Dispatchers.IO) {
+                                    viewModel.moveToArchive(true, id)
+                                    withContext(Dispatchers.Main) {
+                                        delay(100)
+                                        navController.navigateUp()
+                                    }
                                 }
-                            }
 //                            var hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = true
-                            //   viewModel.archiveNotes(id, hashmap)
+                                //   viewModel.archiveNotes(id, hashmap)
 //                            viewModel.getResultFromArchivedNotes.observe(activity) {
 //                                when (it) {
 //                                    is GetResult.Success -> {
@@ -634,18 +633,18 @@ fun MainStructureEditNote(
 //                                    }
 //                                }
 //                            }
-                        } else if (screen == Constant.ARCHIVE) {
-                            //  viewModel.unArchiveNote(id, navHostController = navController, activity)
-                            scope.launch(Dispatchers.IO) {
-                                viewModel.moveToArchive(false, id)
-                                withContext(Dispatchers.Main) {
-                                    delay(100)
-                                    navController.navigateUp()
+                            } else if (screen == Constant.ARCHIVE) {
+                                //  viewModel.unArchiveNote(id, navHostController = navController, activity)
+                                scope.launch(Dispatchers.IO) {
+                                    viewModel.moveToArchive(false, id)
+                                    withContext(Dispatchers.Main) {
+                                        delay(100)
+                                        navController.navigateUp()
+                                    }
                                 }
-                            }
 //                            val hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = false
-                            // viewModel.unArchiveNotes(id, hashmap)
+                                // viewModel.unArchiveNotes(id, hashmap)
 //                            viewModel.getResultFromUnArchiveNotes.observe(activity) {
 //                                when (it) {
 //                                    is GetResult.Success -> {
@@ -666,13 +665,14 @@ fun MainStructureEditNote(
 //                                    }
 //                                }
 //                            }
-                        }
+                            }
 
-                    }) {
-                        Icon(
-                            imageVector = if (screen == Constant.HOME) Icons.Filled.Archive else if (screen == Constant.LOCKED_NOTE) Icons.Filled.Archive else Icons.Filled.Unarchive,
-                            contentDescription = "Archive"
-                        )
+                        }) {
+                            Icon(
+                                imageVector = if (screen == Constant.HOME) Icons.Filled.Archive else if (screen == Constant.LOCKED_NOTE) Icons.Filled.Archive else Icons.Filled.Unarchive,
+                                contentDescription = "Archive"
+                            )
+                        }
                     }
                     IconButton(onClick = {
                         // viewModel.deleteNoteById(id)

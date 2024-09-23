@@ -33,4 +33,8 @@ class EditNoteRepository @Inject constructor(private val noteDatabase: NoteDatab
     suspend fun lockOrUnlockNote(lockOrUnlock: Boolean, id: Int) {
         noteDatabase.getDao().lockOrUnlockNote(lockOrUnlock, id)
     }
+
+    suspend fun pinOrUnpinNote(pinOrUnpin: Boolean, id: Int) {
+        noteDatabase.getDao().pinOrUnpinNote(pinOrUnpin, id)
+    }
 }

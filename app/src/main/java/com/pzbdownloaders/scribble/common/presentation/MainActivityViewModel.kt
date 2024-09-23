@@ -432,6 +432,10 @@ class MainActivityViewModel @Inject constructor(
         editNoteRepository.lockOrUnlockNote(lockOrUnlock, id)
     }
 
+    suspend fun pinOrUnpinNote(pinOrUnpin: Boolean, id: Int) {
+        editNoteRepository.pinOrUnpinNote(pinOrUnpin, id)
+    }
+
     fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
         viewModelScope.launch(Dispatchers.IO) {
             getNoteById(id)

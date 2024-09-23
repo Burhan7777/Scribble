@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.addNoteInNotebookComponents
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -15,10 +16,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -27,13 +30,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -89,49 +98,130 @@ fun MainStructureAddNoteInNotebook(
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
 
-    DisposableEffect(Unit) {
-        var note = Note(
-            0,
-            title = title.value,
-            content = richTextState.value.toHtml(),
-            timeModified = System.currentTimeMillis(),
-            notebook = notebookName,
-            timeStamp = System.currentTimeMillis()
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
+//    DisposableEffect(Unit) {
+//        var note = Note(
+//            0,
+//            title = title.value,
+//            content = richTextState.value.toHtml(),
+//            timeModified = System.currentTimeMillis(),
+//            notebook = notebookName,
+//            timeStamp = System.currentTimeMillis()
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
+//
+//        )
+//        viewModel.insertNote(note)
+//        viewModel.generatedNoteId.observe(activity) {
+//            generatedNoteId.value = it
+//        }
+//        val timer = Timer()
+//        // Schedule a task to run every 10 seconds
+//        timer.schedule(delay = 3000L, period = 1000L) {
+//            viewModel.getNoteById(generatedNoteId.value.toInt())
+//            var noteFromDb = viewModel.getNoteById
+//            var note1 = noteFromDb.value.copy(
+//                title = title.value,
+//                content = richTextState.value.toHtml(),
+//                timeModified = System.currentTimeMillis(),
+//                notebook = notebookName,
+////                listOfBulletPointNotes = convertedBulletPoints,
+////                listOfCheckedNotes = converted,
+////                listOfCheckedBoxes = mutableListOfCheckBoxes
+//
+//            )
+//            viewModel.updateNote(note1)
+//        }
+//
+//        // Clean up the timer when the composable leaves the composition
+//        onDispose {
+//            timer.cancel() // Stop the timer
+//        }
+//    }
 
-        )
-        viewModel.insertNote(note)
-        viewModel.generatedNoteId.observe(activity) {
-            generatedNoteId.value = it
-        }
-        val timer = Timer()
-        // Schedule a task to run every 10 seconds
-        timer.schedule(delay = 3000L, period = 1000L) {
-            viewModel.getNoteById(generatedNoteId.value.toInt())
-            var noteFromDb = viewModel.getNoteById
-            var note1 = noteFromDb.value.copy(
+    // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+
+    var coroutineScope = rememberCoroutineScope()
+
+    DisposableEffect(Unit) {
+        if (generatedNoteId.value.toInt() == 0) {
+            val note = Note(
                 title = title.value,
                 content = richTextState.value.toHtml(),
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookName,
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
-
+                timeStamp = System.currentTimeMillis(),
             )
-            viewModel.updateNote(note1)
+            viewModel.insertNote(note)
+        }
+        viewModel.generatedNoteId.observe(activity) {
+            generatedNoteId.value = it
         }
 
-        // Clean up the timer when the composable leaves the composition
+        val job = coroutineScope.launch {
+            // Delay the autosave for 3 seconds, then run it every 10 seconds
+            delay(3000L)
+            while (isActive) {
+                // Get the note by ID and update it
+                // viewModel.getNoteById(generatedNoteId.value.toInt())
+                // val noteFromDb = viewModel.getNoteById.value
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookName,
+                    timeStamp = System.currentTimeMillis(),
+                )
+                viewModel.updateNote(updatedNote)
+                delay(5000L)
+                // Save every 10 seconds
+            }
+        }
+
         onDispose {
-            timer.cancel() // Stop the timer
+            job.cancel()  // Cancel the coroutine when the component is disposed
         }
     }
 
-    // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+    val lifecycleOwner = LocalLifecycleOwner.current
 
+    // Observe the lifecycle to detect when the app goes into the background
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                // Trigger autosave when app goes to background (onStop)
+                val updatedNote = Note(
+                    id = generatedNoteId.value.toInt(),
+                    title = title.value,
+                    content = richTextState.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = notebookName,
+                    timeStamp = System.currentTimeMillis(),
+                )
+                viewModel.updateNote(updatedNote)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // Cleanup the observer when the Composable is disposed
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    BackHandler {
+        val updatedNote = Note(
+            id = generatedNoteId.value.toInt(),
+            title = title.value,
+            content = richTextState.value.toHtml(),
+            timeModified = System.currentTimeMillis(),
+            notebook = notebookName,
+            timeStamp = System.currentTimeMillis(),
+        )
+        viewModel.updateNote(updatedNote)
+        navController.popBackStack()
+    }
 
     Scaffold(
         topBar = {
