@@ -50,6 +50,9 @@ interface Dao {
     @Query("UPDATE notes set archive= :archive WHERE id= :id")
     suspend fun moveToArchive(archive: Boolean, id: Int)
 
+    @Query("UPDATE notes set locked= :locked WHERE id= :id")
+    suspend fun lockOrUnlockNote(locked: Boolean, id: Int)
+
     @Query("SELECT * FROM notebook where name= :name")
     suspend fun getNotebookByName(name: String): NoteBook
 

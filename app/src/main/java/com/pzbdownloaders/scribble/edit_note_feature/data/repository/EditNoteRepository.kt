@@ -29,4 +29,8 @@ class EditNoteRepository @Inject constructor(private val noteDatabase: NoteDatab
     suspend fun moveToArchive(archive: Boolean, id: Int) {
         noteDatabase.getDao().moveToArchive(archive, id)
     }
+
+    suspend fun lockOrUnlockNote(lockOrUnlock: Boolean, id: Int) {
+        noteDatabase.getDao().lockOrUnlockNote(lockOrUnlock, id)
+    }
 }

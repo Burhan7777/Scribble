@@ -428,6 +428,10 @@ class MainActivityViewModel @Inject constructor(
         editNoteRepository.moveToArchive(archive, id)
     }
 
+    suspend fun lockOrUnlockNote(lockOrUnlock: Boolean, id: Int) {
+        editNoteRepository.lockOrUnlockNote(lockOrUnlock, id)
+    }
+
     fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
         viewModelScope.launch(Dispatchers.IO) {
             getNoteById(id)

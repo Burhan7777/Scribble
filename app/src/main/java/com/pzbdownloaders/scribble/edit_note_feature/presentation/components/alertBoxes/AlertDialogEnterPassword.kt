@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,10 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.getPasswordFromFirebase
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -42,10 +47,12 @@ fun AlertDialogBoxEnterPassword(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val enteredPassword = remember { mutableStateOf("") }
-    androidx.compose.material3.AlertDialog(onDismissRequest = {
-        onDismiss()
-    },
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = {
+            onDismiss()
+        },
         shape = MaterialTheme.shapes.medium.copy(
             topStart = CornerSize(15.dp),
             topEnd = CornerSize(15.dp),
@@ -103,21 +110,19 @@ fun AlertDialogBoxEnterPassword(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            viewModel.getNoteById(id)
-                            var note = viewModel.getNoteById
-                            var newNote = note.value.copy(
-                                locked = true,
-                                timeModified = System.currentTimeMillis(),
-                                notebook = Constant.NOT_CATEGORIZED
-                            )
-                            viewModel.updateNote(newNote)
-                            Toast.makeText(
-                                activity,
-                                "Note has been locked",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            navHostController.popBackStack()
+                            scope.launch(Dispatchers.IO) {
+                                viewModel.lockOrUnlockNote(true, id)
+                                withContext(Dispatchers.Main) {
+                                    delay(200)
+                                    Toast.makeText(
+                                        activity,
+                                        "Note has been locked",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    navHostController.navigateUp()
+                                }
+                            }
                         } else if (it == Constant.FAILURE) {
                             Toast.makeText(
                                 activity,
