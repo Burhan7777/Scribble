@@ -108,18 +108,15 @@ fun AlertDialogBoxEnterPasswordToUnlock(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            scope.launch(Dispatchers.IO) {
-                                viewModel.lockOrUnlockNote(false, id)
-                                withContext(Dispatchers.Main) {
-                                    delay(200)
-                                    Toast.makeText(
-                                        activity,
-                                        "Note has been unlocked",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    navHostController.navigateUp()
-                                }
+                            viewModel.getNoteById(id)
+                            var note = viewModel.getNoteById.value
+                            var note1 = note.copy(
+                                locked = false
+                            )
+                            viewModel.updateNote(note1)
+                            scope.launch {
+                                delay(200)
+                                navHostController.navigateUp()
                             }
                         } else if (it == Constant.FAILURE) {
                             Toast.makeText(

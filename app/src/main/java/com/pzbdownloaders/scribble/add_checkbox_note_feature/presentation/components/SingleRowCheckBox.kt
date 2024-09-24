@@ -82,6 +82,7 @@ fun SingleRowCheckBox(
             checked = checkBox.value,
             onCheckedChange = {
                 checkBox.value = it
+               // mutableListOfCheckBoxes[index] = it
             },
             colors = androidx.compose.material3.CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colors.onPrimary,
@@ -124,6 +125,7 @@ fun SingleRowCheckBox(
             trailingIcon = {
                 IconButton(onClick = {
                     onDelete()
+                    mutableListOfCheckBoxes.removeAt(index)
 
                 }) {
                     Icon(

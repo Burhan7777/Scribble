@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.trash_bin_feature.presentation.components
+package com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
@@ -8,22 +8,26 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
-import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun AlertBoxToRestoreTrashNotes(
-    navHostController: NavHostController,
-    viewModel: MainActivityViewModel,
-    activity: MainActivity,
+fun AlertBoxToDeleteTrashNotes(
     note: Note,
+    viewModel: MainActivityViewModel,
+    navHostController: NavHostController,
     onDismiss: () -> Unit
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(onDismissRequest = {
         onDismiss()
     },
@@ -40,7 +44,7 @@ fun AlertBoxToRestoreTrashNotes(
 
         title = {
             Text(
-                text = "Restore Note ",
+                text = "Delete Note?",
                 fontFamily = FontFamily.fontFamilyBold,
                 fontSize = 20.sp,
                 color = MaterialTheme.colors.onPrimary
@@ -48,7 +52,7 @@ fun AlertBoxToRestoreTrashNotes(
         },
         text = {
             Text(
-                text = "Are you sure you want to restore this note ? ",
+                text = "Are you sure you want to delete this note permanently  ? ",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -56,10 +60,13 @@ fun AlertBoxToRestoreTrashNotes(
         confirmButton = {
             Button(
                 onClick = {
-                    var note = note.copy(deletedNote = false, timePutInTrash = 0L)
-                    viewModel.updateNote(note)
-                    onDismiss()
-                    navHostController.popBackStack()
+                    viewModel.deleteNoteById(note.id)
+
+                    scope.launch {
+                        delay(200)
+                        onDismiss()
+                        navHostController.navigateUp()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -72,7 +79,7 @@ fun AlertBoxToRestoreTrashNotes(
                     bottomEnd = CornerSize(15.dp),
                 )
             ) {
-                Text(text = "Restore", fontFamily = FontFamily.fontFamilyRegular)
+                Text(text = "Delete Permanently", fontFamily = FontFamily.fontFamilyRegular)
             }
         },
         dismissButton = {

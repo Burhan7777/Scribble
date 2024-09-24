@@ -9,20 +9,20 @@ import com.pzbdownloaders.scribble.common.domain.utils.Constant
 @Entity(tableName = "notes")
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val content: String = "",
-    val archive: Boolean = false,
-    val notebook: String = Constant.NOT_CATEGORIZED,
-    val locked: Boolean = false,
-    val listOfCheckedNotes: ArrayList<String> = arrayListOf(),
-    val listOfCheckedBoxes: ArrayList<Boolean> = arrayListOf(),
-    val listOfBulletPointNotes: ArrayList<String> = arrayListOf(),
-    val timeStamp: Long = 0,
-    val editTime: String = "",
-    val color: Int = 0,
-    val timePutInTrash: Long = 0,
-    val deletedNote: Boolean = false,
-    val notePinned: Boolean = false,
-    val timeModified :Long = 0
+    var id: Int = 0,
+    var title: String = "",
+    var content: String = "",
+    var archive: Boolean = false,
+    var notebook: String = Constant.NOT_CATEGORIZED,
+    var locked: Boolean = false,
+    var listOfCheckedNotes: ArrayList<String> = arrayListOf(),
+    var listOfCheckedBoxes: ArrayList<Boolean> = arrayListOf(),
+    var listOfBulletPointNotes: ArrayList<String> = arrayListOf(),
+    var timeStamp: Long = 0,
+    var editTime: String = "",
+    var color: Int = 0,
+    var timePutInTrash: Long = 0,
+    var deletedNote: Boolean = false,
+    var notePinned: Boolean = false,
+    var timeModified :Long = 0
 )

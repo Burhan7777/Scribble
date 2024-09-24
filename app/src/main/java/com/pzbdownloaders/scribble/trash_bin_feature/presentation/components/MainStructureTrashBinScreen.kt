@@ -42,6 +42,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxes.DeleteAllTrashNotes
 import kotlinx.coroutines.launch
 
 
@@ -63,6 +64,21 @@ fun MainStructureTrashBinScreen(
     var coroutineScope = rememberCoroutineScope()
 
     var showDialogToAccessLockedNotes = remember { mutableStateOf(false) }
+    var showDeleteAllTrashNotesDialogBox = remember { mutableStateOf(false) }
+
+
+    var listOfTrashNotes = ArrayList<Int>()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getAllNotes()
+    }
+
+    var allNotes = viewModel.listOfNotes
+    for (i in allNotes) {
+        if (i.deletedNote) {
+            listOfTrashNotes.add(i.id)
+        }
+    }
 
 
 //
@@ -255,6 +271,22 @@ fun MainStructureTrashBinScreen(
                     }
 
                 },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Restore,
+                            contentDescription = "restore all files",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = { showDeleteAllTrashNotesDialogBox.value = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "delete all files",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colors.primary
                 ),
@@ -277,6 +309,11 @@ fun MainStructureTrashBinScreen(
                     navHostController = navHostController,
                 ) {
                     showDialogToAccessLockedNotes.value = false
+                }
+            }
+            if (showDeleteAllTrashNotesDialogBox.value) {
+                DeleteAllTrashNotes(listOfIds = listOfTrashNotes, viewModel = viewModel) {
+                    showDeleteAllTrashNotesDialogBox.value = false
                 }
             }
             TrashNotes(viewModel, activity, navHostController)

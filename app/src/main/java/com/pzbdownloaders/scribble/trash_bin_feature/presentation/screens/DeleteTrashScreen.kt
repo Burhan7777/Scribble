@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -47,8 +46,8 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
-import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxToDeleteTrashNotes
-import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxToRestoreTrashNotes
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxes.AlertBoxToDeleteTrashNotes
+import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxes.AlertBoxToRestoreTrashNotes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

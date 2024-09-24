@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @androidx.room.Dao
 interface Dao {
 
-    @Upsert
+    @Insert
     suspend fun insertNote(note: Note): Long
 
     @Query("SELECT * from notes ORDER BY timeStamp DESC")
@@ -25,7 +25,7 @@ interface Dao {
     @Query("DELETE from notes where id= :id")
     suspend fun deleteNoteById(id: Int)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateNote(note: Note)
 
     @Query("SELECT * FROM notes where notebook= :notebook ORDER BY timeStamp DESC")
@@ -34,7 +34,7 @@ interface Dao {
     @Upsert
     suspend fun addNoteBook(notebook: NoteBook)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateNotebook(notebook: NoteBook)
 
     @Query(
@@ -71,9 +71,4 @@ interface Dao {
     @RawQuery
     fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery): Int
 
-    @Transaction
-    suspend fun updateAndRefreshNote(note: Note): Note {
-        updateNote(note)
-        return getNoteById(note.id)
-    }
 }

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.chaquo.python.Python
+import com.pzbdownloaders.scribble.common.domain.utils.CheckInternet
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -111,20 +112,26 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
-                    val result =
-                        checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
-                    result.observe(activity) {
-                        if (it == true) {
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Password has been already created",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        } else {
-                            showPasswordDialog.value = true
+                    if (CheckInternet.isInternetAvailable(context)) {
+                        val result =
+                            checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
+                        result.observe(activity) {
+                            if (it == true) {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Password has been already created",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            } else {
+                                showPasswordDialog.value = true
+                            }
                         }
+                    } else {
+                        Toast
+                            .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
 
@@ -252,20 +259,26 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
-                    val result =
-                        checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
-                    result.observe(activity) {
-                        if (it == true) {
-                            showChangePasswordDialog.value = true
-                        } else {
-                            Toast
-                                .makeText(
-                                    activity,
-                                    "Please setup the password first.",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
+                    if (CheckInternet.isInternetAvailable(context)) {
+                        val result =
+                            checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
+                        result.observe(activity) {
+                            if (it == true) {
+                                showChangePasswordDialog.value = true
+                            } else {
+                                Toast
+                                    .makeText(
+                                        activity,
+                                        "Please setup the password first.",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
                         }
+                    } else {
+                        Toast
+                            .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
                 },
@@ -328,7 +341,13 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
-                    showEmailWillbeSendAlertBox.value = true
+                    if (CheckInternet.isInternetAvailable(context)) {
+                        showEmailWillbeSendAlertBox.value = true
+                    } else {
+                        Toast
+                            .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 },
             shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(10.dp),
@@ -389,7 +408,13 @@ fun SettingsScreen(
                     )
                 )
                 .clickable {
-                    navHostController.navigate(Screens.BackupAndRestoreScreen.route)
+                    if (CheckInternet.isInternetAvailable(context)) {
+                        navHostController.navigate(Screens.BackupAndRestoreScreen.route)
+                    } else {
+                        Toast
+                            .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
                 },
             shape = MaterialTheme.shapes.medium.copy(

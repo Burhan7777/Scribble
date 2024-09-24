@@ -102,7 +102,7 @@ fun MainStructureEditNote(
     var converted = rememberSaveable { ArrayList<String>() }
 // This is the list of checkbox notes which we saved in checkboxes
     var mutableListOfCheckBoxes =
-        rememberSaveable { ArrayList<Boolean>() }// This is the llst of checkboxes
+        rememberSaveable { mutableStateOf<ArrayList<Boolean>>(arrayListOf()) }// This is the llst of checkboxes
 
     var convertedBulletPoints = rememberSaveable { ArrayList<String>() }
 
@@ -184,9 +184,13 @@ fun MainStructureEditNote(
         }
     }
 
-    if (note.value != null) {
-        mutableListOfCheckBoxes = note.value.listOfCheckedBoxes
+
+    LaunchedEffect(Unit) {
+        if (note.value != null) {
+            mutableListOfCheckBoxes.value = note.value.listOfCheckedBoxes
+        }
     }
+
 
     LaunchedEffect(key1 = true) {
         if (title == "" && content.value == "") {
@@ -266,32 +270,104 @@ fun MainStructureEditNote(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     // Observe the lifecycle to detect when the app goes into the background
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                // Trigger autosave when app goes to background (onStop)
-                viewModel.getNoteById(note.value.id)
-                activity.lifecycleScope.launch {
-                    val noteFromDb = viewModel.getNoteByIdFlow.first() { true }
-                    var note = noteFromDb?.copy(
-                        title = title,
-                        content = richStateText.value.toHtml(),
-                        timeModified = System.currentTimeMillis(),
-                        notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+    if (content.value.isNotEmpty()) {
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP) {
+                    // Trigger autosave when app goes to background (onStop)
+                    viewModel.getNoteById(note.value.id)
+                    activity.lifecycleScope.launch {
+                        val noteFromDb = viewModel.getNoteByIdFlow.first() { true }
+                        var note = noteFromDb?.copy(
+                            title = title,
+                            content = richStateText.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                    )
-                    viewModel.updateNote(note!!)
+                        )
+                        viewModel.updateNote(note!!)
+                    }
                 }
             }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
+            lifecycleOwner.lifecycle.addObserver(observer)
 
-        // Cleanup the observer when the Composable is disposed
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
+            // Cleanup the observer when the Composable is disposed
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+    }
+
+    // Observe the lifecycle to detect when the app goes into the background
+    if (mutableListOfCheckboxTexts.size > 0) {
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP) {
+                    convertMutableStateIntoString(
+                        mutableListOfCheckboxTexts,
+                        converted
+                    )
+                    // Trigger autosave when app goes to background (onStop)
+                    viewModel.getNoteById(note.value.id)
+                    activity.lifecycleScope.launch {
+                        val noteFromDb = viewModel.getNoteById.value
+                        var note = noteFromDb?.copy(
+                            title = title,
+                            // content = richStateText.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+                            listOfCheckedNotes = converted,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes.value
+
+                        )
+                        viewModel.updateNote(note!!)
+                    }
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            // Cleanup the observer when the Composable is disposed
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+    }
+
+    if (mutableListOfBulletPoints.size > 0) {
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP) {
+                    convertMutableStateIntoString(
+                        mutableListOfBulletPoints,
+                        convertedBulletPoints
+                    )
+                    // Trigger autosave when app goes to background (onStop)
+                    viewModel.getNoteById(note.value.id)
+                    activity.lifecycleScope.launch {
+                        val noteFromDb = viewModel.getNoteById.value
+                        var note = noteFromDb?.copy(
+                            title = title,
+                            // content = richStateText.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+                            listOfBulletPointNotes = convertedBulletPoints
+
+
+                        )
+                        viewModel.updateNote(note!!)
+                    }
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            // Cleanup the observer when the Composable is disposed
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
         }
     }
 
@@ -302,23 +378,23 @@ fun MainStructureEditNote(
             viewModel.getNoteById(id)
             var noteFromDb = viewModel.getNoteById
 
-//        for (i in listOfCheckedNotes) {
-//            println("TEXT1:${i.value}")
-//        }
+//            for (i in listOfCheckedNotes) {
+//                println("TEXT1:${i.value}")
+//            }
 //
-//        for (i in mutableListConverted) {
-//            println("TEXT2:${i}")
-//        }
+//            for (i in mutableListConverted) {
+//                println("TEXT2:${i}")
+//            }
             var listOfNotes = noteFromDb.value.listOfCheckedNotes
 
-//            for (i in listOfNotes) {
-//                if (!converted.contains(i)) {
-//                    converted.add(i)
-//                }
-//            }
+            for (i in listOfNotes) {
+                if (!converted.contains(i)) {
+                    converted.add(i)
+                }
+            }
 //            var listOFCheckBoxes = noteFromDb.value.listOfCheckedBoxes
 //            for (i in listOFCheckBoxes) {
-//                if (!mutableListOfCheckBoxes.contains(i)) {
+//                if (!mutableListOfCheckBoxes..vacontains(i)) {
 //                    mutableListOfCheckBoxes.add(i)
 //                }
 //            }
@@ -337,7 +413,7 @@ fun MainStructureEditNote(
                 //timeStamp = System.currentTimeMillis(),
                 notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                 listOfCheckedNotes = converted,
-                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                listOfCheckedBoxes = mutableListOfCheckBoxes.value,
             )
             viewModel.updateNote(note1)
         }
@@ -414,7 +490,7 @@ fun MainStructureEditNote(
             }
 
             delay(800)
-            navController.popBackStack()
+            navController.navigateUp()
         }
     }
 
@@ -436,6 +512,7 @@ fun MainStructureEditNote(
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
+                        println("MUTABLESTATE:$mutableListOfCheckBoxes")
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         convertMutableStateIntoString(
                             mutableListOfBulletPoints,
@@ -453,7 +530,7 @@ fun MainStructureEditNote(
                             archived,
                             locked = lockedOrNote,
                             listOfCheckedNotes = converted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes.value,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
@@ -462,7 +539,11 @@ fun MainStructureEditNote(
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
                             .show()
-                        navController.popBackStack()
+                        scope.launch {
+                            delay(200)
+                            navController.navigateUp()
+                        }
+
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
                     }
@@ -520,14 +601,18 @@ fun MainStructureEditNote(
                             archived,
                             locked = lockedOrNote,
                             listOfCheckedNotes = converted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
+                            listOfCheckedBoxes = mutableListOfCheckBoxes.value,
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
                             timeModified = System.currentTimeMillis()
                         )
                         viewModel.updateNote(note)
-                        navController.popBackStack()
+                        scope.launch {
+                            delay(200)
+                            navController.navigateUp()
+                        }
+
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
                             .show()
 
@@ -537,12 +622,21 @@ fun MainStructureEditNote(
                     }
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
-                            scope.launch(Dispatchers.IO) {
-                                viewModel.pinOrUnpinNote(!pinnedOrNot.value, id)
-                                withContext(Dispatchers.Main) {
-                                    delay(200)
-                                    navController.navigateUp()
-                                }
+//                            scope.launch(Dispatchers.IO) {
+//                                viewModel.pinOrUnpinNote(!pinnedOrNot.value, id)
+//                                withContext(Dispatchers.Main) {
+//                                    delay(200)
+//                                    navController.navigateUp()
+//                                }
+//                            }
+                            viewModel.getNoteById(id)
+                            var note = viewModel.getNoteById.value
+                            var pinnedStatus = note.notePinned
+                            var note1 = note.copy(notePinned = !pinnedStatus)
+                            viewModel.updateNote(note1)
+                            scope.launch {
+                                delay(200)
+                                navController.navigateUp()
                             }
 
 
@@ -554,62 +648,66 @@ fun MainStructureEditNote(
                             )
                         }
                     }
-                    IconButton(onClick = {
-                        if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
-                            val result = checkIfUserHasCreatedPassword()
-                            result.observe(activity) {
-                                if (it == false) {
-                                    passwordNotSetUpDialogBox.value = true
-                                } else {
-                                    convertMutableStateIntoString(
-                                        mutableListOfCheckboxTexts,
-                                        converted
-                                    )
-                                    convertMutableStateIntoString(
-                                        mutableListOfBulletPoints,
-                                        convertedBulletPoints
-                                    )
-                                    enterPasswordToLockDialogBox.value = true
+                    if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
+                        IconButton(onClick = {
+                            if (screen == Constant.HOME) {
+                                val result = checkIfUserHasCreatedPassword()
+                                result.observe(activity) {
+                                    if (it == false) {
+                                        passwordNotSetUpDialogBox.value = true
+                                    } else {
+                                        convertMutableStateIntoString(
+                                            mutableListOfCheckboxTexts,
+                                            converted
+                                        )
+                                        convertMutableStateIntoString(
+                                            mutableListOfBulletPoints,
+                                            convertedBulletPoints
+                                        )
+                                        enterPasswordToLockDialogBox.value = true
 
+                                    }
                                 }
+                            } else if (screen == Constant.LOCKED_NOTE) {
+                                convertMutableStateIntoString(
+                                    mutableListOfCheckboxTexts,
+                                    converted
+                                )
+                                convertMutableStateIntoString(
+                                    mutableListOfBulletPoints,
+                                    convertedBulletPoints
+                                )
+                                enterPasswordToUnLockDialogBox.value = true
                             }
-
-
-                        } else if (screen == Constant.LOCKED_NOTE) {
-                            convertMutableStateIntoString(
-                                mutableListOfCheckboxTexts,
-                                converted
+                        }) {
+                            Icon(
+                                imageVector = if (screen ==
+                                    Constant.HOME
+                                ) Icons.Filled.Lock else if (screen == Constant.ARCHIVE) Icons.Filled.Lock else Icons.Filled.LockOpen,
+                                contentDescription = "Lock Note"
                             )
-                            convertMutableStateIntoString(
-                                mutableListOfBulletPoints,
-                                convertedBulletPoints
-                            )
-                            enterPasswordToUnLockDialogBox.value = true
                         }
-                    }) {
-                        Icon(
-                            imageVector = if (screen ==
-                                Constant.HOME
-                            ) Icons.Filled.Lock else if (screen == Constant.ARCHIVE) Icons.Filled.Lock else Icons.Filled.LockOpen,
-                            contentDescription = "Lock Note"
-                        )
                     }
-                    if(screen == Constant.HOME || screen == Constant.ARCHIVE) {
+                    if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
                         IconButton(onClick = {
                             convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                             convertMutableStateIntoString(
                                 mutableListOfBulletPoints,
                                 convertedBulletPoints
                             )
-                            if (screen == Constant.HOME ) {
-                                //  viewModel.archiveNote(id, navHostController = navController,activity)
-                                scope.launch(Dispatchers.IO) {
-                                    viewModel.moveToArchive(true, id)
-                                    withContext(Dispatchers.Main) {
-                                        delay(100)
-                                        navController.navigateUp()
-                                    }
-                                }
+                            if (screen == Constant.HOME) {
+                                viewModel.archiveNote(
+                                    id,
+                                    navHostController = navController,
+                                    activity
+                                )
+//                                scope.launch(Dispatchers.IO) {
+//                                    viewModel.moveToArchive(true, id)
+//                                    withContext(Dispatchers.Main) {
+//                                        delay(100)
+//                                        navController.navigateUp()
+//                                    }
+//                                }
 //                            var hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = true
                                 //   viewModel.archiveNotes(id, hashmap)
@@ -634,14 +732,18 @@ fun MainStructureEditNote(
 //                                }
 //                            }
                             } else if (screen == Constant.ARCHIVE) {
-                                //  viewModel.unArchiveNote(id, navHostController = navController, activity)
-                                scope.launch(Dispatchers.IO) {
-                                    viewModel.moveToArchive(false, id)
-                                    withContext(Dispatchers.Main) {
-                                        delay(100)
-                                        navController.navigateUp()
-                                    }
-                                }
+                                viewModel.unArchiveNote(
+                                    id,
+                                    navHostController = navController,
+                                    activity
+                                )
+//                                scope.launch(Dispatchers.IO) {
+//                                    viewModel.moveToArchive(false, id)
+//                                    withContext(Dispatchers.Main) {
+//                                        delay(100)
+//                                        navController.navigateUp()
+//                                    }
+//                                }
 //                            val hashmap = HashMap<String, Any>()
 //                            hashmap["archived"] = false
                                 // viewModel.unArchiveNotes(id, hashmap)
@@ -786,7 +888,7 @@ fun MainStructureEditNote(
             navHostController = navController,
             title = title,
             convertedMutableList = converted,
-            listOfCheckboxes = mutableListOfCheckBoxes,
+            listOfCheckboxes = mutableListOfCheckBoxes.value,
             listOfBulletPoints = convertedBulletPoints,
             content = content.value
         ) {
@@ -801,7 +903,7 @@ fun MainStructureEditNote(
             navHostController = navController,
             title = title,
             listOfCheckedNotes = converted,
-            listOfCheckBoxes = mutableListOfCheckBoxes,
+            listOfCheckBoxes = mutableListOfCheckBoxes.value,
             listOfBulletPoints = convertedBulletPoints,
             content = content.value
         ) {

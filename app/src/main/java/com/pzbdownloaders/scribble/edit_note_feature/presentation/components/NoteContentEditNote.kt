@@ -60,7 +60,7 @@ fun NoteContent(
     content: MutableState<String>,
     noteBook: String,
     listOfNotes: SnapshotStateList<MutableState<String>>,
-    listOfCheckboxes: ArrayList<Boolean>,
+    listOfCheckboxes: MutableState<ArrayList<Boolean>>,
     listOfBulletPointNotes: SnapshotStateList<MutableState<String>>,
     activity: MainActivity,
     richStateText: MutableState<RichTextState>,

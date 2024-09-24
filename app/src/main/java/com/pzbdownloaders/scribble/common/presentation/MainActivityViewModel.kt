@@ -42,6 +42,7 @@ import com.pzbdownloaders.scribble.search_main_screen_feature.domain.usecase.Get
 import com.pzbdownloaders.scribble.settings_feature.screen.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -375,49 +376,51 @@ class MainActivityViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             getNoteById(id)
-        }
-        var it = getNoteById.value
-        println("NOTE:$it")
-        var timeStamp = it?.timeStamp
-        var title = it?.title
-        var content = it?.content
-        var listOfCheckNotes = it?.listOfCheckedNotes
-        var listOfCheckBoxes = it?.listOfCheckedBoxes
-        var listOfBulletPoints = it?.listOfBulletPointNotes
-        var id = it?.id
-        var pinned = it.notePinned
-        var timeThrownInTrash = it.timePutInTrash
-        var deletedNote = it.deletedNote
-        var lockedOrNote = it.locked
+            var it = getNoteById.value
+            println("NOTE:$it")
+            var note = it.copy(archive = true)
+//            var timeStamp = it?.timeStamp
+//            var title = it?.title
+//            var content = it?.content
+//            var listOfCheckNotes = it?.listOfCheckedNotes
+//            var listOfCheckBoxes = it?.listOfCheckedBoxes
+//            var listOfBulletPoints = it?.listOfBulletPointNotes
+//            var id = it?.id
+//            var pinned = it.notePinned
+//            var timeThrownInTrash = it.timePutInTrash
+//            var deletedNote = it.deletedNote
+//            var lockedOrNote = it.locked
 
-        var note2 = Note(
-            archive = true,
-            timeModified = System.currentTimeMillis(),
-            notebook = Constant.NOT_CATEGORIZED,
-            timeStamp = timeStamp!!,
-            title = title!!,
-            content = content!!,
-            listOfBulletPointNotes = listOfBulletPoints!!,
-            listOfCheckedBoxes = listOfCheckBoxes!!,
-            listOfCheckedNotes = listOfCheckNotes!!,
-            id = id!!,
-            notePinned = pinned,
-            timePutInTrash = timeThrownInTrash,
-            locked = lockedOrNote,
-            deletedNote = deletedNote
-
-        )
-        viewModelScope.launch(Dispatchers.IO) {
-            updateNote(note2!!)
+//            var note2 = Note(
+//                archive = true,
+//                timeModified = System.currentTimeMillis(),
+//                notebook = Constant.NOT_CATEGORIZED,
+//                timeStamp = timeStamp!!,
+//                title = title!!,
+//                content = content!!,
+//                listOfBulletPointNotes = listOfBulletPoints!!,
+//                listOfCheckedBoxes = listOfCheckBoxes!!,
+//                listOfCheckedNotes = listOfCheckNotes!!,
+//                id = id!!,
+//                notePinned = pinned,
+//                timePutInTrash = timeThrownInTrash,
+//                locked = lockedOrNote,
+//                deletedNote = deletedNote
+//
+//            )
+            updateNote(note)
+            println("NOTE1:$note")
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    application,
+                    "Note has been archived",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                delay(200)
+                navHostController.navigateUp()
+            }
         }
-        println("NOTE1:$note2")
-        Toast.makeText(
-            application,
-            "Note has been archived",
-            Toast.LENGTH_SHORT
-        )
-            .show()
-        navHostController.popBackStack()
     }
 
     suspend fun moveToTrashById(deletedNote: Boolean, timePutInTrash: Long, id: Int) {
@@ -439,50 +442,53 @@ class MainActivityViewModel @Inject constructor(
     fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
         viewModelScope.launch(Dispatchers.IO) {
             getNoteById(id)
+            var it = getNoteById.value
+            println("NOTE:$it")
+            var note = it.copy(archive = false)
+//            //println("NOTEFROMDB:$it")
+//            var timeStamp = it?.timeStamp
+//            var title = it?.title
+//            var content = it?.content
+//            var listOfCheckNotes = it?.listOfCheckedNotes
+//            var listOfCheckBoxes = it?.listOfCheckedBoxes
+//            var listOfBulletPoints = it?.listOfBulletPointNotes
+//            var id = it?.id
+//            var pinned = it.notePinned
+//            var timeThrownInTrash = it.timePutInTrash
+//            var deletedNote = it.deletedNote
+//            var lockedOrNote = it.locked
+//
+//            var note1 = Note(
+//                archive = false,
+//                timeModified = System.currentTimeMillis(),
+//                notebook = Constant.NOT_CATEGORIZED,
+//                timeStamp = timeStamp!!,
+//                title = title!!,
+//                content = content!!,
+//                listOfBulletPointNotes = listOfBulletPoints!!,
+//                listOfCheckedBoxes = listOfCheckBoxes!!,
+//                listOfCheckedNotes = listOfCheckNotes!!,
+//                id = id!!,
+//                notePinned = pinned,
+//                timePutInTrash = timeThrownInTrash,
+//                locked = lockedOrNote,
+//                deletedNote = deletedNote
+//
+//            )
+
+            updateNote(note)
+            withContext(Dispatchers.Main) {
+                println("NOTE1:$note")
+
+                Toast.makeText(
+                    application,
+                    "Note has been unarchived",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                delay(200)
+                navHostController.navigateUp()
+            }
         }
-        var it = getNoteById.value
-        println("NOTE:$it")
-        //println("NOTEFROMDB:$it")
-        var timeStamp = it?.timeStamp
-        var title = it?.title
-        var content = it?.content
-        var listOfCheckNotes = it?.listOfCheckedNotes
-        var listOfCheckBoxes = it?.listOfCheckedBoxes
-        var listOfBulletPoints = it?.listOfBulletPointNotes
-        var id = it?.id
-        var pinned = it.notePinned
-        var timeThrownInTrash = it.timePutInTrash
-        var deletedNote = it.deletedNote
-        var lockedOrNote = it.locked
-
-        var note1 = Note(
-            archive = false,
-            timeModified = System.currentTimeMillis(),
-            notebook = Constant.NOT_CATEGORIZED,
-            timeStamp = timeStamp!!,
-            title = title!!,
-            content = content!!,
-            listOfBulletPointNotes = listOfBulletPoints!!,
-            listOfCheckedBoxes = listOfCheckBoxes!!,
-            listOfCheckedNotes = listOfCheckNotes!!,
-            id = id!!,
-            notePinned = pinned,
-            timePutInTrash = timeThrownInTrash,
-            locked = lockedOrNote,
-            deletedNote = deletedNote
-
-        )
-        viewModelScope.launch(Dispatchers.IO) {
-            updateNote(note1!!)
-        }
-        println("NOTE1:$note1")
-
-        Toast.makeText(
-            application,
-            "Note has been unarchived",
-            Toast.LENGTH_SHORT
-        )
-            .show()
-        navHostController.popBackStack()
     }
 }

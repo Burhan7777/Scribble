@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (54/68) // MAIN - (26/31)
+FEATURES THAT NEED TO BE ADDED (59/80) // MAIN - (31/42)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -28,7 +28,7 @@ FEATURES THAT NEED TO BE ADDED (54/68) // MAIN - (26/31)
 25) "No Notes found" animation in main screen and notebooks screen:
 26) Rate app option while using app: DELAYED
 27) Update app option: DELAYED
-28) Firebase fix dialog boxes like in Instabuddy :( :
+28) Firebase fix dialog boxes like in Instabuddy :
 29) Don't forget to save password of locked notes on the cloud: DONE
 30) Save note on back button also auto-save function(Main): DONE (FINALLY AFTER 3 FREAKING DAYS PHEW!!!)
 31) Text formatting features(Main): DONE
@@ -53,19 +53,31 @@ FEATURES THAT NEED TO BE ADDED (54/68) // MAIN - (26/31)
 50) Change notebook option should not be in locked notes(Main): DONE
 51) Lock Notebook(Main): DELAYED
 52) Replace add to notebook from checkbox and bulletpoints: DONE
-53) Forgot password option(Main):
+53) Forgot password option(Main): DONE
 54) Hide textformatting bar when title textfield is in focus(Main): DONE
 55) Add a discard note button in add notes , checkboxes and bullet-points(Main): DONE
 56) Trashbin main screen should display checkboxes and bullet-points(Main): DONE
 57) Ad crashlytics(Main): DONE
 58) Add theme change in settings: DONE
 59) Test on light theme(Main):
-60) Text on Tab - Make Adjustment for tab(Main):
+60) Test on Tab - Make Adjustment for tab(Main):
 61) Make only Portrait(Main): DONE
 62) Long notes just like in keep in grid mode(Main): DELAYED
 63) Auto backup option(Main): DONE
 64) Discard changes in edit screen:
 65) Undo and redo functionality: DELAYED
 66) Empty note is not to be saved(Main): DELAYED
-67) Trash delete all notes(Main):
-68) Long click select note in Trash:
+67) Trash delete all notes(Main): DONE
+68) Long click select note in Trash: DELAYED
+69) Check internet connection while setting up password , changing password, forgot password(Main): DONE
+70) Store password locally (give user option with warning)(Main):
+71) Fix the search bar (Main):
+72) Fix the checkboxes(Main): DONE
+73) Save checkbox and bullet points when screen goes to home(Main):
+74) Consider login through email and password:
+75) Autosave on by default(Main):
+76) Figure out autosave of notes(Main):
+77) Add noStop() save function to notes , checkboxes and bulletpoints of locked and notebook screen(Main):
+78) Trash bin crashes sometimes due to state issue(Main):
+79) Delete all option has to be performed twice to make (Main):
+80) Saving removes pinned note(Main):

@@ -110,19 +110,29 @@ fun AlertDialogBoxEnterPassword(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            scope.launch(Dispatchers.IO) {
-                                viewModel.lockOrUnlockNote(true, id)
-                                withContext(Dispatchers.Main) {
-                                    delay(200)
-                                    Toast.makeText(
-                                        activity,
-                                        "Note has been locked",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    navHostController.navigateUp()
-                                }
+                            viewModel.getNoteById(id)
+                            var note = viewModel.getNoteById.value
+                            var note1 = note.copy(
+                                locked = true
+                            )
+                            viewModel.updateNote(note1)
+                            scope.launch {
+                                delay(200)
+                                navHostController.navigateUp()
                             }
+//                            scope.launch(Dispatchers.IO) {
+//                                viewModel.lockOrUnlockNote(true, id)
+//                                withContext(Dispatchers.Main) {
+//                                    delay(200)
+//                                    Toast.makeText(
+//                                        activity,
+//                                        "Note has been locked",
+//                                        Toast.LENGTH_SHORT
+//                                    )
+//                                        .show()
+//                                    navHostController.navigateUp()
+//                                }
+//                            }
                         } else if (it == Constant.FAILURE) {
                             Toast.makeText(
                                 activity,

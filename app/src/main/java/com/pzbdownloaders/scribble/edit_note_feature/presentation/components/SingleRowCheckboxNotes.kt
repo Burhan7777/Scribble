@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 fun SingleRowCheckBoxNotes(
     note: MutableState<String>,
     index: Int,
-    listOfCheckboxes: ArrayList<Boolean>,
+    listOfCheckboxes: MutableState<ArrayList<Boolean>>,
     listOfCheckboxText: SnapshotStateList<MutableState<String>>,
     count: MutableState<Int>,
     focusRequester: FocusRequester,
@@ -60,7 +60,7 @@ fun SingleRowCheckBoxNotes(
 //    }
 
     LaunchedEffect(key1 = listOfCheckboxText.size) {
-        listOfCheckboxes.add(false)
+        listOfCheckboxes.value.add(false)
 
     }
     var coroutine = rememberCoroutineScope()
@@ -68,8 +68,8 @@ fun SingleRowCheckBoxNotes(
     // println("TEXT:$listOfCheckboxes")
 
     var checkBox = rememberSaveable { mutableStateOf(false) }
-    for (i in listOfCheckboxes) {
-        checkBox.value = listOfCheckboxes[index]
+    for (i in listOfCheckboxes.value) {
+        checkBox.value = listOfCheckboxes.value[index]
     }
 //    for(i in listOfCheckboxes)
 //    LaunchedEffect(key1 = i) {
@@ -84,7 +84,7 @@ fun SingleRowCheckBoxNotes(
             checked = checkBox.value,
             onCheckedChange = {
                 checkBox.value = it
-                listOfCheckboxes[index] = it
+                listOfCheckboxes.value[index] = it
 //                coroutine.launch {
 //                    delay(300)
 //                    count.value++
@@ -109,8 +109,8 @@ fun SingleRowCheckBoxNotes(
 
                 // Check if the string value is already present
                 listOfCheckboxText[index].value = it
-              ///  println("INDEX:$index")
-              //  println("TEXT2:${listOfCheckboxText.toCollection(ArrayList())}")
+                ///  println("INDEX:$index")
+                //  println("TEXT2:${listOfCheckboxText.toCollection(ArrayList())}")
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
@@ -147,6 +147,7 @@ fun SingleRowCheckBoxNotes(
                 IconButton(onClick = {
                     onDelete()
                     listOfCheckboxText.removeAt(index)
+                    listOfCheckboxes.value.removeAt(index)
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Clear,

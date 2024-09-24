@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "notebook")
 data class NoteBook(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name:String = "",
-    val lockedOrNote:Boolean = false
+    var id: Int = 0,
+    var name:String = "",
+    var lockedOrNote:Boolean = false
 )

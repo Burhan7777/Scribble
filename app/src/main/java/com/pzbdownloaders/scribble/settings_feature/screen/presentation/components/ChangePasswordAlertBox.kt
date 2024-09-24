@@ -22,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pzbdownloaders.scribble.common.domain.utils.CheckInternet
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -38,8 +39,8 @@ fun ChangePasswordAlertBox(
     activity: MainActivity
 ) {
 
-    var oldPassword = remember{ mutableStateOf("") }
-    var newPassword = remember{ mutableStateOf("") }
+    var oldPassword = remember { mutableStateOf("") }
+    var newPassword = remember { mutableStateOf("") }
 
     val context = LocalContext.current
     androidx.compose.material3.AlertDialog(
@@ -133,33 +134,37 @@ fun ChangePasswordAlertBox(
         }, confirmButton = {
             androidx.compose.material.Button(
                 onClick = {
-                    val result = getPasswordFromFirebase()
-                    result.observe(activity) {
-                        if (it == oldPassword.value) {
-                            var result = changePassword(newPassword.value)
-                            result.observe(activity) {
-                                if (it) {
-                                    Toast.makeText(
-                                        activity,
-                                        "Password changed successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    changePasswordDialog.value = false
-                                } else {
-                                    Toast.makeText(
-                                        activity,
-                                        "Failed to change password please try again",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                    if (CheckInternet.isInternetAvailable(context)) {
+                        val result = getPasswordFromFirebase()
+                        result.observe(activity) {
+                            if (it == oldPassword.value) {
+                                var result = changePassword(newPassword.value)
+                                result.observe(activity) {
+                                    if (it) {
+                                        Toast.makeText(
+                                            activity,
+                                            "Password changed successfully",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        changePasswordDialog.value = false
+                                    } else {
+                                        Toast.makeText(
+                                            activity,
+                                            "Failed to change password please try again",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "Password entered is wrong",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                        } else {
-                            Toast.makeText(
-                                activity,
-                                "Password entered is wrong",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
+                    } else {
+                        Toast.makeText(context, "This needs internet", Toast.LENGTH_SHORT).show()
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

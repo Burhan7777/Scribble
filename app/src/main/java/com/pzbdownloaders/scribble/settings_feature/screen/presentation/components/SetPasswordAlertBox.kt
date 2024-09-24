@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pzbdownloaders.scribble.common.domain.utils.CheckInternet
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -127,6 +128,7 @@ fun SetPasswordAlertBox(
         }, confirmButton = {
             androidx.compose.material.Button(
                 onClick = {
+
                     val result = checkPasswordIfMatches(password.value, confirmPassword.value)
                     if (result) {
                         val result = createPassword(password.value)
