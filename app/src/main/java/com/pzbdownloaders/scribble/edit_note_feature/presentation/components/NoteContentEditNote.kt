@@ -288,6 +288,7 @@ fun NoteContent(
                         listOfNotes,
                         count,
                         focusRequester,
+                        focusRequesters,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(index)
@@ -300,23 +301,23 @@ fun NoteContent(
                 }
             }
         }
-        LaunchedEffect(count.value) {
-            if (listOfNotes.size > 1) {
-                lazyListState.animateScrollToItem(listOfNotes.size - 1)
-                focusRequesters.lastOrNull()
-                    ?.requestFocus()  // Move focus to the last added checkbox
-            }
-        }
-        LaunchedEffect(focusRequesters, listOfNotes) {
-            if (listOfNotes.isNotEmpty()) {
-                // Delay focus request to ensure the UI is composed
-                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-                    // Add a small delay to ensure everything is composed
-                    kotlinx.coroutines.delay(100)
-                    firstFocusRequester.requestFocus()
-                }
-            }
-        }
+//        LaunchedEffect(count.value) {
+//            if (listOfNotes.size > 1) {
+//                lazyListState.animateScrollToItem(listOfNotes.size - 1)
+//                focusRequesters.lastOrNull()
+//                    ?.requestFocus()  // Move focus to the last added checkbox
+//            }
+//        }
+//        LaunchedEffect(focusRequesters, listOfNotes) {
+//            if (listOfNotes.isNotEmpty()) {
+//                // Delay focus request to ensure the UI is composed
+//                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+//                    // Add a small delay to ensure everything is composed
+//                   // kotlinx.coroutines.delay(100)
+//                    firstFocusRequester.requestFocus()
+//                }
+//            }
+//        }
     } else if (listOfBulletPointNotes.size > 0) {
         val focusRequesters = remember { mutableStateListOf(FocusRequester()) }
 
@@ -362,6 +363,7 @@ fun NoteContent(
                         listOfBulletPointNotes,
                         countBullet,
                         focusRequester,
+                        focusRequesters,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(index)
@@ -375,23 +377,23 @@ fun NoteContent(
                 }
             }
         }
-        LaunchedEffect(countBullet.value) {
-            if (listOfBulletPointNotes.size > 1) {
-                lazyListState.animateScrollToItem(listOfBulletPointNotes.size - 1)
-                focusRequesters.lastOrNull()
-                    ?.requestFocus()  // Move focus to the last added checkbox
-            }
-        }
-        LaunchedEffect(focusRequesters, listOfBulletPointNotes) {
-            if (listOfBulletPointNotes.isNotEmpty()) {
-                // Delay focus request to ensure the UI is composed
-                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
-                    // Add a small delay to ensure everything is composed
-                    kotlinx.coroutines.delay(100)
-                    firstFocusRequester.requestFocus()
-                }
-            }
-        }
+//        LaunchedEffect(countBullet.value) {
+//            if (listOfBulletPointNotes.size > 1) {
+//                lazyListState.animateScrollToItem(listOfBulletPointNotes.size - 1)
+//                focusRequesters.lastOrNull()
+//                    ?.requestFocus()  // Move focus to the last added checkbox
+//            }
+//        }
+//        LaunchedEffect(focusRequesters, listOfBulletPointNotes) {
+//            if (listOfBulletPointNotes.isNotEmpty()) {
+//                // Delay focus request to ensure the UI is composed
+//                focusRequesters.firstOrNull()?.let { firstFocusRequester ->
+//                    // Add a small delay to ensure everything is composed
+//                    kotlinx.coroutines.delay(100)
+//                    firstFocusRequester.requestFocus()
+//                }
+//            }
+//        }
     }
 
 }

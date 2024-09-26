@@ -35,8 +35,9 @@ class GetSearchResultUseCase {
         }
 
         val result = index.search(query)
-        val obj = result.hits.deserialize(AddNote.serializer())
-        Log.i("searchId", obj.toString())
-        return obj.toCollection(ArrayList())
+        // val obj = result.hits.deserialize(AddNote.serializer())
+        //  Log.i("searchId", obj.toString())
+        //   return obj.toCollection(ArrayList())
+        return arrayListOf()
     }
 }

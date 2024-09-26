@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes
 
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.getPasswordFromFirebase
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -110,29 +112,8 @@ fun AlertDialogBoxEnterPassword(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            viewModel.getNoteById(id)
-                            var note = viewModel.getNoteById.value
-                            var note1 = note.copy(
-                                locked = true
-                            )
-                            viewModel.updateNote(note1)
-                            scope.launch {
-                                delay(200)
-                                navHostController.navigateUp()
-                            }
-//                            scope.launch(Dispatchers.IO) {
-//                                viewModel.lockOrUnlockNote(true, id)
-//                                withContext(Dispatchers.Main) {
-//                                    delay(200)
-//                                    Toast.makeText(
-//                                        activity,
-//                                        "Note has been locked",
-//                                        Toast.LENGTH_SHORT
-//                                    )
-//                                        .show()
-//                                    navHostController.navigateUp()
-//                                }
-//                            }
+
+                            lockTheNote(viewModel, id, scope, navHostController, context)
                         } else if (it == Constant.FAILURE) {
                             Toast.makeText(
                                 activity,
@@ -177,4 +158,34 @@ fun AlertDialogBoxEnterPassword(
             }
         }
     )
+}
+
+fun lockTheNote(
+    viewModel: MainActivityViewModel,
+    id: Int,
+    scope: CoroutineScope,
+    navHostController: NavHostController,
+    context: Context
+) {
+    scope.launch {
+    viewModel.getNoteById(id)
+    var note = viewModel.getNoteById.value
+    var note1 = note.copy(
+        locked = true
+    )
+    viewModel.updateNote(note1)
+        delay(200)
+    viewModel.getNoteById(id)
+    var note2 = viewModel.getNoteById.value
+    if (!note2.locked) {
+        println("LOCKED TRIGGERED")
+        lockTheNote(viewModel, id, scope, navHostController, context)
+    } else {
+
+            delay(300)
+            navHostController.navigateUp()
+            delay(200)
+            Toast.makeText(context, "Note has been locked", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

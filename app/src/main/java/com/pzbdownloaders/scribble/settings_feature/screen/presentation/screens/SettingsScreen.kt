@@ -379,7 +379,8 @@ fun SettingsScreen(
                     fontSize = 18.sp,
                     fontFamily = FontFamily.fontFamilyRegular,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color= androidx.compose.material.MaterialTheme.colors.onPrimary
                 )
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Icon(

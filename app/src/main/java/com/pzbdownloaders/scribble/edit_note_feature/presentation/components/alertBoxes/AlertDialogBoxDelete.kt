@@ -1,5 +1,7 @@
 package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Button
@@ -9,7 +11,9 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -21,6 +25,7 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -34,10 +39,12 @@ fun AlertDialogBoxDelete(
     id: Int,
     activity: MainActivity,
     navHostController: NavHostController,
+    showDeletingNoteDialogBox: MutableState<Boolean>,
     //note: Note,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+
     var scope = rememberCoroutineScope()
     androidx.compose.material3.AlertDialog(
         onDismissRequest = {
@@ -72,38 +79,18 @@ fun AlertDialogBoxDelete(
         confirmButton = {
             Button(
                 onClick = {
+                  ///  showDeletingNoteDialogBox.value = true
 
-//                    scope.launch(Dispatchers.IO) {
-//                        // Move the note to trash on the IO thread
-//                        scope.launch {
-//                            viewModel.moveToTrashById(true, System.currentTimeMillis(), id)
-//                        }.join()
-//
-//
-//                        // Now delay and popBackStack on the Main thread
-//                        withContext(Dispatchers.Main) {
-//                             // Navigate back after delay
-//                            onDismiss()
-//                            // Handle the dismissing logic
-//                            navHostController.navigateUp()
-//                        }
-//                    }
-                    viewModel.getNoteById(id)
-                    val note = viewModel.getNoteById.value
-                    println("DELETE:$note")
-                    val note1 = note.copy(
-                        deletedNote = true,
-                        timePutInTrash = System.currentTimeMillis()
+                    moveToTrash(
+                        viewModel,
+                        id,
+                        scope,
+                        navHostController,
+                        context,
+                        showDeletingNoteDialogBox,
+                        onDismiss
                     )
-                    viewModel.updateNote(note1)
-                    println("DELETE:$note1")
-                    scope.launch {
-                        delay(200)
-                        navHostController.navigateUp()
-                    }
-
-
-
+                    //onDismiss()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -138,4 +125,48 @@ fun AlertDialogBoxDelete(
             }
         }
     )
+}
+
+fun moveToTrash(
+    viewModel: MainActivityViewModel,
+    id: Int,
+    scope: CoroutineScope,
+    navHostController: NavHostController,
+    context: Context,
+    showDeletingDialogBox: MutableState<Boolean>,
+    onDismiss: () -> Unit
+) {
+    scope.launch {
+        viewModel.getNoteById(id)
+        val note = viewModel.getNoteById.value
+        // println("DELETE:$note")
+        val note1 = note.copy(
+            deletedNote = true,
+            timePutInTrash = System.currentTimeMillis()
+        )
+        viewModel.updateNote(note1)
+        //onDismiss()
+        delay(200)
+        viewModel.getNoteById(id)
+        var note2 = viewModel.getNoteById.value
+        if (!note2.deletedNote) {
+            println("DELETED TRIGGERED")
+            moveToTrash(
+                viewModel,
+                id,
+                scope,
+                navHostController,
+                context,
+                showDeletingDialogBox,
+                onDismiss
+            )
+        } else {
+            // println("DELETE:$note1")
+       //     showDeletingDialogBox.value = false
+            delay(200)
+            navHostController.navigateUp()
+            delay(300)
+            Toast.makeText(context, "Note moved to trash", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

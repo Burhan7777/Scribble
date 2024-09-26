@@ -87,39 +87,6 @@ fun SignUpScreen(
             modifier = Modifier.padding(20.dp),
             color = MaterialTheme.colors.onPrimary
         )
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = MaterialTheme.colors.onPrimary,
-                unfocusedIndicatorColor = MaterialTheme.colors.onPrimary,
-                focusedTextColor = MaterialTheme.colors.onPrimary,
-                unfocusedTextColor = MaterialTheme.colors.onPrimary,
-                cursorColor = MaterialTheme.colors.onPrimary,
-                focusedContainerColor = MaterialTheme.colors.primary,
-                unfocusedContainerColor = MaterialTheme.colors.primary,
-            ),
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            label = {
-                Text(
-                    text = "Name",
-                    color = MaterialTheme.colors.onPrimary,
-                    fontFamily = FontFamily.fontFamilyLight
-                )
-            },
-            shape = MaterialTheme.shapes.medium.copy(
-                topStart = CornerSize(15.dp),
-                topEnd = CornerSize(15.dp),
-                bottomStart = CornerSize(15.dp),
-                bottomEnd = CornerSize(15.dp),
-            ),
-            textStyle = LocalTextStyle.current.copy(
-                fontFamily = FontFamily.fontFamilyRegular
-            )
-        )
-
         /*  OutlinedTextField(
               value = lastName,
               onValueChange = { lastName = it },
@@ -180,7 +147,8 @@ fun SignUpScreen(
             ),
             textStyle = LocalTextStyle.current.copy(
                 fontFamily = FontFamily.fontFamilyRegular
-            )
+            ),
+            maxLines = 1
         )
 
         OutlinedTextField(
@@ -232,7 +200,8 @@ fun SignUpScreen(
                         )
                     }
                 }
-            }
+            },
+            maxLines = 1
         )
 
         OutlinedTextField(
@@ -254,7 +223,7 @@ fun SignUpScreen(
                 Text(
                     text = "Repeat Password",
                     color = MaterialTheme.colors.onPrimary,
-                    fontFamily = FontFamily.fontFamilyLight
+                    fontFamily = FontFamily.fontFamilyLight,
                 )
             },
             visualTransformation = if (!passwordRepeatedVisibilityToggle) PasswordVisualTransformation() else VisualTransformation.None,
@@ -288,7 +257,8 @@ fun SignUpScreen(
                         )
                     }
                 }
-            }
+            },
+            maxLines = 1
         )
 
         Row(
@@ -314,11 +284,10 @@ fun SignUpScreen(
         Button(
             onClick = {
                 var result = viewModel.authenticationSignUp(
-                    name,
-                    email,
-                    password,
-                    repeatedPassword,
-                    isChecked
+                    email = email,
+                    password = password,
+                    repeatedPassword = repeatedPassword,
+                    isChecked = isChecked
                 )
                 if (result == "Correct") {
                     signUpButtonClick = !signUpButtonClick
@@ -330,9 +299,12 @@ fun SignUpScreen(
                                     .show()
                                 navHostController.popBackStack()
                             }
+
                             Constant.FAILURE -> {
                                 signUpButtonClick = !signUpButtonClick
-                                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            }else ->{
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

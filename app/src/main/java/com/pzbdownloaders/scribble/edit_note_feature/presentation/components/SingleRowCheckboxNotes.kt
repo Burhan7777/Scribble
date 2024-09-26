@@ -50,6 +50,7 @@ fun SingleRowCheckBoxNotes(
     listOfCheckboxText: SnapshotStateList<MutableState<String>>,
     count: MutableState<Int>,
     focusRequester: FocusRequester,
+    focusRequesters: SnapshotStateList<FocusRequester>,
     onDelete: () -> Unit
 
 ) {
@@ -119,6 +120,13 @@ fun SingleRowCheckBoxNotes(
                 onNext = {
                     count.value++
                     listOfCheckboxText.add(mutableStateOf(""))
+                    coroutine.launch {
+                        // Delay for one frame to ensure the new item is created before requesting focus
+                        kotlinx.coroutines.delay(100)
+                        if (index < focusRequesters.size - 1) {
+                            focusRequesters[index + 1].requestFocus()
+                        }
+                    }
                 }
             ),
             colors = androidx.compose.material3.TextFieldDefaults.colors(

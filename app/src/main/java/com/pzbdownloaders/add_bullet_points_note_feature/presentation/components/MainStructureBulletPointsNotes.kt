@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
@@ -29,6 +30,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_checkbox_note_feature.presentation.components.CheckboxNote
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
@@ -52,6 +57,7 @@ fun MainStructureBulletPointsNotes(
     activity: MainActivity
 ) {
     var context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     var mutableListOfBulletPointsNotes = RememberSaveableSnapshotStateList()
 
@@ -91,7 +97,6 @@ fun MainStructureBulletPointsNotes(
     if (generatedNoteId.value.toInt() == 0) {
         LaunchedEffect(key1 = true) {
             var note = Note(
-                0,
                 title = title.value,
                 timeModified = System.currentTimeMillis(),
                 notebook = notebookState.value,
@@ -147,7 +152,38 @@ fun MainStructureBulletPointsNotes(
             navController.popBackStack()
         }
     }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                convertMutableStateIntoString(
+                    mutableListOfBulletPointsNotes,
+                    mutableListConverted
+                )
+                // Trigger autosave when app goes to background (onStop)
+                activity.lifecycleScope.launch {
+                    mutableListConverted.removeAll { it == "" }
+
+                    var note1 = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        timeModified = System.currentTimeMillis(),
+                        timeStamp = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        listOfBulletPointNotes = mutableListConverted
+                    )
+                    viewModel.updateNote(note1)
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // Cleanup the observer when the Composable is disposed
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
 //    LaunchedEffect(key1 = mutableListOfCheckboxTexts.size > 0) {
 //        mutableListOfCheckBoxes.add(false)
@@ -176,10 +212,14 @@ fun MainStructureBulletPointsNotes(
                             timeStamp = System.currentTimeMillis(),
                             timeModified = System.currentTimeMillis()
                         )
-                        viewModel.insertNote(note)
+                        viewModel.updateNote(note)
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                             .show()
-                        navController.popBackStack()
+                        scope.launch {
+                            delay(200)
+                            navController.navigateUp()
+                        }
+
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -211,10 +251,14 @@ fun MainStructureBulletPointsNotes(
                             timeStamp = System.currentTimeMillis(),
                             timeModified = System.currentTimeMillis()
                         )
-                        viewModel.insertNote(note)
+                        viewModel.updateNote(note)
                         Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
                             .show()
-                        navController.popBackStack()
+                        scope.launch {
+                            delay(200)
+                            navController.navigateUp()
+                        }
+
 
                     }) {
                         Icon(

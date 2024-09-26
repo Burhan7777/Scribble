@@ -32,8 +32,12 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.DiscardNoteAlertBox
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
@@ -159,6 +163,39 @@ fun MainStructureCheckBoxNote(
             count.value++
             delay(800)
             navController.popBackStack()
+        }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                convertMutableStateIntoString(
+                    listOfCheckedNotes,
+                    mutableListConverted
+                )
+                // Trigger autosave when app goes to background (onStop)
+                activity.lifecycleScope.launch {
+                    mutableListConverted.removeAll { it == "" }
+                    var note1 = Note(
+                        id = generatedNoteId.value.toInt(),
+                        title = title.value,
+                        timeModified = System.currentTimeMillis(),
+                        timeStamp = System.currentTimeMillis(),
+                        notebook = notebookState.value,
+                        listOfCheckedNotes = mutableListConverted,
+                        listOfCheckedBoxes = mutableListOfCheckBoxes,
+                    )
+                    viewModel.updateNote(note1)
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // Cleanup the observer when the Composable is disposed
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 

@@ -7,5 +7,22 @@ THINGS TO TEST BEFORE LAUNCH
 4) Save button saves in all three screens:
 5) backHandler works in all three screens:
 6) Note is saved when user goes to home screen in all three screens:
-7) Adds to notebook in main screen even on back press, save button, backhandler and going to home:
+7) Adds to notebook in main screen even on back press, save button, back-handler and going to home:
 8) clear button works on all three screens:
+9) Saves state in edit screen in archive , locked and notebook:
+10) Main screen to archive:
+11) Archive to main screen:
+12) notebook to archive:
+13) archive to notebook:
+14) archive to trash:
+15) trash to archive:
+16) main screen to locked screen:
+17) locked screen to main screen:
+18) locked screen to trash:
+19) trash to locked screen:
+20) main screen to trash:
+21) trash to main screen:
+22) restore all trash:
+23) delete all trash:
+24) Delete notebook:
+25) delete notebook and save notes:

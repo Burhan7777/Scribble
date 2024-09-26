@@ -228,14 +228,12 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun authenticationSignUp(
-        name: String,
         email: String,
         password: String,
         repeatedPassword: String,
         isChecked: Boolean
     ): String {
         return authenticationSignUpUseCase.checkAuth(
-            name,
             email,
             password,
             repeatedPassword,
@@ -375,51 +373,7 @@ class MainActivityViewModel @Inject constructor(
     fun archiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            getNoteById(id)
-            var it = getNoteById.value
-            println("NOTE:$it")
-            var note = it.copy(archive = true)
-//            var timeStamp = it?.timeStamp
-//            var title = it?.title
-//            var content = it?.content
-//            var listOfCheckNotes = it?.listOfCheckedNotes
-//            var listOfCheckBoxes = it?.listOfCheckedBoxes
-//            var listOfBulletPoints = it?.listOfBulletPointNotes
-//            var id = it?.id
-//            var pinned = it.notePinned
-//            var timeThrownInTrash = it.timePutInTrash
-//            var deletedNote = it.deletedNote
-//            var lockedOrNote = it.locked
 
-//            var note2 = Note(
-//                archive = true,
-//                timeModified = System.currentTimeMillis(),
-//                notebook = Constant.NOT_CATEGORIZED,
-//                timeStamp = timeStamp!!,
-//                title = title!!,
-//                content = content!!,
-//                listOfBulletPointNotes = listOfBulletPoints!!,
-//                listOfCheckedBoxes = listOfCheckBoxes!!,
-//                listOfCheckedNotes = listOfCheckNotes!!,
-//                id = id!!,
-//                notePinned = pinned,
-//                timePutInTrash = timeThrownInTrash,
-//                locked = lockedOrNote,
-//                deletedNote = deletedNote
-//
-//            )
-            updateNote(note)
-            println("NOTE1:$note")
-            withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    application,
-                    "Note has been archived",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                delay(200)
-                navHostController.navigateUp()
-            }
         }
     }
 
@@ -440,55 +394,6 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun unArchiveNote(id: Int, navHostController: NavHostController, activity: MainActivity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            getNoteById(id)
-            var it = getNoteById.value
-            println("NOTE:$it")
-            var note = it.copy(archive = false)
-//            //println("NOTEFROMDB:$it")
-//            var timeStamp = it?.timeStamp
-//            var title = it?.title
-//            var content = it?.content
-//            var listOfCheckNotes = it?.listOfCheckedNotes
-//            var listOfCheckBoxes = it?.listOfCheckedBoxes
-//            var listOfBulletPoints = it?.listOfBulletPointNotes
-//            var id = it?.id
-//            var pinned = it.notePinned
-//            var timeThrownInTrash = it.timePutInTrash
-//            var deletedNote = it.deletedNote
-//            var lockedOrNote = it.locked
-//
-//            var note1 = Note(
-//                archive = false,
-//                timeModified = System.currentTimeMillis(),
-//                notebook = Constant.NOT_CATEGORIZED,
-//                timeStamp = timeStamp!!,
-//                title = title!!,
-//                content = content!!,
-//                listOfBulletPointNotes = listOfBulletPoints!!,
-//                listOfCheckedBoxes = listOfCheckBoxes!!,
-//                listOfCheckedNotes = listOfCheckNotes!!,
-//                id = id!!,
-//                notePinned = pinned,
-//                timePutInTrash = timeThrownInTrash,
-//                locked = lockedOrNote,
-//                deletedNote = deletedNote
-//
-//            )
 
-            updateNote(note)
-            withContext(Dispatchers.Main) {
-                println("NOTE1:$note")
-
-                Toast.makeText(
-                    application,
-                    "Note has been unarchived",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                delay(200)
-                navHostController.navigateUp()
-            }
-        }
     }
 }

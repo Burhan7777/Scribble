@@ -60,13 +60,7 @@ fun AlertBoxToDeleteTrashNotes(
         confirmButton = {
             Button(
                 onClick = {
-                    viewModel.deleteNoteById(note.id)
 
-                    scope.launch {
-                        delay(200)
-                        onDismiss()
-                        navHostController.navigateUp()
-                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,
@@ -102,3 +96,4 @@ fun AlertBoxToDeleteTrashNotes(
         }
     )
 }
+

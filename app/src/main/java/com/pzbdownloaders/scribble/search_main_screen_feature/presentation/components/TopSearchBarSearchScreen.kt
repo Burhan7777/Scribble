@@ -47,8 +47,13 @@ fun TopSearchBarSearchScreen(
         onSearch = {
             active = !active
             if (text.isNotEmpty()) {
-                viewModel.getSearchResult(text)
-                viewModel.getArchiveSearchResult(text)
+                navHostController.popBackStack()
+                navHostController.navigate(
+                    Screens.SearchScreen.searchNoteWIthScreen(
+                        text,
+                        Constant.HOME
+                    )
+                )
             } else {
                 Toast.makeText(context, "Nothing to search", Toast.LENGTH_SHORT).show()
             }
@@ -81,27 +86,6 @@ fun TopSearchBarSearchScreen(
                     navHostController.popBackStack()
                 },
                 tint = MaterialTheme.colors.onPrimary
-            )
-        },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Filled.Clear,
-                contentDescription = "Clear",
-                modifier = Modifier.clickable {
-                    FirebaseAuth.getInstance().signOut()
-                    val sharedPreferences =
-                        context.getSharedPreferences(
-                            Constant.SHARED_PREP_NAME,
-                            Context.MODE_PRIVATE
-                        )
-                    sharedPreferences.edit().apply {
-                        putString(Constant.USER_KEY, "LoggedOut")
-                    }.apply()
-
-                    navHostController.popBackStack()
-                    navHostController.navigate(Screens.LoginScreen.route)
-                },
-                tint = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         },
         placeholder = {

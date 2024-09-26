@@ -5,15 +5,11 @@ import android.util.Patterns
 class AuthenticationSignUpUseCase(
 ) {
     fun checkAuth(
-        name: String,
         email: String,
         password: String,
         repeatPassword: String,
         isChecked: Boolean
     ): String {
-        if (name.isEmpty())
-            return "Enter name"
-
         if (email.isEmpty())
             return "Enter email"
 

@@ -1,5 +1,6 @@
 package com.pzbdownloaders.scribble.trash_bin_feature.presentation.components
 
+import android.provider.ContactsContract.CommonDataKinds.Note
 import com.pzbdownloaders.scribble.main_screen.presentation.components.SingleItemNoteList
 
 
@@ -26,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
-import com.pzbdownloaders.scribble.add_note_feature.domain.model.AddNote
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -35,7 +35,8 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 fun TrashNotes(
     viewModel: MainActivityViewModel,
     activity: MainActivity,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    listOfNotesFromDb: MutableState<SnapshotStateList<com.pzbdownloaders.scribble.main_screen.domain.model.Note>>
 ) {
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
@@ -44,22 +45,18 @@ fun TrashNotes(
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getListOfNotesToShow.observeAsState().value
 
-    viewModel.getAllNotes()
-    var listOfNotesFromDB = viewModel.listOfNotes
-
-
-
-    if (listOfNotesFromDB.isEmpty()) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .width(35.dp)
-                    .height(35.dp),
-                color = MaterialTheme.colors.onPrimary
-            )
-        }
-    }
+//
+//    if (listOfNotesFromDB..va.isEmpty()) {
+//        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+//            CircularProgressIndicator(
+//                modifier = Modifier
+//                    .padding(8.dp)
+//                    .width(35.dp)
+//                    .height(35.dp),
+//                color = MaterialTheme.colors.onPrimary
+//            )
+//        }
+//    }
     LazyColumn() {
         item {
             Text(
@@ -100,7 +97,7 @@ fun TrashNotes(
             }
         }
         items(
-            listOfNotesFromDB ?: emptyList()
+            listOfNotesFromDb.value ?: emptyList()
         ) { note ->
             SingleItemTrashNoteList(note = note, navHostController)
         }

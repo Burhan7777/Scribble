@@ -8,19 +8,24 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteAllTrashNotes(
-    listOfIds: ArrayList<Int>,
+    listOfIds: MutableState<ArrayList<Int>>,
     viewModel: MainActivityViewModel,
+    allNotes: MutableState<SnapshotStateList<Note>>,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -57,10 +62,16 @@ fun DeleteAllTrashNotes(
         confirmButton = {
             Button(
                 onClick = {
-                    for (i in listOfIds) {
-                        viewModel.deleteNoteById(i)
+
+                    scope.launch {
+                        for (i in listOfIds.value) {
+                            viewModel.deleteNoteById(i)
+                        }
+                        delay(500)
+                        viewModel.getAllNotes()
+                        allNotes.value = viewModel.listOfNotes
+                        onDismiss()
                     }
-                    onDismiss()
 
                 },
                 colors = ButtonDefaults.buttonColors(

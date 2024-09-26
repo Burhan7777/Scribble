@@ -65,11 +65,11 @@ fun BackupAndRestoreScreen(navHostController: NavHostController) {
     var loadingDialogWhenRestoring = remember { mutableStateOf(false) }
 
     val prefs = context.getSharedPreferences(Constant.AUTO_SAVE_PREF, MODE_PRIVATE)
-    val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, false)
+    val autoSave = prefs.getBoolean(Constant.AUTO_SAVE_KEY, true)
     var autoSaveCheckedBox = remember { mutableStateOf(autoSave) }
     Column {
         Row() {
-            IconButton(onClick = { navHostController.popBackStack() }) {
+            IconButton(onClick = { navHostController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIos,
                     contentDescription = "go Back",

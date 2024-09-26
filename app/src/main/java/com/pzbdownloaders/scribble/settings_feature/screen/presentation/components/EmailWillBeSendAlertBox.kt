@@ -60,7 +60,8 @@ fun EmailWillBeSendAlertBox(
             Text(
                 text = "An email will be send to your email id with a reset code.",
                 fontSize = 15.sp,
-                fontFamily = FontFamily.fontFamilyRegular
+                fontFamily = FontFamily.fontFamilyRegular,
+                color = MaterialTheme.colors.onPrimary
             )
         }, confirmButton = {
             androidx.compose.material.Button(

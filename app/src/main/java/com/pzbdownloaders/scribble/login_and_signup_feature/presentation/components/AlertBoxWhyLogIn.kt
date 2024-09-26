@@ -39,7 +39,9 @@ fun AlertBoxWhyLogIn(onDismiss: () -> Unit) {
         },
         text = {
             Text(
-                text = "This app has a feature of locking notes and the password is saved on cloud not on device for better security. Hence the login.  ",
+                text = "This app has a feature of locking notes and the password is saved on cloud not on device for better security. " +
+                        "Besides password to save notes can be reset using the email id provided." +
+                        " Hence the login.  ",
                 fontFamily = FontFamily.fontFamilyRegular,
                 color = MaterialTheme.colors.onPrimary
             )

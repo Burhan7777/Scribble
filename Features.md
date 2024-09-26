@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (59/80) // MAIN - (31/42)
+FEATURES THAT NEED TO BE ADDED (72/80) // MAIN - (39/44)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -59,7 +59,7 @@ FEATURES THAT NEED TO BE ADDED (59/80) // MAIN - (31/42)
 56) Trashbin main screen should display checkboxes and bullet-points(Main): DONE
 57) Ad crashlytics(Main): DONE
 58) Add theme change in settings: DONE
-59) Test on light theme(Main):
+59) Test on light theme(Main): DONE
 60) Test on Tab - Make Adjustment for tab(Main):
 61) Make only Portrait(Main): DONE
 62) Long notes just like in keep in grid mode(Main): DELAYED
@@ -71,13 +71,13 @@ FEATURES THAT NEED TO BE ADDED (59/80) // MAIN - (31/42)
 68) Long click select note in Trash: DELAYED
 69) Check internet connection while setting up password , changing password, forgot password(Main): DONE
 70) Store password locally (give user option with warning)(Main):
-71) Fix the search bar (Main):
+71) Fix the search bar (Main): DONE
 72) Fix the checkboxes(Main): DONE
-73) Save checkbox and bullet points when screen goes to home(Main):
-74) Consider login through email and password:
-75) Autosave on by default(Main):
+73) Save checkbox and bullet points when screen goes to home(Main): DONE
+74) Consider login through email and password: DONE
+75) Autosave on by default(Main): DONE
 76) Figure out autosave of notes(Main):
-77) Add noStop() save function to notes , checkboxes and bulletpoints of locked and notebook screen(Main):
-78) Trash bin crashes sometimes due to state issue(Main):
-79) Delete all option has to be performed twice to make (Main):
-80) Saving removes pinned note(Main):
+77) Add noStop() save function to notes , checkboxes and bulletpoints of locked and notebook screen(Main): DONE
+78) Trash bin crashes sometimes due to state issue(Main): DONE
+79) Delete all option has to be performed twice to make (Main): DELAYED
+80) Saving removes pinned note(Main): DONE

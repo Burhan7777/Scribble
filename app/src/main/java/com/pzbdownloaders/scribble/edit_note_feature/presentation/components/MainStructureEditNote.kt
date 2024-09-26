@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
@@ -34,6 +35,8 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.LoadingDialogBox
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -73,12 +76,6 @@ fun MainStructureEditNote(
 
     if (richStateText.value.annotatedString.text == "") fontSize.value = "20"
 
-//    var note: AddNote? by remember {
-//        mutableStateOf(AddNote())
-//    }
-
-    //viewModel.getNoteToEdit(id)
-    // note = viewModel.getNoteDetailsToEdit.observeAsState().value
     var note = mutableStateOf(Note())
 
     var scope = rememberCoroutineScope()
@@ -136,6 +133,14 @@ fun MainStructureEditNote(
 
     var hideFormattingTextBarWhenTitleIsInFocus = remember { mutableStateOf(true) }
 
+    var showMovingToArchiveLoadingBox = remember { mutableStateOf(false) }
+
+
+    var showMovingFromArchiveLoadingBox = remember { mutableStateOf(false) }
+
+    var showDeletingNoteDialogBox = remember { mutableStateOf(false) }
+
+
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         viewModel.getNoteById(id)
@@ -162,13 +167,6 @@ fun MainStructureEditNote(
             }
         }
     }
-
-
-//    LaunchedEffect(key1 = Unit) {
-//        for (i in note.value.listOfBulletPointNotes) {
-//            mutableListOfBulletPoints.add(mutableStateOf(i))
-//        }
-//    }
 
     LaunchedEffect(key1 = Unit) {
         for (i in note.value.listOfBulletPointNotes) {
@@ -200,36 +198,6 @@ fun MainStructureEditNote(
         notebook = note.value.notebook
 
     }
-
-//    if (mutableListOfCheckboxTexts.size == 0 && mutableListOfBulletPoints.size == 0) {
-//        DisposableEffect(Unit) {
-//
-//            val timer = Timer()
-//            // Schedule a task to run every 10 seconds
-//            timer.schedule(delay = 3000L, period = 1000L) {
-//                println("TRIGGERED")
-//                viewModel.getNoteById(id)
-//                var noteFromDb = viewModel.getNoteById
-//                var note = noteFromDb.value.copy(
-//                    title = title,
-//                    content = richStateText.value.toHtml(),
-//                    timeModified = System.currentTimeMillis(),
-//                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-////                listOfBulletPointNotes = convertedBulletPoints,
-////                listOfCheckedNotes = converted,
-////                listOfCheckedBoxes = mutableListOfCheckBoxes
-//
-//                )
-//                viewModel.updateNote(note)
-//            }
-//
-//            // Clean up the timer when the composable leaves the composition
-//            onDispose {
-//                timer.cancel() // Stop the timer
-//            }
-//        }
-//    }
-
 
 //    if (note.value != null) {
 //        if (note.value.listOfCheckedNotes.isEmpty() && note.value.listOfBulletPointNotes.isEmpty()) {
@@ -283,11 +251,8 @@ fun MainStructureEditNote(
                             content = richStateText.value.toHtml(),
                             timeModified = System.currentTimeMillis(),
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-//                listOfBulletPointNotes = convertedBulletPoints,
-//                listOfCheckedNotes = converted,
-//                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                        )
+                            )
                         viewModel.updateNote(note!!)
                     }
                 }
@@ -378,13 +343,6 @@ fun MainStructureEditNote(
             viewModel.getNoteById(id)
             var noteFromDb = viewModel.getNoteById
 
-//            for (i in listOfCheckedNotes) {
-//                println("TEXT1:${i.value}")
-//            }
-//
-//            for (i in mutableListConverted) {
-//                println("TEXT2:${i}")
-//            }
             var listOfNotes = noteFromDb.value.listOfCheckedNotes
 
             for (i in listOfNotes) {
@@ -392,20 +350,12 @@ fun MainStructureEditNote(
                     converted.add(i)
                 }
             }
-//            var listOFCheckBoxes = noteFromDb.value.listOfCheckedBoxes
-//            for (i in listOFCheckBoxes) {
-//                if (!mutableListOfCheckBoxes..vacontains(i)) {
-//                    mutableListOfCheckBoxes.add(i)
-//                }
-//            }
+
             convertMutableStateIntoString(
                 mutableListOfCheckboxTexts,
                 converted
             )
-            //println("TEXT2:$listOFCheckBoxes")
-            //  println("TEXT1:$converted")
-            // println("TEXT2:${mutableListOfCheckboxTexts.toCollection(ArrayList())}")
-            //println(mutableListOfCheckBoxes)
+
             converted.removeAll { it == "" }
             var note1 = noteFromDb.value.copy(
                 title = title,
@@ -426,34 +376,11 @@ fun MainStructureEditNote(
             viewModel.getNoteById(id)
             var noteFromDb = viewModel.getNoteById
 
-//        for (i in listOfCheckedNotes) {
-//            println("TEXT1:${i.value}")
-//        }
-//
-//        for (i in mutableListConverted) {
-//            println("TEXT2:${i}")
-//        }
-            var listOfNotes = noteFromDb.value.listOfBulletPointNotes
-
-//            for (i in listOfNotes) {
-//                if (!converted.contains(i)) {
-//                    converted.add(i)
-//                }
-//            }
-//            var listOFCheckBoxes = noteFromDb.value.listOfCheckedBoxes
-//            for (i in listOFCheckBoxes) {
-//                if (!mutableListOfCheckBoxes.contains(i)) {
-//                    mutableListOfCheckBoxes.add(i)
-//                }
-//            }
             convertMutableStateIntoString(
                 mutableListOfBulletPoints,
                 convertedBulletPoints
             )
-            //println("TEXT2:$listOFCheckBoxes")
-            //  println("TEXT1:$converted")
-            // println("TEXT2:${mutableListOfCheckboxTexts.toCollection(ArrayList())}")
-            //println(mutableListOfCheckBoxes)
+
             convertedBulletPoints.removeAll { it == "" }
             var note1 = noteFromDb.value.copy(
                 title = title,
@@ -523,6 +450,7 @@ fun MainStructureEditNote(
                         var archived = noteFromDb.value.archive
                         var lockedOrNote = noteFromDb.value.locked
                         var timeCreated = noteFromDb.value.timeStamp
+                        var pinned = noteFromDb.value.notePinned
                         var note = Note(
                             id,
                             title,
@@ -534,7 +462,8 @@ fun MainStructureEditNote(
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
-                            timeModified = System.currentTimeMillis()
+                            timeModified = System.currentTimeMillis(),
+                            notePinned = pinned
                         )
                         viewModel.updateNote(note)
                         Toast.makeText(context, "Note has been updated", Toast.LENGTH_SHORT)
@@ -551,38 +480,6 @@ fun MainStructureEditNote(
                 title = { Text(text = "") },
                 actions = {
                     IconButton(onClick = {
-                        //    var updatedNote = Note(id, title, content, getTimeInMilliSeconds(), 123)
-                        //   Log.i("title", title)
-                        //  viewModel.updateNote(updatedNote)
-//                        val map = HashMap<String, Any>()
-//                        map["title"] = title
-//                        map["content"] = content
-//                        map["timeStamp"] = System.currentTimeMillis()
-//                        if (selectedNotebook.value.isNotEmpty()) map["label"] =
-//                            selectedNotebook.value
-//                      //  viewModel.updateNote(note!!.noteId, map)
-//                        viewModel.getResultFromUpdateNote.observe(activity) {
-//                            when (it) {
-//                                is GetResult.Success -> {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Updated Successfully",
-//                                        Toast.LENGTH_SHORT
-//                                    )
-//                                        .show()
-//                                    navController.popBackStack()
-//                                }
-//                                is GetResult.Failure -> {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Update failed. Try again",
-//                                        Toast.LENGTH_SHORT
-//                                    )
-//                                        .show()
-//                                }
-//                            }
-//                        }
-
 
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
                         convertMutableStateIntoString(
@@ -594,6 +491,7 @@ fun MainStructureEditNote(
                         var archived = noteFromDb.value.archive
                         var lockedOrNote = noteFromDb.value.locked
                         var timeCreated = noteFromDb.value.timeStamp
+                        var pinned = noteFromDb.value.notePinned
                         var note = Note(
                             id,
                             title,
@@ -605,7 +503,8 @@ fun MainStructureEditNote(
                             notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
                             listOfBulletPointNotes = convertedBulletPoints,
                             timeStamp = timeCreated,
-                            timeModified = System.currentTimeMillis()
+                            timeModified = System.currentTimeMillis(),
+                            notePinned = pinned
                         )
                         viewModel.updateNote(note)
                         scope.launch {
@@ -622,23 +521,7 @@ fun MainStructureEditNote(
                     }
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
-//                            scope.launch(Dispatchers.IO) {
-//                                viewModel.pinOrUnpinNote(!pinnedOrNot.value, id)
-//                                withContext(Dispatchers.Main) {
-//                                    delay(200)
-//                                    navController.navigateUp()
-//                                }
-//                            }
-                            viewModel.getNoteById(id)
-                            var note = viewModel.getNoteById.value
-                            var pinnedStatus = note.notePinned
-                            var note1 = note.copy(notePinned = !pinnedStatus)
-                            viewModel.updateNote(note1)
-                            scope.launch {
-                                delay(200)
-                                navController.navigateUp()
-                            }
-
+                            pinOrUnpinNote(viewModel, id, scope, navController)
 
                         }) {
                             Icon(
@@ -690,83 +573,33 @@ fun MainStructureEditNote(
                     }
                     if (screen == Constant.HOME || screen == Constant.ARCHIVE) {
                         IconButton(onClick = {
-                            convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
-                            convertMutableStateIntoString(
-                                mutableListOfBulletPoints,
-                                convertedBulletPoints
-                            )
+
                             if (screen == Constant.HOME) {
-                                viewModel.archiveNote(
-                                    id,
-                                    navHostController = navController,
-                                    activity
+
+                                showMovingToArchiveLoadingBox.value = true
+
+                                moveToArchive(
+                                    id = id,
+                                    navController = navController,
+                                    viewModel = viewModel,
+                                    scope = scope,
+                                    activity = activity,
+                                    showMovingToArchiveLoadingBox
                                 )
-//                                scope.launch(Dispatchers.IO) {
-//                                    viewModel.moveToArchive(true, id)
-//                                    withContext(Dispatchers.Main) {
-//                                        delay(100)
-//                                        navController.navigateUp()
-//                                    }
-//                                }
-//                            var hashmap = HashMap<String, Any>()
-//                            hashmap["archived"] = true
-                                //   viewModel.archiveNotes(id, hashmap)
-//                            viewModel.getResultFromArchivedNotes.observe(activity) {
-//                                when (it) {
-//                                    is GetResult.Success -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Note has be archived",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                        navController.popBackStack()
-//                                    }
-//
-//                                    is GetResult.Failure -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Note failed to be archived",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                }
-//                            }
+
+
                             } else if (screen == Constant.ARCHIVE) {
-                                viewModel.unArchiveNote(
+
+                                showMovingFromArchiveLoadingBox.value = true
+
+                                unArchiveNote(
                                     id,
-                                    navHostController = navController,
-                                    activity
+                                    viewModel,
+                                    activity,
+                                    navController,
+                                    scope,
+                                    showMovingFromArchiveLoadingBox
                                 )
-//                                scope.launch(Dispatchers.IO) {
-//                                    viewModel.moveToArchive(false, id)
-//                                    withContext(Dispatchers.Main) {
-//                                        delay(100)
-//                                        navController.navigateUp()
-//                                    }
-//                                }
-//                            val hashmap = HashMap<String, Any>()
-//                            hashmap["archived"] = false
-                                // viewModel.unArchiveNotes(id, hashmap)
-//                            viewModel.getResultFromUnArchiveNotes.observe(activity) {
-//                                when (it) {
-//                                    is GetResult.Success -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Note has been unarchived",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                        navController.popBackStack()
-//                                    }
-//
-//                                    is GetResult.Failure -> {
-//                                        Toast.makeText(
-//                                            context,
-//                                            "Note failed to be unarchived",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-//                                    }
-//                                }
-//                            }
                             }
 
                         }) {
@@ -845,27 +678,12 @@ fun MainStructureEditNote(
         }
     }
     if (dialogOpen.value) {
-//        viewModel.getNoteById(id)
-//        var noteFromDb = viewModel.getNoteById
-//        var archived = noteFromDb.value.archive
-//        var lockedOrNote = noteFromDb.value.locked
-//        var note = Note(
-//            id,
-//            title,
-//            richStateText.value.toHtml(),
-//            archived,
-//            locked = lockedOrNote,
-//            listOfCheckedNotes = converted,
-//            listOfCheckedBoxes = mutableListOfCheckBoxes,
-//            notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
-//            listOfBulletPointNotes = convertedBulletPoints,
-        //timeStamp = System.currentTimeMillis()
-        //  )
         AlertDialogBoxDelete(
             viewModel = viewModel,
             id = id,
             activity = activity,
             navHostController = navController,
+            showDeletingNoteDialogBox
             // note = note
         ) {
             dialogOpen.value = false
@@ -911,6 +729,15 @@ fun MainStructureEditNote(
 
         }
     }
+    if (showMovingToArchiveLoadingBox.value) {
+        LoadingDialogBox(text = mutableStateOf("Moving to Archive"))
+    }
+    if (showMovingFromArchiveLoadingBox.value) {
+        LoadingDialogBox(text = mutableStateOf("Moving from Archive"))
+    }
+    if (showDeletingNoteDialogBox.value) {
+        LoadingDialogBox(text = mutableStateOf("Moving to trash"))
+    }
 }
 
 fun convertMutableStateIntoString(
@@ -946,6 +773,108 @@ fun RememberSaveableSnapshotStateList(): SnapshotStateList<MutableState<String>>
 }
 
 
+fun moveToArchive(
+    id: Int,
+    navController: NavHostController,
+    viewModel: MainActivityViewModel,
+    scope: CoroutineScope, activity: MainActivity,
+    showMovingDialog: MutableState<Boolean>
+) {
+    scope.launch {
+        viewModel.getNoteById(id)
+        var it = viewModel.getNoteById.value
+        // println("NOTE:$it")
+        var note = it.copy(archive = true)
+
+        viewModel.updateNote(note)
+
+        viewModel.getNoteById(id)
+        delay(200)
+        var note1 = viewModel.getNoteById.value
+        if (!note1.archive) {
+            println("NESTED TRIGGERED")
+            moveToArchive(
+                id = id,
+                navController = navController,
+                viewModel = viewModel,
+                scope = scope,
+                activity = activity,
+                showMovingDialog = showMovingDialog
+            )
+        } else {
+
+            println("NOTE1:$note")
+
+
+            delay(200)
+            showMovingDialog.value = false
+            navController.navigateUp()
+            delay(200)
+            Toast.makeText(
+                activity,
+                "Note has been archived",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+    }
+}
+
+fun unArchiveNote(
+    id: Int,
+    viewModel: MainActivityViewModel,
+    activity: MainActivity,
+    navController: NavHostController,
+    scope: CoroutineScope,
+    showMoveFromArchiveDialog: MutableState<Boolean>
+) {
+    scope.launch {
+        viewModel.getNoteById(id)
+        var it = viewModel.getNoteById.value
+        //println("NOTE:$it")
+        var note = it.copy(archive = false)
+
+        viewModel.updateNote(note)
+        delay(200)
+        viewModel.getNoteById(id)
+        var note1 = viewModel.getNoteById.value
+        if (note1.archive) {
+            println("NESTED TRIGGERED")
+            unArchiveNote(id, viewModel, activity, navController, scope, showMoveFromArchiveDialog)
+        } else {
+            // println("NOTE1:$note")
+
+
+            delay(200)
+            showMoveFromArchiveDialog.value = false
+            navController.navigateUp()
+            delay(200)
+            Toast.makeText(
+                activity,
+                "Note has been unarchived",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+    }
+}
+
+fun pinOrUnpinNote(
+    viewModel: MainActivityViewModel,
+    id: Int,
+    scope: CoroutineScope,
+    navController: NavHostController
+) {
+    viewModel.getNoteById(id)
+    var note = viewModel.getNoteById.value
+    var pinnedStatus = note.notePinned
+    var note1 = note.copy(notePinned = !pinnedStatus)
+    viewModel.updateNote(note1)
+    scope.launch {
+        delay(200)
+        navController.navigateUp()
+    }
+}
 
 
 

@@ -67,16 +67,16 @@ fun MainStructureTrashBinScreen(
     var showDeleteAllTrashNotesDialogBox = remember { mutableStateOf(false) }
 
 
-    var listOfTrashNotes = ArrayList<Int>()
+    var listOfTrashNotes = remember { mutableStateOf<ArrayList<Int>>(arrayListOf()) }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getAllNotes()
     }
 
-    var allNotes = viewModel.listOfNotes
-    for (i in allNotes) {
+    var allNotes = mutableStateOf(viewModel.listOfNotes)
+    for (i in allNotes.value) {
         if (i.deletedNote) {
-            listOfTrashNotes.add(i.id)
+            listOfTrashNotes.value.add(i.id)
         }
     }
 
@@ -272,20 +272,20 @@ fun MainStructureTrashBinScreen(
 
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Restore,
-                            contentDescription = "restore all files",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
-                    IconButton(onClick = { showDeleteAllTrashNotesDialogBox.value = true }) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "delete all files",
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
+//                    IconButton(onClick = { /*TODO*/ }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Restore,
+//                            contentDescription = "restore all files",
+//                            tint = MaterialTheme.colors.onPrimary
+//                        )
+//                    }
+//                    IconButton(onClick = { showDeleteAllTrashNotesDialogBox.value = true }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.Delete,
+//                            contentDescription = "delete all files",
+//                            tint = MaterialTheme.colors.onPrimary
+//                        )
+//                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colors.primary
@@ -312,11 +312,15 @@ fun MainStructureTrashBinScreen(
                 }
             }
             if (showDeleteAllTrashNotesDialogBox.value) {
-                DeleteAllTrashNotes(listOfIds = listOfTrashNotes, viewModel = viewModel) {
+                DeleteAllTrashNotes(
+                    listOfIds = listOfTrashNotes,
+                    viewModel = viewModel,
+                    allNotes
+                ) {
                     showDeleteAllTrashNotesDialogBox.value = false
                 }
             }
-            TrashNotes(viewModel, activity, navHostController)
+            TrashNotes(viewModel, activity, navHostController, allNotes)
         }
     }
 }

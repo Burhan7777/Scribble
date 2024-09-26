@@ -143,7 +143,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
-            println("MUTABLELIST2:${note.listOfCheckedBoxes}")
+        //    println("MUTABLELIST2:${note.listOfCheckedBoxes}")
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = note.title,
