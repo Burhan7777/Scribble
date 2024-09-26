@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (72/80) // MAIN - (39/44)
+FEATURES THAT NEED TO BE ADDED (73/80) // MAIN - (30/44)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -76,7 +76,7 @@ FEATURES THAT NEED TO BE ADDED (72/80) // MAIN - (39/44)
 73) Save checkbox and bullet points when screen goes to home(Main): DONE
 74) Consider login through email and password: DONE
 75) Autosave on by default(Main): DONE
-76) Figure out autosave of notes(Main):
+76) Figure out autosave of notes(Main): DONE
 77) Add noStop() save function to notes , checkboxes and bulletpoints of locked and notebook screen(Main): DONE
 78) Trash bin crashes sometimes due to state issue(Main): DONE
 79) Delete all option has to be performed twice to make (Main): DELAYED

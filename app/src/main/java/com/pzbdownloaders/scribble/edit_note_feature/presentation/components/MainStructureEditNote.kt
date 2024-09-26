@@ -38,7 +38,9 @@ import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.LoadingDialogBox
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -140,7 +142,6 @@ fun MainStructureEditNote(
 
     var showDeletingNoteDialogBox = remember { mutableStateOf(false) }
 
-
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         viewModel.getNoteById(id)
@@ -208,9 +209,9 @@ fun MainStructureEditNote(
 //                    while (isActive) {
 //                        // Get the note by ID and update it
 //                        viewModel.getNoteById(note.value.id)
-//                        activity.lifecycleScope.launch {
+//                        activity.lifecycleScope.launch(Dispatchers.IO) {
 //                            val noteFromDb = viewModel.getNoteById.value
-//                            var note = noteFromDb?.copy(
+//                            var note = noteFromDb.copy(
 //                                title = title,
 //                                content = richStateText.value.toHtml(),
 //                                timeModified = System.currentTimeMillis(),
@@ -220,13 +221,13 @@ fun MainStructureEditNote(
 ////                listOfCheckedBoxes = mutableListOfCheckBoxes
 //
 //                            )
-////
-//                          //  viewModel.updateNote(note!!)
+//                        viewModel.updateNote(note)
 //                            delay(5000L)
 //                        }
 //                        // Save every 10 seconds
 //                    }
 //                }
+//                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
 //
 //                onDispose {
 //                    job.cancel()  // Cancel the coroutine when the component is disposed
@@ -427,6 +428,75 @@ fun MainStructureEditNote(
             showTrialEndedDialogBox.value = false
         }
     }
+
+//    var debounceJob: Job? = null
+//
+//    DisposableEffect(Unit) {
+//        scope.launch {
+//            // Listen for changes in the title or content
+//            snapshotFlow { title to richStateText.value.toHtml() }
+//                .debounce(2000L)  // Wait for 2 seconds of inactivity before saving
+//                .collect { (newTitle, newContent) ->  // Destructure the Pair here
+//                    // When the user stops typing, save the note
+//                    viewModel.getNoteById(note.value.id)
+//                    val note = viewModel.getNoteById.value
+//                    val updatedNote = note.copy(
+//                        title = newTitle,
+//                        content = newContent,
+//                        timeModified = System.currentTimeMillis(),
+//                        notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value
+//                    )
+//                    viewModel.updateNote(updatedNote)
+//                }
+//        }
+//        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+//
+//        onDispose {
+//            debounceJob?.cancel()
+//        }
+//    }
+
+    var lastContent =
+        remember { mutableStateOf(richStateText.value.annotatedString.text) } // Track last saved content
+    var isTyping by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isTyping) {
+        if (!isTyping) {
+            delay(2000) // Wait for 2 seconds after typing stops
+            if (richStateText.value.annotatedString.text != lastContent.value) {
+                viewModel.getNoteById(note.value.id)
+                val noteFromDb = viewModel.getNoteById.value
+                var note = noteFromDb.copy(
+                    title = title,
+                    content = richStateText.value.toHtml(),
+                    timeModified = System.currentTimeMillis(),
+                    notebook = if (selectedNotebook.value == "") notebook else selectedNotebook.value,
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                )
+                viewModel.updateNote(note)
+                lastContent.value =
+                    richStateText.value.annotatedString.text // Update the last saved content
+            }
+        }
+    }
+
+    LaunchedEffect(richStateText.value.annotatedString.text) {
+        while (true) {
+            delay(500) // Poll every 500ms to check for changes
+            if (richStateText.value.annotatedString.text != lastContent.value) {
+                isTyping = true
+                coroutineScope.launch {
+                    delay(2000)
+                    isTyping = false
+                }
+            }
+        }
+    }
+
+
 
 
     Scaffold(
