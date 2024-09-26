@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (73/80) // MAIN - (30/44)
+FEATURES THAT NEED TO BE ADDED (76/80) // MAIN - (43/45)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -25,7 +25,7 @@ FEATURES THAT NEED TO BE ADDED (73/80) // MAIN - (30/44)
 22) Remove fall back to destructive migration and implement proper migration: DONE
 23) Animations in lazy-column when note is deleted:DELAYED
 24) Transitions between screens:DELAYED
-25) "No Notes found" animation in main screen and notebooks screen:
+25) "No Notes found" animation in main screen and notebooks screen:  DONE
 26) Rate app option while using app: DELAYED
 27) Update app option: DELAYED
 28) Firebase fix dialog boxes like in Instabuddy : DONE
@@ -44,7 +44,7 @@ FEATURES THAT NEED TO BE ADDED (73/80) // MAIN - (30/44)
 41) Can add notes in notebooks(Main): DONE
 42) Remove Splash screen(Main):DONE
 43) Add Firebase events to everything(Main):
-44) Keep track of total words written for the achievements(Main):
+44) Keep track of total words written for the achievements(Main): DELAYED
 45) How long notes survive in trash in settings (Main):  CANCELLED(14 days it is)
 46) Change title of all to richtextstate(Main): CANCELLED
 47) Add checkbox and bulletpoints to notebooks and locked  notes: DONE
@@ -64,7 +64,7 @@ FEATURES THAT NEED TO BE ADDED (73/80) // MAIN - (30/44)
 61) Make only Portrait(Main): DONE
 62) Long notes just like in keep in grid mode(Main): DELAYED
 63) Auto backup option(Main): DONE
-64) Discard changes in edit screen:
+64) Discard changes in edit screen: DELAYED
 65) Undo and redo functionality: DELAYED
 66) Empty note is not to be saved(Main): DELAYED
 67) Trash delete all notes(Main): DONE

@@ -151,6 +151,9 @@ dependencies {
     //WORK MANAGER
     implementation "androidx.work:work-runtime-ktx:2.7.1"
 
+    //LOTTIE ANIMATIONS
+    implementation "com.airbnb.android:lottie-compose:6.0.0"
+
 
 
 
