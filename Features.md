@@ -28,7 +28,7 @@ FEATURES THAT NEED TO BE ADDED (72/80) // MAIN - (39/44)
 25) "No Notes found" animation in main screen and notebooks screen:
 26) Rate app option while using app: DELAYED
 27) Update app option: DELAYED
-28) Firebase fix dialog boxes like in Instabuddy :
+28) Firebase fix dialog boxes like in Instabuddy : DONE
 29) Don't forget to save password of locked notes on the cloud: DONE
 30) Save note on back button also auto-save function(Main): DONE (FINALLY AFTER 3 FREAKING DAYS PHEW!!!)
 31) Text formatting features(Main): DONE
