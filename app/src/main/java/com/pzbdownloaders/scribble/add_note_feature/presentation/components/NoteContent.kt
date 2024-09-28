@@ -60,6 +60,7 @@ import com.pzbdownloaders.scribble.common.data.Model.NoteBook
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.Menu
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -73,7 +74,8 @@ fun NoteContent(
     textFieldValue: MutableState<TextFieldValue>,
     boldText: MutableState<Boolean>,
     richStateText: RichTextState,
-    hideFormattingTextBar: MutableState<Boolean>
+    hideFormattingTextBar: MutableState<Boolean>,
+    showSavedText: MutableState<Boolean>
 //    notebook: MutableState<ArrayList<String>>,
 //    notebookFromDB: MutableState<ArrayList<NoteBook>>
 ) {
@@ -113,44 +115,69 @@ fun NoteContent(
         focusRequester.requestFocus()
     }
 
+    LaunchedEffect(key1 = showSavedText.value) {
+        delay(1000)
+        showSavedText.value = false
+    }
+
 
 //    val listOfNoteBooks = viewModel.getNoteBooks.observeAsState().value
 //    Log.i("notebooks", listOfNoteBooks?.size.toString())
 
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(0.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (notebook.isNotEmpty()) {
-            Text(
-                text = if (noteBookState.value.isEmpty()) "Notebook:$notebook" else "Notebook selected: ${noteBookState.value}",
-                color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyRegular,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 15.dp)
-            )
-        } else {
-            Text(
-                text = if (noteBookState.value.isEmpty()) "Add to Notebook" else "Notebook selected: ${noteBookState.value}",
-                color = MaterialTheme.colors.onPrimary,
-                fontFamily = FontFamily.fontFamilyRegular,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 15.dp)
-            )
-        }
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(0.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            if (notebook.isNotEmpty()) {
+                Text(
+                    text = if (noteBookState.value.isEmpty()) "Notebook:$notebook" else "Notebook selected: ${noteBookState.value}",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+            } else {
+                Text(
+                    text = if (noteBookState.value.isEmpty()) "Add to Notebook" else "Notebook selected: ${noteBookState.value}",
+                    color = MaterialTheme.colors.onPrimary,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(start = 15.dp)
+                )
+            }
 
-        androidx.compose.material.Icon(
-            imageVector = Icons.Filled.ArrowDropDown,
-            contentDescription = "Arrow DropDown",
-            modifier = Modifier.clickable {
-                isExpanded.value = true
-            })
-        if (isExpanded.value) {
-            MainMenu(isExpanded = isExpanded, noteBookState, viewModel, dialogOpen, notebookText)
+            androidx.compose.material.Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "Arrow DropDown",
+                modifier = Modifier.clickable {
+                    isExpanded.value = true
+                })
+            if (isExpanded.value) {
+                MainMenu(
+                    isExpanded = isExpanded,
+                    noteBookState,
+                    viewModel,
+                    dialogOpen,
+                    notebookText
+                )
+            }
+            //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
         }
-        //     CreateDropDownMenu("Color", notebookText, notebooks, viewModel, noteBookState)
+//        if (showSavedText.value) {
+//            Text(
+//                text = "Saved",
+//                color = MaterialTheme.colors.onPrimary,
+//                fontFamily = FontFamily.fontFamilyRegular,
+//                fontStyle = FontStyle.Italic,
+//                modifier = Modifier
+//                    .align(Alignment.CenterEnd)
+//                    .padding(end = 10.dp)
+//            )
+//        }
     }
 
 
@@ -176,7 +203,7 @@ fun NoteContent(
         modifier = Modifier
             .focusRequester(focusRequester)
             .onFocusChanged {
-                    hideFormattingTextBar.value = it.isFocused
+                hideFormattingTextBar.value = it.isFocused
             }
     )
 

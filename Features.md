@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (76/80) // MAIN - (43/45)
+FEATURES THAT NEED TO BE ADDED (77/81) // MAIN - (44/46)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -70,7 +70,7 @@ FEATURES THAT NEED TO BE ADDED (76/80) // MAIN - (43/45)
 67) Trash delete all notes(Main): DONE
 68) Long click select note in Trash: DELAYED
 69) Check internet connection while setting up password , changing password, forgot password(Main): DONE
-70) Store password locally (give user option with warning)(Main):
+70) Store password locally (give user option with warning)(Main):CANCELLED
 71) Fix the search bar (Main): DONE
 72) Fix the checkboxes(Main): DONE
 73) Save checkbox and bullet points when screen goes to home(Main): DONE
@@ -81,3 +81,4 @@ FEATURES THAT NEED TO BE ADDED (76/80) // MAIN - (43/45)
 78) Trash bin crashes sometimes due to state issue(Main): DONE
 79) Delete all option has to be performed twice to make (Main): DELAYED
 80) Saving removes pinned note(Main): DONE
+81) Saving and saved text view(Main):

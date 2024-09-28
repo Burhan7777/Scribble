@@ -79,6 +79,8 @@ fun MainStructureAddNote(
 
     var boldSelection = remember { mutableStateOf(false) }
 
+    var showSavedText = remember { mutableStateOf(false) }
+
     var isBoldActivated = remember { mutableStateOf(false) }
     var isUnderlineActivated = remember { mutableStateOf(false) }
     var isItalicActivated = remember { mutableStateOf(false) }
@@ -163,6 +165,7 @@ fun MainStructureAddNote(
                     timeStamp = System.currentTimeMillis()
                 )
                 viewModel.updateNote(updatedNote)
+              //  showSavedText.value = true
                 delay(5000L)
                 // Save every 10 seconds
             }
@@ -296,7 +299,8 @@ fun MainStructureAddNote(
                     textFieldValue,
                     boldText,
                     richTextState.value,
-                    hideTextFomattingBarWhenTitleIsInFocus
+                    hideTextFomattingBarWhenTitleIsInFocus,
+                    showSavedText
 //                notebook,
 //                notebookFromDB)
                 )

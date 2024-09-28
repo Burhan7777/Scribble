@@ -51,7 +51,7 @@ fun Notes(
 
 
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
-    var listOfPinnedNotes = remember { SnapshotStateList<Note>() }
+    var listOfPinnedNotes =   SnapshotStateList<Note>()
     viewModel.getAllNotes()
     listOfNotesFromDB = viewModel.listOfNotes
     for (i in listOfNotesFromDB) {
@@ -110,6 +110,33 @@ fun Notes(
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
                 )
+                if (listOfNotesFromDB.isEmpty()) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 50.dp)
+                    ) {
+                        Column(modifier = Modifier.align(Alignment.Center)) {
+                            Text(
+                                text = "WOW... so empty !!!",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.fontFamilyExtraLight,
+                                color = MaterialTheme.colors.onPrimary,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = "Create your first note by clicking the add button in the bottom right",
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily.fontFamilyRegular,
+                                color = MaterialTheme.colors.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
             }
             items(
                 items = listOfNotesFromDB ?: emptyList()
