@@ -220,7 +220,7 @@ fun MainStructureAddNoteInNotebook(
             timeStamp = System.currentTimeMillis(),
         )
         viewModel.updateNote(updatedNote)
-        navController.popBackStack()
+        navController.navigateUp()
     }
 
     Scaffold(
@@ -233,7 +233,24 @@ fun MainStructureAddNoteInNotebook(
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        viewModel.getNoteById(generatedNoteId.value.toInt())
+                        var noteFromDb = viewModel.getNoteById
+                        var note2 = noteFromDb.value.copy(
+                            title = title.value,
+                            content = richTextState.value.toHtml(),
+                            timeModified = System.currentTimeMillis(),
+                            notebook = notebookName,
+                            timeStamp = System.currentTimeMillis()
+//                listOfBulletPointNotes = convertedBulletPoints,
+//                listOfCheckedNotes = converted,
+//                listOfCheckedBoxes = mutableListOfCheckBoxes
+
+                        )
+                        viewModel.updateNote(note2)
+                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.navigateUp() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "go back")
                     }
                 },
@@ -264,7 +281,7 @@ fun MainStructureAddNoteInNotebook(
                         viewModel.updateNote(note2)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                             .show()
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }

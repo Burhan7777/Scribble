@@ -22,7 +22,7 @@ fun CheckboxNoteMainScreen(
     activity: MainActivity
 ) {
 
-    var notebookState = remember {
+    var notebookState = rememberSaveable {
         mutableStateOf("")
     }
 

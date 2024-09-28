@@ -47,12 +47,12 @@ fun NotesNotebook(
     //var listOfNotes = viewModel.listOfNotesByNotebook
     var listOfNotesBooks = remember { SnapshotStateList<Note>() }
     var listOfPinnedNotes = ArrayList<Note>()
-    listOfNotesBooks =
-        viewModel.listOfNotesByNotebook.toMutableStateList()
-
-    for (i in listOfNotesBooks) {
-        if (i.notePinned) {
-            listOfPinnedNotes.add(i)
+    viewModel.listOfNotesByNotebookLiveData.observe(activity) {
+        listOfNotesBooks = it.toMutableStateList()
+        for (i in it) {
+            if (i.notePinned) {
+                listOfPinnedNotes.add(i)
+            }
         }
     }
 

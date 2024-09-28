@@ -32,6 +32,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -50,15 +51,19 @@ fun Notes(
 //        viewModel.getListOfNotesToShow.observeAsState().value
 
 
+    var scope = rememberCoroutineScope()
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
-    var listOfPinnedNotes =   SnapshotStateList<Note>()
+    var listOfPinnedNotes = SnapshotStateList<Note>()
     viewModel.getAllNotes()
-    listOfNotesFromDB = viewModel.listOfNotes
-    for (i in listOfNotesFromDB) {
-        if (i.notePinned) {
-            listOfPinnedNotes.add(i)
+    viewModel.listOfNotesLiveData.observe(activity) {
+        listOfNotesFromDB = it.toMutableStateList()
+        for (i in it) {
+            if (i.notePinned) {
+                listOfPinnedNotes.add(i)
+            }
         }
     }
+
 
 //    viewModel.listOfNotesLiveData.observe(activity) {
 //        for (note in listOfNotesFromDB) {

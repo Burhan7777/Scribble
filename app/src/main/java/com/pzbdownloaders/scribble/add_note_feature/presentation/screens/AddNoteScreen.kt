@@ -30,7 +30,7 @@ fun AddNoteScreen(
         mutableStateOf("")
     }
 
-    var notebookState = remember {
+    var notebookState = rememberSaveable {
         mutableStateOf("")
     }
 

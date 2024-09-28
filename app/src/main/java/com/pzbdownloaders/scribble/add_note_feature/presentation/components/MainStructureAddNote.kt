@@ -165,7 +165,7 @@ fun MainStructureAddNote(
                     timeStamp = System.currentTimeMillis()
                 )
                 viewModel.updateNote(updatedNote)
-              //  showSavedText.value = true
+                //  showSavedText.value = true
                 delay(5000L)
                 // Save every 10 seconds
             }
@@ -212,7 +212,7 @@ fun MainStructureAddNote(
             timeStamp = System.currentTimeMillis()
         )
         viewModel.updateNote(updatedNote)
-        navController.popBackStack()
+        navController.navigateUp()
     }
     Scaffold(
         topBar = {
@@ -256,7 +256,7 @@ fun MainStructureAddNote(
                         viewModel.updateNote(note2)
                         Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
                             .show()
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }

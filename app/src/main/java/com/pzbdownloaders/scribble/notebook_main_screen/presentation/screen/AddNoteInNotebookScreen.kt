@@ -3,6 +3,7 @@ package com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.NavHostController
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
@@ -14,19 +15,19 @@ fun AddNoteInNotebookScreen(
     viewModel: MainActivityViewModel,
     navHostController: NavHostController,
     activity: MainActivity,
-    notebookName:String
+    notebookName: String
 ) {
 
 
-    var title = remember {
+    var title = rememberSaveable {
         mutableStateOf("")
     }
 
-    var content = remember {
+    var content = rememberSaveable {
         mutableStateOf("")
     }
 
-    var notebookState = remember {
+    var notebookState = rememberSaveable {
         mutableStateOf("")
     }
 
@@ -40,7 +41,7 @@ fun AddNoteInNotebookScreen(
         navHostController,
         title = title,
         content = content,
-        viewModel= viewModel,
+        viewModel = viewModel,
         //note,
         notebookState = notebookState,
         activity = activity,

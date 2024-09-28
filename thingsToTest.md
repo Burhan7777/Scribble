@@ -26,3 +26,5 @@ THINGS TO TEST BEFORE LAUNCH
 23) delete all trash:
 24) Delete notebook:
 25) delete notebook and save notes:
+26) Pinned or unpinned note:
+27) Pinned note moved to locked still pinned or not:
