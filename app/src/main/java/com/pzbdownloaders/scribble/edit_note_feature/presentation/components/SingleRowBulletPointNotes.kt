@@ -51,6 +51,7 @@ fun SingleRoaBulletPointNotes(
     countBullet: MutableState<Int>,
     focusRequester: FocusRequester,
     focusRequesters: SnapshotStateList<FocusRequester>,
+    //isNewCheckBoxAdded: MutableState<Boolean>,
     onDelete: () -> Unit
 
 ) {
@@ -85,6 +86,7 @@ fun SingleRoaBulletPointNotes(
                     coroutine.launch {
                         // Delay for one frame to ensure the new item is created before requesting focus
                         kotlinx.coroutines.delay(100)
+                     //   isNewCheckBoxAdded.value = true
                         if (index < focusRequesters.size - 1) {
                             focusRequesters[index + 1].requestFocus()
                         }

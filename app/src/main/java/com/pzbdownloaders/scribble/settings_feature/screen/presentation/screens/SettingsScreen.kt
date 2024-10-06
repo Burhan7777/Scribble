@@ -11,15 +11,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Looks
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -80,9 +85,13 @@ fun SettingsScreen(
     var showUpdatePasswordDialogBox = rememberSaveable { mutableStateOf(false) }
 
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { navHostController.popBackStack() }) {
+            IconButton(onClick = { navHostController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIos,
                     contentDescription = "Back to main screen",
@@ -380,7 +389,7 @@ fun SettingsScreen(
                     fontFamily = FontFamily.fontFamilyRegular,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    color= androidx.compose.material.MaterialTheme.colors.onPrimary
+                    color = androidx.compose.material.MaterialTheme.colors.onPrimary
                 )
                 Box(modifier = Modifier.fillMaxWidth()) {
                     Icon(
@@ -505,6 +514,189 @@ fun SettingsScreen(
                 )
                 Text(
                     text = "Change Theme",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+                    navHostController.navigate(Screens.FeedbackScreen.route)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Feedback,
+                    contentDescription = "Feedback",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Feedback",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+                    navHostController.navigate(Screens.ReportBugScreen.route)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.BugReport,
+                    contentDescription = "Bug report",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Report a Bug",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.fontFamilyRegular,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Arrow Forward",
+                        tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                        modifier = Modifier
+                            .padding(top = 10.dp, end = 10.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+        }
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(10.dp)
+                .border(
+                    BorderStroke(1.dp, androidx.compose.material.MaterialTheme.colors.onPrimary),
+                    androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(10.dp),
+                        topEnd = CornerSize(10.dp),
+                        bottomStart = CornerSize(10.dp),
+                        bottomEnd = CornerSize(10.dp),
+                    )
+                )
+                .clickable {
+                    navHostController.navigate(Screens.PrivacyPolicy.route)
+                },
+            shape = MaterialTheme.shapes.medium.copy(
+                topStart = CornerSize(10.dp),
+                topEnd = CornerSize(10.dp),
+                bottomStart = CornerSize(10.dp),
+                bottomEnd = CornerSize(10.dp),
+            ),
+            elevation = CardDefaults.cardElevation(15.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+            )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.PrivacyTip,
+                    contentDescription = "Change theme",
+                    modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                )
+                Text(
+                    text = "Privacy Policy",
                     modifier = Modifier.padding(top = 12.dp, start = 10.dp),
                     fontSize = 18.sp,
                     fontFamily = FontFamily.fontFamilyRegular,

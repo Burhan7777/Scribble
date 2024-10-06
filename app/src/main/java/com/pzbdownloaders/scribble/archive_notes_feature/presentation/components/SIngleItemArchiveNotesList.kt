@@ -169,7 +169,7 @@ fun SingleItemArchiveNoteList(
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )
@@ -198,7 +198,7 @@ fun SingleItemArchiveNoteList(
                                         checkedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
                                         checkmarkColor = androidx.compose.material.MaterialTheme.colors.onSecondary,
                                         uncheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
-                                        disabledCheckedColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledCheckedColor = androidx.compose.material.MaterialTheme.colors.onPrimary
                                     ),
                                     enabled = false,
                                 )

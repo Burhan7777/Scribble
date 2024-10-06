@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (77/81) // MAIN - (44/46)
+FEATURES THAT NEED TO BE ADDED (78/82) // MAIN - (46/47)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -20,7 +20,7 @@ FEATURES THAT NEED TO BE ADDED (77/81) // MAIN - (44/46)
 17) Lock the whole app: DELAYED
 18) Bottom bar features like google keep(Main): DONE
 19) In-App product to buy product with one time payment: DELAYED
-20) Launch app on play-store before finishing the app for saving time at the end:
+20) Launch app on play-store before finishing the app for saving time at the end: DONE
 21) Change layout from columns to grid option: DONE
 22) Remove fall back to destructive migration and implement proper migration: DONE
 23) Animations in lazy-column when note is deleted:DELAYED
@@ -60,13 +60,13 @@ FEATURES THAT NEED TO BE ADDED (77/81) // MAIN - (44/46)
 57) Ad crashlytics(Main): DONE
 58) Add theme change in settings: DONE
 59) Test on light theme(Main): DONE
-60) Test on Tab - Make Adjustment for tab(Main):
+60) Test on Tab - Make Adjustment for tab(Main): DONE
 61) Make only Portrait(Main): DONE
 62) Long notes just like in keep in grid mode(Main): DELAYED
 63) Auto backup option(Main): DONE
 64) Discard changes in edit screen: DELAYED
 65) Undo and redo functionality: DELAYED
-66) Empty note is not to be saved(Main): DELAYED
+66) Empty note is not to be saved(Main): DONE
 67) Trash delete all notes(Main): DONE
 68) Long click select note in Trash: DELAYED
 69) Check internet connection while setting up password , changing password, forgot password(Main): DONE
@@ -81,4 +81,5 @@ FEATURES THAT NEED TO BE ADDED (77/81) // MAIN - (44/46)
 78) Trash bin crashes sometimes due to state issue(Main): DONE
 79) Delete all option has to be performed twice to make (Main): DELAYED
 80) Saving removes pinned note(Main): DONE
-81) Saving and saved text view(Main):
+81) Saving and saved text view(Main): CANCELLED
+82) Add remaining formatting tools in bottom formatting bar:

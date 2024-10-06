@@ -56,6 +56,7 @@ fun Notes(
     var listOfPinnedNotes = SnapshotStateList<Note>()
     viewModel.getAllNotes()
     viewModel.listOfNotesLiveData.observe(activity) {
+        listOfPinnedNotes.clear()
         listOfNotesFromDB = it.toMutableStateList()
         for (i in it) {
             if (i.notePinned) {

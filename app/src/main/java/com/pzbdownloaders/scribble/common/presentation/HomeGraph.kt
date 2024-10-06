@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.common.presentation
 
 import android.util.Log
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.MutableState
 import androidx.navigation.*
 import androidx.navigation.compose.composable
@@ -23,6 +24,9 @@ import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.bull
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.screen.checkboxscreen.CheckboxNoteBookMainScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.BackupAndRestoreScreen
 import com.pzbdownloaders.scribble.search_main_screen_feature.presentation.screens.SearchScreen
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.FeedbackScreen
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.PrivacyPolicy
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.ReportBugScreen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.screens.SettingsScreen
 import com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens.DeleteTrashScreen
 import com.pzbdownloaders.scribble.trash_bin_feature.presentation.screens.TrashBinScreen
@@ -48,7 +52,9 @@ fun NavGraphBuilder.homeGraph(
         composable(Screens.HomeScreen.route) {
             NotesScreen(navController, viewModel, activity, selectedItem, selectedNote)
         }
-        composable(Screens.AddNoteScreen.route) {
+        composable(
+            Screens.AddNoteScreen.route
+        ) {
             AddNoteScreen(navController, viewModel, activity)
         }
         composable(
@@ -197,7 +203,15 @@ fun NavGraphBuilder.homeGraph(
                 activity = activity
             )
         }
-
+        composable(Screens.PrivacyPolicy.route) {
+            PrivacyPolicy()
+        }
+        composable(Screens.FeedbackScreen.route) {
+            FeedbackScreen()
+        }
+        composable(Screens.ReportBugScreen.route) {
+            ReportBugScreen()
+        }
 
     }
 }

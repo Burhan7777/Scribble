@@ -935,14 +935,22 @@ fun pinOrUnpinNote(
     scope: CoroutineScope,
     navController: NavHostController
 ) {
-    viewModel.getNoteById(id)
-    var note = viewModel.getNoteById.value
-    var pinnedStatus = note.notePinned
-    var note1 = note.copy(notePinned = !pinnedStatus)
-    viewModel.updateNote(note1)
     scope.launch {
+        viewModel.getNoteById(id)
+        var note = viewModel.getNoteById.value
+        var pinnedStatus = note.notePinned
+        var note1 = note.copy(notePinned = !pinnedStatus)
+        viewModel.updateNote(note1)
         delay(200)
-        navController.navigateUp()
+        viewModel.getNoteById(id)
+        var note2 = viewModel.getNoteById.value
+        if (note2.notePinned == pinnedStatus) {
+            println("PINNED TRIGGERED")
+            pinOrUnpinNote(viewModel, id, scope, navController)
+        } else {
+            delay(200)
+            navController.navigateUp()
+        }
     }
 }
 

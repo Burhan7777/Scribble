@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -228,7 +230,11 @@ fun NoteContent(
                     cursorColor = MaterialTheme.colors.onPrimary,
                     textColor = MaterialTheme.colors.onPrimary,
                     focusedIndicatorColor = MaterialTheme.colors.primary,
-                    unfocusedIndicatorColor = MaterialTheme.colors.primary
+                    unfocusedIndicatorColor = MaterialTheme.colors.primary,
+                    selectionColors = TextSelectionColors(
+                        handleColor = MaterialTheme.colors.onPrimary,
+                        backgroundColor = Color.Gray
+                    )
                 ),
                 placeholder = {
                     Text(
@@ -271,6 +277,8 @@ fun NoteContent(
 
         val imeVisible = WindowInsets.isImeVisible
 
+        var isNewCheckboxAdded = remember { mutableStateOf(false) } //
+
         val lazyListState = rememberLazyListState()
         Column(
             modifier = Modifier
@@ -289,6 +297,7 @@ fun NoteContent(
                         count,
                         focusRequester,
                         focusRequesters,
+                        isNewCheckboxAdded,
                         onDelete = {
                             try {
                                 focusRequesters.removeAt(index)
@@ -301,13 +310,14 @@ fun NoteContent(
                 }
             }
         }
-//        LaunchedEffect(count.value) {
-//            if (listOfNotes.size > 1) {
-//                lazyListState.animateScrollToItem(listOfNotes.size - 1)
-//                focusRequesters.lastOrNull()
-//                    ?.requestFocus()  // Move focus to the last added checkbox
-//            }
-//        }
+        LaunchedEffect(count.value) {
+            if (listOfNotes.size > 1 && listOfNotes.last().value.isEmpty()) {
+                lazyListState.animateScrollToItem(listOfNotes.size - 1)
+                focusRequesters.lastOrNull()
+                    ?.requestFocus()
+                isNewCheckboxAdded.value = false// Move focus to the last added checkbox
+            }
+        }
 //        LaunchedEffect(focusRequesters, listOfNotes) {
 //            if (listOfNotes.isNotEmpty()) {
 //                // Delay focus request to ensure the UI is composed
@@ -377,13 +387,13 @@ fun NoteContent(
                 }
             }
         }
-//        LaunchedEffect(countBullet.value) {
-//            if (listOfBulletPointNotes.size > 1) {
-//                lazyListState.animateScrollToItem(listOfBulletPointNotes.size - 1)
-//                focusRequesters.lastOrNull()
-//                    ?.requestFocus()  // Move focus to the last added checkbox
-//            }
-//        }
+        LaunchedEffect(countBullet.value) {
+            if (listOfBulletPointNotes.size > 1 && listOfBulletPointNotes.last().value.isEmpty()) {
+                lazyListState.animateScrollToItem(listOfBulletPointNotes.size - 1)
+                focusRequesters.lastOrNull()
+                    ?.requestFocus()  // Move focus to the last added checkbox
+            }
+        }
 //        LaunchedEffect(focusRequesters, listOfBulletPointNotes) {
 //            if (listOfBulletPointNotes.isNotEmpty()) {
 //                // Delay focus request to ensure the UI is composed

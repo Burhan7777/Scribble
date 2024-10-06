@@ -23,6 +23,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
 
@@ -295,16 +297,16 @@ fun SignUpScreen(
                     viewModel.getResultFromSignUp.observe(activity) {
                         when (it) {
                             Constant.SUCCESS -> {
-                                Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT)
-                                    .show()
                                 navHostController.popBackStack()
                             }
 
                             Constant.FAILURE -> {
                                 signUpButtonClick = !signUpButtonClick
                                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                            }else ->{
-                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            }
+
+                            else -> {
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

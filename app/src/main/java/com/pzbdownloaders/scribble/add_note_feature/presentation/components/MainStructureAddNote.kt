@@ -203,16 +203,22 @@ fun MainStructureAddNote(
     }
 
     BackHandler {
-        val updatedNote = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            content = richTextState.value.toHtml(),
-            timeModified = System.currentTimeMillis(),
-            notebook = notebookState.value,
-            timeStamp = System.currentTimeMillis()
-        )
-        viewModel.updateNote(updatedNote)
-        navController.navigateUp()
+        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+            val updatedNote = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                timeStamp = System.currentTimeMillis()
+            )
+            viewModel.updateNote(updatedNote)
+            navController.navigateUp()
+        } else {
+            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
+            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+            navController.navigateUp()
+        }
     }
     Scaffold(
         topBar = {
@@ -224,7 +230,31 @@ fun MainStructureAddNote(
                 ),
                 title = { Text(text = "") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+                            var note2 = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                content = richTextState.value.toHtml(),
+                                archive = false,
+                                notebook = notebookState.value,
+                                timeStamp = System.currentTimeMillis(),
+                                deletedNote = false,
+                                locked = false,
+                                timeModified = System.currentTimeMillis()
+
+                            )
+                            viewModel.updateNote(note2)
+                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
+                    }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
                     }
                 },
@@ -239,24 +269,29 @@ fun MainStructureAddNote(
                         )
                     }
                     IconButton(onClick = {
-//                        viewModel.getNoteById(generatedNoteId.value.toInt())
-//                        var noteFromDb = viewModel.getNoteById
-                        var note2 = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            content = richTextState.value.toHtml(),
-                            archive = false,
-                            notebook = notebookState.value,
-                            timeStamp = System.currentTimeMillis(),
-                            deletedNote = false,
-                            locked = false,
-                            timeModified = System.currentTimeMillis()
+                        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+                            var note2 = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                content = richTextState.value.toHtml(),
+                                archive = false,
+                                notebook = notebookState.value,
+                                timeStamp = System.currentTimeMillis(),
+                                deletedNote = false,
+                                locked = false,
+                                timeModified = System.currentTimeMillis()
 
-                        )
-                        viewModel.updateNote(note2)
-                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.navigateUp()
+                            )
+                            viewModel.updateNote(note2)
+                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }

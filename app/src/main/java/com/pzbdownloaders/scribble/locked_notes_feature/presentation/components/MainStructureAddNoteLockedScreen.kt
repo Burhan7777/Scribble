@@ -41,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -134,7 +135,7 @@ fun MainStructureAddNoteLockedScreen(
     var isUnOrderedListActivated = remember { mutableStateOf(false) }
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
-    var generatedNoteId = remember { mutableStateOf<Long>(0) }
+    var generatedNoteId = rememberSaveable { mutableStateOf<Long>(0) }
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
 
@@ -256,17 +257,23 @@ fun MainStructureAddNoteLockedScreen(
     }
 
     BackHandler {
-        val updatedNote = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            content = richTextState.value.toHtml(),
-            timeModified = System.currentTimeMillis(),
-            notebook = Constant.NOT_CATEGORIZED,
-            timeStamp = System.currentTimeMillis(),
-            locked = true
-        )
-        viewModel.updateNote(updatedNote)
-        navController.popBackStack()
+        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+            val updatedNote = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                content = richTextState.value.toHtml(),
+                timeModified = System.currentTimeMillis(),
+                notebook = Constant.NOT_CATEGORIZED,
+                timeStamp = System.currentTimeMillis(),
+                locked = true
+            )
+            viewModel.updateNote(updatedNote)
+            navController.popBackStack()
+        } else {
+            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()
+            navController.navigateUp()
+        }
     }
     // WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
@@ -282,23 +289,29 @@ fun MainStructureAddNoteLockedScreen(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        viewModel.getNoteById(generatedNoteId.value.toInt())
-                        var noteFromDb = viewModel.getNoteById
-                        var note1 = noteFromDb.value.copy(
-                            title = title.value,
-                            content = richTextState.value.toHtml(),
-                            timeModified = System.currentTimeMillis(),
-                            notebook = notebookState.value,
-                            locked = true
+                        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+                            var note1 = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                content = richTextState.value.toHtml(),
+                                timeModified = System.currentTimeMillis(),
+                                notebook = notebookState.value,
+                                locked = true
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                        )
-                        viewModel.updateNote(note1)
-                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.popBackStack()
+                            )
+                            viewModel.updateNote(note1)
+                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Undo")
                     }
@@ -314,23 +327,29 @@ fun MainStructureAddNoteLockedScreen(
                         )
                     }
                     IconButton(onClick = {
-                        viewModel.getNoteById(generatedNoteId.value.toInt())
-                        var noteFromDb = viewModel.getNoteById
-                        var note1 = noteFromDb.value.copy(
-                            title = title.value,
-                            content = richTextState.value.toHtml(),
-                            timeModified = System.currentTimeMillis(),
-                            notebook = notebookState.value,
-                            locked = true
+                        if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
+                            var note1 = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                content = richTextState.value.toHtml(),
+                                timeModified = System.currentTimeMillis(),
+                                notebook = notebookState.value,
+                                locked = true
 //                listOfBulletPointNotes = convertedBulletPoints,
 //                listOfCheckedNotes = converted,
 //                listOfCheckedBoxes = mutableListOfCheckBoxes
 
-                        )
-                        viewModel.updateNote(note1)
-                        Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.popBackStack()
+                            )
+                            viewModel.updateNote(note1)
+                            Toast.makeText(context, "Note has been added", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.popBackStack()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }

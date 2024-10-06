@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
@@ -38,7 +39,7 @@ fun LockedNotes(
     activity: MainActivity,
     navHostController: NavHostController,
 
-) {
+    ) {
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
 
@@ -46,12 +47,16 @@ fun LockedNotes(
 //    val listOfNotes: SnapshotStateList<AddNote>? =
 //        viewModel.getArchivedNotes.observeAsState().value
 
-    viewModel.getAllNotes()
-    var listOfNotes = viewModel.listOfNotes
     var listOfPinnedNotes = SnapshotStateList<Note>()
-    for (i in listOfNotes) {
-        if (i.notePinned && i.locked) {
-            listOfPinnedNotes.add(i)
+    var listOfNotes = SnapshotStateList<Note>()
+    viewModel.getAllNotes()
+    viewModel.listOfNotesLiveData.observe(activity) {
+        listOfPinnedNotes.clear()
+        listOfNotes = it.toMutableStateList()
+        for (i in listOfNotes) {
+            if (i.notePinned && i.locked) {
+                listOfPinnedNotes.add(i)
+            }
         }
     }
 

@@ -48,8 +48,10 @@ fun Notes(
 
     var listOfNotes = remember { mutableStateListOf<Note>() }
     viewModel.getAllNotes()
-    listOfNotes = viewModel.listOfNotes
-    println("ARCHIVE:${listOfNotes?.size}")
+    viewModel.listOfNotesLiveData.observe(activity) {
+        listOfNotes = it.toMutableStateList()
+        println("ARCHIVE:${listOfNotes?.size}")
+    }
 
 
 //    if (listOfNotes == null) {

@@ -70,4 +70,7 @@ sealed class Screens(val route: String) {
     }
     object CheckBoxLockedNotesMainScreen:Screens("checkbox_locked_notes_main_screen")
     object BulletPointsLockedNotesMainScreen:Screens("bullet_points_locked_notes_main_screen")
+    object PrivacyPolicy:Screens("privacy_policy")
+    object FeedbackScreen:Screens("feedback_screen")
+    object ReportBugScreen:Screens("report_bug_screen")
 }

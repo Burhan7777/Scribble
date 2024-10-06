@@ -21,6 +21,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -37,7 +38,12 @@ import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 
 @Composable
-fun SingleItemNotebookList(note: Note, navHostController: NavHostController, title: String) {
+fun SingleItemNotebookList(
+    note: Note,
+    navHostController: NavHostController,
+    title: String,
+    showLockedNotes: MutableState<Boolean>
+) {
 
     var richTextState = rememberRichTextState()
     var contentText = richTextState.setHtml(note.content).annotatedString.text

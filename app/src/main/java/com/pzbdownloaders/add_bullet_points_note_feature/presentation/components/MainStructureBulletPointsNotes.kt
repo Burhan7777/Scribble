@@ -204,19 +204,26 @@ fun MainStructureBulletPointsNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebookState.value,
-                            listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                            .show()
-                        scope.launch {
-                            delay(200)
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebookState.value,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                                .show()
+                            scope.launch {
+                                delay(200)
+                                navController.navigateUp()
+                            }
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
                             navController.navigateUp()
                         }
 
@@ -243,19 +250,26 @@ fun MainStructureBulletPointsNotes(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebookState.value,
-                            listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                            .show()
-                        scope.launch {
-                            delay(200)
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebookState.value,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                                .show()
+                            scope.launch {
+                                delay(200)
+                                navController.navigateUp()
+                            }
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
                             navController.navigateUp()
                         }
 

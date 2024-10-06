@@ -122,13 +122,13 @@ fun MainStructureCheckBoxNote(
         // Schedule a task to run every 10 seconds
     }
 
-    //   println("LIST:${listOfCheckedNotes.size}")
-    LaunchedEffect(key1 = count.value) {
-        convertMutableStateIntoString(
-            listOfCheckedNotes,
-            mutableListConverted
-        )
-        delay(500)
+    if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+        LaunchedEffect(key1 = count.value) {
+            convertMutableStateIntoString(
+                listOfCheckedNotes,
+                mutableListConverted
+            )
+            delay(500)
 
 //        for (i in listOfCheckedNotes) {
 //            println("TEXT1:${i.value}")
@@ -138,18 +138,19 @@ fun MainStructureCheckBoxNote(
 //            println("TEXT2:${i}")
 //        }
 
-        mutableListConverted.removeAll { it == "" }
+            mutableListConverted.removeAll { it == "" }
 
-        var note1 = Note(
-            id = generatedNoteId.value.toInt(),
-            title = title.value,
-            timeModified = System.currentTimeMillis(),
-            timeStamp = System.currentTimeMillis(),
-            notebook = notebookState.value,
-            listOfCheckedNotes = mutableListConverted,
-            listOfCheckedBoxes = mutableListOfCheckBoxes,
-        )
-        viewModel.updateNote(note1)
+            var note1 = Note(
+                id = generatedNoteId.value.toInt(),
+                title = title.value,
+                timeModified = System.currentTimeMillis(),
+                timeStamp = System.currentTimeMillis(),
+                notebook = notebookState.value,
+                listOfCheckedNotes = mutableListConverted,
+                listOfCheckedBoxes = mutableListOfCheckBoxes,
+            )
+            viewModel.updateNote(note1)
+        }
     }
 
 //    LaunchedEffect(key1 = mutableListOfCheckboxTexts.size > 0) {
@@ -161,8 +162,8 @@ fun MainStructureCheckBoxNote(
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
             count.value++
-            delay(800)
-            navController.popBackStack()
+            delay(500)
+            navController.navigateUp()
         }
     }
 
@@ -214,17 +215,24 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebookState.value,
-                            listOfCheckedNotes = mutableListConverted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        navController.popBackStack()
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebookState.value,
+                                listOfCheckedNotes = mutableListConverted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -248,19 +256,25 @@ fun MainStructureCheckBoxNote(
                             listOfCheckedNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebookState.value,
-                            listOfCheckedNotes = mutableListConverted,
-                            listOfCheckedBoxes = mutableListOfCheckBoxes,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.popBackStack()
+
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebookState.value,
+                                listOfCheckedNotes = mutableListConverted,
+                                listOfCheckedBoxes = mutableListOfCheckBoxes,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
 
                     }) {
                         Icon(

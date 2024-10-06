@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.api.Distribution.BucketOptions.Linear
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
@@ -202,7 +204,11 @@ fun LoginScreen(
                     viewModel.getResultFromSignIn.observe(activity) {
                         when (it) {
                             Constant.SUCCESS -> {
-                                Toast.makeText(context, "Sign in successful", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "Sign in successful",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                                 val sharedPreferences = context.getSharedPreferences(
                                     Constant.SHARED_PREP_NAME,
@@ -219,7 +225,11 @@ fun LoginScreen(
 
                             Constant.FAILURE -> {
                                 loginButtonClick = !loginButtonClick
-                                Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    context,
+                                    "Authentication failed",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }
@@ -290,6 +300,22 @@ fun LoginScreen(
                 fontFamily = FontFamily.fontFamilyLight
             )
         }*/
+//        Box(modifier = Modifier.fillMaxWidth()) {
+//            androidx.compose.material3.TextButton(
+//                modifier = Modifier.align(Alignment.CenterEnd),
+//                onClick = {
+//
+//                }) {
+//                Text(
+//                    "Forgot Password?",
+//                    fontFamily = FontFamily.fontFamilyBold,
+//                    fontStyle = FontStyle.Italic,
+//                    color = MaterialTheme.colors.onPrimary,
+//                    fontSize = 12.sp,
+//                    textDecoration = TextDecoration.Underline,
+//
+//                    )
+//            }
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,

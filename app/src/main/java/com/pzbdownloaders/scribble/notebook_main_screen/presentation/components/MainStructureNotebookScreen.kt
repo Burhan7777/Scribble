@@ -15,6 +15,8 @@ import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material3.*
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,9 +27,14 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.lockTheNote
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.main_screen.presentation.components.AlertDialogBoxEnterPasswordToOpenLockedNotes
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes.DeleteAllNotesToo
 import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes.DeleteNotebookAlertBox
+import com.pzbdownloaders.scribble.notebook_main_screen.presentation.components.alertboxes.UnlockNotes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -54,6 +61,16 @@ fun MainStructureNotebookScreen(
     var showDeleteNotebookDialogBox = remember { mutableStateOf(false) }
 
     var showDeleteNotesTooDialogBox = remember { mutableStateOf(false) }
+
+    var showLockedNotes =
+        remember { mutableStateOf(false) } // THIS SHOWS LOCKED NOTES IN NOTEBOOKS WHEN UNLOCKED BY UNLOCKED BUTTON
+
+    var showUnlockDialogBox = rememberSaveable { mutableStateOf(false) }
+
+    var listOfLockedNotes =
+        remember { SnapshotStateList<Note>() } // CONSISTS OF LOCKED NOTES OF A PARTICULAR NOTEBOOK
+
+    val scope = rememberCoroutineScope()
 
 
 //    if (selectedItem.value == 0) selectedNote.value = 100000
@@ -188,140 +205,197 @@ fun MainStructureNotebookScreen(
 //        },
 //        drawerState = drawerState
 //    ) {
-        Scaffold(
-            modifier = Modifier.background(MaterialTheme.colors.primary),
-            topBar = {
-                TopAppBar(
-                    title = {
-                        androidx.compose.material.Text(
-                            text = title,
-                            fontFamily = FontFamily.fontFamilyRegular,
-                            color = MaterialTheme.colors.onPrimary
+    Scaffold(
+        modifier = Modifier.background(MaterialTheme.colors.primary),
+        topBar = {
+            TopAppBar(
+                title = {
+                    androidx.compose.material.Text(
+                        text = title,
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        if (showLockedNotes.value) {
+                            lockTheUnlockedNotesOfNotebook(
+                                listOfLockedNotes,
+                                viewModel,
+                                navHostController,
+                                scope
+                            )
+                        } else {
+                            navHostController.navigateUp()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Go Back to main screen",
+                            tint = MaterialTheme.colors.onPrimary
                         )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navHostController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Go Back to main screen",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
-
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colors.primary
-                    ),
-                    actions = {
-                        IconButton(onClick = {
-                            showDeleteNotesTooDialogBox.value = true
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "Delete Notebook",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
                     }
-                )
 
-            },
-            bottomBar = {
-                BottomAppBar {
-                    BottomAppBar() {
-                        IconButton(onClick = {
-                            navHostController.navigate(
-                                Screens.CheckboxNotebookMainScreen.checkboxNotebookMainScreenWithNotebook(
-                                    title
-                                )
-                            )
-                        }) {
-                            Icon(
-                                imageVector = Icons.Outlined.CheckBox,
-                                contentDescription = "CheckBox",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
-                        IconButton(onClick = {
-                            navHostController.navigate(
-                                Screens.BulletPointsNotebook.bulletPointsWithNotebook(
-                                    title
-                                )
-                            )
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.FormatListBulleted,
-                                contentDescription = "Bullet point list",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colors.primary
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        showDeleteNotesTooDialogBox.value = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete Notebook",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
                     }
                 }
-            },
-            floatingActionButtonPosition = FabPosition.End,
-            isFloatingActionButtonDocked = true,
-            floatingActionButton = {
-                FloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    onClick = {
+            )
+
+        },
+        bottomBar = {
+            BottomAppBar {
+                BottomAppBar() {
+                    IconButton(onClick = {
                         navHostController.navigate(
-                            Screens.AddNoteInNotebookScreen.addNoteBookWIthName(
+                            Screens.CheckboxNotebookMainScreen.checkboxNotebookMainScreenWithNotebook(
                                 title
                             )
                         )
-                    },
-                    shape = MaterialTheme.shapes.medium.copy(
-                        topStart = CornerSize(15.dp),
-                        topEnd = CornerSize(15.dp),
-                        bottomStart = CornerSize(15.dp),
-                        bottomEnd = CornerSize(15.dp),
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        tint = MaterialTheme.colors.onPrimary,
-                        contentDescription = "Add Note"
-                    )
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.CheckBox,
+                            contentDescription = "CheckBox",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
+                    IconButton(onClick = {
+                        navHostController.navigate(
+                            Screens.BulletPointsNotebook.bulletPointsWithNotebook(
+                                title
+                            )
+                        )
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatListBulleted,
+                            contentDescription = "Bullet point list",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                 }
-            },
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        isFloatingActionButtonDocked = true,
+        floatingActionButton = {
+            FloatingActionButton(
+                backgroundColor = MaterialTheme.colors.primaryVariant,
+                onClick = {
+                    navHostController.navigate(
+                        Screens.AddNoteInNotebookScreen.addNoteBookWIthName(
+                            title
+                        )
+                    )
+                },
+                shape = MaterialTheme.shapes.medium.copy(
+                    topStart = CornerSize(15.dp),
+                    topEnd = CornerSize(15.dp),
+                    bottomStart = CornerSize(15.dp),
+                    bottomEnd = CornerSize(15.dp),
+                )
             ) {
-                //   TopSearchBarNotebook(navHostController, drawerState, viewModel)
-                if (showDialogToAccessLockedNotes.value) {
-                    AlertDialogBoxEnterPasswordToOpenLockedNotes(  // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
-                        viewModel = viewModel,
-                        activity = activity,
-                        navHostController = navHostController
-                    ) {
-                        showDialogToAccessLockedNotes.value = false
-                    }
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    tint = MaterialTheme.colors.onPrimary,
+                    contentDescription = "Add Note"
+                )
+            }
+        },
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            //   TopSearchBarNotebook(navHostController, drawerState, viewModel)
+            if (showDialogToAccessLockedNotes.value) {
+                AlertDialogBoxEnterPasswordToOpenLockedNotes(  // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
+                    viewModel = viewModel,
+                    activity = activity,
+                    navHostController = navHostController
+                ) {
+                    showDialogToAccessLockedNotes.value = false
                 }
-                if (showDeleteNotebookDialogBox.value) {
-                    DeleteNotebookAlertBox(
-                        viewModel = viewModel,
-                        title,
-                        navHostController,
-                        activity
-                    ) {
-                        showDeleteNotebookDialogBox.value = false
-                    }
+            }
+            if (showDeleteNotebookDialogBox.value) {
+                DeleteNotebookAlertBox(
+                    viewModel = viewModel,
+                    title,
+                    navHostController,
+                    activity
+                ) {
+                    showDeleteNotebookDialogBox.value = false
                 }
-                if (showDeleteNotesTooDialogBox.value) {
-                    DeleteAllNotesToo(
-                        viewModel = viewModel,
-                        activity = activity,
-                        navHostController = navHostController,
-                        name = title,
-                        showDeleteNotebookDialogBox = showDeleteNotebookDialogBox
-                    ) {
-                        showDeleteNotesTooDialogBox.value = false
-                    }
+            }
+            if (showDeleteNotesTooDialogBox.value) {
+                DeleteAllNotesToo(
+                    viewModel = viewModel,
+                    activity = activity,
+                    navHostController = navHostController,
+                    name = title,
+                    showDeleteNotebookDialogBox = showDeleteNotebookDialogBox
+                ) {
+                    showDeleteNotesTooDialogBox.value = false
                 }
-                NotesNotebook(viewModel, activity, navHostController, title)
+            }
+            if (showUnlockDialogBox.value) {
+                UnlockNotes(activity, showLockedNotes, listOfLockedNotes, viewModel) {
+                    showUnlockDialogBox.value = false
+                }
+            }
+            NotesNotebook(
+                viewModel,
+                activity,
+                navHostController,
+                title,
+                showLockedNotes,
+                showUnlockDialogBox,
+                listOfLockedNotes
+            )
+        }
+    }
+}
+
+fun lockTheUnlockedNotesOfNotebook(
+    listOfLockedNotes: SnapshotStateList<Note>,
+    viewModel: MainActivityViewModel,
+    navHostController: NavHostController,
+    scope: CoroutineScope,
+) {
+    scope.launch {
+        for (i in listOfLockedNotes) {
+            viewModel.getNoteById(i.id)
+            var note = viewModel.getNoteById.value
+            var note1 = note.copy(
+                locked = true
+            )
+            viewModel.updateNote(note1)
+            delay(200)
+            viewModel.getNoteById(i.id)
+            var note2 = viewModel.getNoteById.value
+            if (!note2.locked) {
+                println("LOCKED TRIGGERED")
+                lockTheUnlockedNotesOfNotebook(
+                    listOfLockedNotes,
+                    viewModel,
+                    navHostController,
+                    scope
+                )
+            } else {
+                delay(300)
+                navHostController.navigateUp()
             }
         }
     }
+}

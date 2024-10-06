@@ -27,6 +27,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -42,6 +43,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.trash_bin_feature.presentation.components.AlertBoxes.DeleteAllTrashNotes
 import kotlinx.coroutines.launch
 
@@ -69,14 +71,15 @@ fun MainStructureTrashBinScreen(
 
     var listOfTrashNotes = remember { mutableStateOf<ArrayList<Int>>(arrayListOf()) }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getAllNotes()
-    }
 
-    var allNotes = mutableStateOf(viewModel.listOfNotes)
-    for (i in allNotes.value) {
-        if (i.deletedNote) {
-            listOfTrashNotes.value.add(i.id)
+    viewModel.getAllNotes()
+    var allNotes = mutableStateOf(mutableStateListOf<Note>())
+    viewModel.listOfNotesLiveData.observe(activity) {
+        allNotes.value = it.toMutableStateList()
+        for (i in allNotes.value) {
+            if (i.deletedNote) {
+                listOfTrashNotes.value.add(i.id)
+            }
         }
     }
 
