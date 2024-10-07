@@ -157,6 +157,12 @@ class MainActivityViewModel @Inject constructor(
 
     var generatedNoteId = MutableLiveData<Long>()
 
+    var listOfLockedNotebooksNote =
+        mutableStateListOf<Note>() // THIS IS STORED IN VIEWMODEL BECAUSE AFTER OPENING THE NOTE AND MOVING BACK IT WILL BE EMPTY
+
+    var showLockedNotes =
+        mutableStateOf(false)
+
     /*  var getListOfNotesToShow = mutableListOf<AddNote>()
           private set
   */

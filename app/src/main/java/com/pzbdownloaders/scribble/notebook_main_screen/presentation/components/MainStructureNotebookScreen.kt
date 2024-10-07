@@ -1,6 +1,7 @@
 package com.pzbdownloaders.scribble.notebook_main_screen.presentation.components
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -62,13 +63,12 @@ fun MainStructureNotebookScreen(
 
     var showDeleteNotesTooDialogBox = remember { mutableStateOf(false) }
 
-    var showLockedNotes =
-        remember { mutableStateOf(false) } // THIS SHOWS LOCKED NOTES IN NOTEBOOKS WHEN UNLOCKED BY UNLOCKED BUTTON
+    // THIS SHOWS LOCKED NOTES IN NOTEBOOKS WHEN UNLOCKED BY UNLOCKED BUTTON
 
     var showUnlockDialogBox = rememberSaveable { mutableStateOf(false) }
 
-    var listOfLockedNotes =
-        remember { SnapshotStateList<Note>() } // CONSISTS OF LOCKED NOTES OF A PARTICULAR NOTEBOOK
+//    var listOfLockedNotes =
+//        remember { SnapshotStateList<Note>() } // CONSISTS OF LOCKED NOTES OF A PARTICULAR NOTEBOOK
 
     val scope = rememberCoroutineScope()
 
@@ -218,16 +218,9 @@ fun MainStructureNotebookScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        if (showLockedNotes.value) {
-                            lockTheUnlockedNotesOfNotebook(
-                                listOfLockedNotes,
-                                viewModel,
-                                navHostController,
-                                scope
-                            )
-                        } else {
-                            navHostController.navigateUp()
-                        }
+                        viewModel.showLockedNotes.value = false
+                        viewModel.listOfLockedNotebooksNote.clear()
+                        navHostController.navigateUp()
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -318,6 +311,11 @@ fun MainStructureNotebookScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
+            BackHandler {
+                viewModel.listOfLockedNotebooksNote.clear()
+                viewModel.showLockedNotes.value = false
+                navHostController.navigateUp()
+            }
             //   TopSearchBarNotebook(navHostController, drawerState, viewModel)
             if (showDialogToAccessLockedNotes.value) {
                 AlertDialogBoxEnterPasswordToOpenLockedNotes(  // FILE IN MAIN SCREEN -> PRESENTATION-> COMPONENTS
@@ -350,7 +348,10 @@ fun MainStructureNotebookScreen(
                 }
             }
             if (showUnlockDialogBox.value) {
-                UnlockNotes(activity, showLockedNotes, listOfLockedNotes, viewModel) {
+                UnlockNotes(
+                    activity,
+                    viewModel
+                ) {
                     showUnlockDialogBox.value = false
                 }
             }
@@ -359,9 +360,7 @@ fun MainStructureNotebookScreen(
                 activity,
                 navHostController,
                 title,
-                showLockedNotes,
                 showUnlockDialogBox,
-                listOfLockedNotes
             )
         }
     }

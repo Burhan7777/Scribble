@@ -39,8 +39,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun UnlockNotes(
     activity: MainActivity,
-    showNotes: MutableState<Boolean>,
-    listOfLockedNotes: SnapshotStateList<Note>,
     viewModel: MainActivityViewModel,
     onDismiss: () -> Unit
 ) {
@@ -107,15 +105,17 @@ fun UnlockNotes(
                     val result = getPasswordFromFirebase()
                     result.observe(activity) {
                         if (it == enteredPassword.value.trim()) {
-                            unlockTheNote(
-                                viewModel = viewModel,
-                                listOfLockedNotes,
-                                scope,
-                                context,
-                                showNotes,
-                                onDismiss,
-                                listOfBooleans
-                            )
+//                            unlockTheNote(
+//                                viewModel = viewModel,
+//                                listOfLockedNotes,
+//                                scope,
+//                                context,
+//                                showNotes,
+//                                onDismiss,
+//                                listOfBooleans
+//                            )
+                            viewModel.showLockedNotes.value = true
+                            onDismiss()
 
                         } else if (it == Constant.FAILURE) {
                             Toast.makeText(
@@ -164,43 +164,43 @@ fun UnlockNotes(
     )
 }
 
-fun unlockTheNote(
-    viewModel: MainActivityViewModel,
-    listOfLockedNotes: SnapshotStateList<Note>,
-    scope: CoroutineScope,
-    context: Context,
-    showLockedNotes: MutableState<Boolean>,
-    onDismiss: () -> Unit,
-    listOfBooleans: SnapshotStateList<Boolean>
-) {
-    scope.launch {
-        for (i in listOfLockedNotes) {
-            println("TITLE:${i.title}")
-            viewModel.getNoteById(i.id)
-            var note = viewModel.getNoteById.value
-            var note1 = note.copy(
-                locked = false
-            )
-
-            viewModel.updateNote(note1)
-            delay(300)
-            viewModel.getNoteById(i.id)
-            var note2 = viewModel.getNoteById.value
-            if (note2.locked) {
-                showLockedNotes.value = false
-                println("UNLOCKED TRIGGERED")
-                unlockTheNote(
-                    viewModel,
-                    listOfLockedNotes,
-                    scope,
-                    context,
-                    showLockedNotes,
-                    onDismiss,
-                    listOfBooleans
-                )
-            }
-        }
-        showLockedNotes.value = true
-        onDismiss()
-    }
-}
+//fun unlockTheNote(
+//    viewModel: MainActivityViewModel,
+//    listOfLockedNotes: SnapshotStateList<Note>,
+//    scope: CoroutineScope,
+//    context: Context,
+//    showLockedNotes: MutableState<Boolean>,
+//    onDismiss: () -> Unit,
+//    listOfBooleans: SnapshotStateList<Boolean>
+//) {
+//    scope.launch {
+//        for (i in listOfLockedNotes) {
+//            println("TITLE:${i.title}")
+//            viewModel.getNoteById(i.id)
+//            var note = viewModel.getNoteById.value
+//            var note1 = note.copy(
+//                locked = false
+//            )
+//
+//            viewModel.updateNote(note1)
+//            delay(300)
+//            viewModel.getNoteById(i.id)
+//            var note2 = viewModel.getNoteById.value
+//            if (note2.locked) {
+//                showLockedNotes.value = false
+//                println("UNLOCKED TRIGGERED")
+//                unlockTheNote(
+//                    viewModel,
+//                    listOfLockedNotes,
+//                    scope,
+//                    context,
+//                    showLockedNotes,
+//                    onDismiss,
+//                    listOfBooleans
+//                )
+//            }
+//        }
+//        showLockedNotes.value = true
+//        onDismiss()
+//    }
+//}

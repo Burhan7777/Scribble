@@ -40,9 +40,7 @@ fun NotesNotebook(
     activity: MainActivity,
     navHostController: NavHostController,
     title: String,
-    showLockedNotes: MutableState<Boolean>,
     showUnlockDialogBox: MutableState<Boolean>,
-    lockedNotes: SnapshotStateList<Note>
 ) {
 
     val fontFamilyExtraLight = Font(R.font.lufgaextralight).toFontFamily()
@@ -57,7 +55,7 @@ fun NotesNotebook(
     var listOfPinnedNotes = ArrayList<Note>()
 
     viewModel.listOfNotesByNotebookLiveData.observe(activity) {
-        lockedNotes.clear()
+
         listOfPinnedNotes.clear()
         listOfNotesBooks = it.toMutableStateList()
         for (i in it) {
@@ -65,18 +63,16 @@ fun NotesNotebook(
                 listOfPinnedNotes.add(i)
             }
         }
-        for (i in it) {
-            if (i.notebook == title && i.locked) {
-                lockedNotes.add(i)
+        if (viewModel.listOfLockedNotebooksNote.isEmpty()) {
+            // viewModel.listlockedNotes.clear()
+            for (i in it) {
+                if (i.notebook == title && i.locked) {
+                    viewModel.listOfLockedNotebooksNote.add(i)
+                }
             }
         }
     }
 
-    if (showLockedNotes.value) {
-        for (i in lockedNotes) {
-            listOfNotesBooks.add(i)
-        }
-    }
 
     if (viewModel.showGridOrLinearNotes.value) {
         LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(160.dp)) {
@@ -114,7 +110,7 @@ fun NotesNotebook(
                     note = note,
                     navHostController = navHostController,
                     title,
-                    showLockedNotes
+                    viewModel.showLockedNotes
                 )
             }
             item(span = StaggeredGridItemSpan.FullLine) {
@@ -128,7 +124,58 @@ fun NotesNotebook(
             items(
                 listOfNotesBooks ?: emptyList()
             ) { note ->
-                SingleItemNotebookList(note = note, navHostController, title, showLockedNotes)
+                SingleItemNotebookList(
+                    note = note,
+                    navHostController,
+                    title,
+                    viewModel.showLockedNotes
+                )
+            }
+            if (!viewModel.showLockedNotes.value && viewModel.listOfLockedNotebooksNote.isNotEmpty()) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center),
+
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+
+                        ) {
+                            Text(
+                                if (viewModel.listOfLockedNotebooksNote.size == 1) "1 locked note" else "${viewModel.listOfLockedNotebooksNote.size} locked notes",
+                                fontFamily = FontFamily.fontFamilyRegular,
+                                fontSize = 15.sp,
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                            TextButton(onClick = {
+                                showUnlockDialogBox.value = true
+                            }) {
+                                Text(
+                                    "Show",
+                                    fontFamily = FontFamily.fontFamilyBold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 15.sp,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                items(viewModel.listOfLockedNotebooksNote) { note ->
+                    SingleItemUnlockNotebookList(
+                        note,
+                        navHostController,
+                        title,
+                        viewModel.showLockedNotes
+                    )
+                }
             }
         }
     } else {
@@ -166,7 +213,7 @@ fun NotesNotebook(
                     note = note,
                     navHostController = navHostController,
                     title,
-                    showLockedNotes
+                    viewModel.showLockedNotes
                 )
             }
             item {
@@ -180,45 +227,59 @@ fun NotesNotebook(
             items(
                 listOfNotesBooks ?: emptyList()
             ) { note ->
-                SingleItemNotebookList(note = note, navHostController, title, showLockedNotes)
+                SingleItemNotebookList(
+                    note = note,
+                    navHostController,
+                    title,
+                    viewModel.showLockedNotes
+                )
             }
-//            item {
-//                if (lockedNotes.size > 0) {
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                    ) {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                                .align(Alignment.Center),
-//
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            horizontalArrangement = Arrangement.Center
-//
-//                        ) {
-//                            Text(
-//                                "${lockedNotes.size} locked notes",
-//                                fontFamily = FontFamily.fontFamilyRegular,
-//                                fontSize = 15.sp,
-//                                color = MaterialTheme.colors.onPrimary
-//                            )
-//                            TextButton(onClick = {
-//                                showUnlockDialogBox.value = true
-//                            }) {
-//                                Text(
-//                                    "Unlock",
-//                                    fontFamily = FontFamily.fontFamilyBold,
-//                                    fontStyle = FontStyle.Italic,
-//                                    fontSize = 15.sp,
-//                                    color = MaterialTheme.colors.onPrimary,
-//                                    textDecoration = TextDecoration.Underline
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+            if (!viewModel.showLockedNotes.value && viewModel.listOfLockedNotebooksNote.isNotEmpty()) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .align(Alignment.Center),
+
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+
+                        ) {
+                            Text(
+                                if (viewModel.listOfLockedNotebooksNote.size == 1) "1 locked note" else "${viewModel.listOfLockedNotebooksNote.size} locked notes",
+                                fontFamily = FontFamily.fontFamilyRegular,
+                                fontSize = 15.sp,
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                            TextButton(onClick = {
+                                showUnlockDialogBox.value = true
+                            }) {
+                                Text(
+                                    "Show",
+                                    fontFamily = FontFamily.fontFamilyBold,
+                                    fontStyle = FontStyle.Italic,
+                                    fontSize = 15.sp,
+                                    color = MaterialTheme.colors.onPrimary,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                items(viewModel.listOfLockedNotebooksNote) { note ->
+                    SingleItemUnlockNotebookList(
+                        note,
+                        navHostController,
+                        title,
+                        viewModel.showLockedNotes
+                    )
+                }
+            }
         }
     }
 }
