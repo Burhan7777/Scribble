@@ -207,18 +207,25 @@ fun MainStructureBulletPointsNotebook(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebook,
-                            listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.popBackStack()
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebook,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -242,18 +249,25 @@ fun MainStructureBulletPointsNotebook(
                             mutableListOfBulletPointsNotes,
                             mutableListConverted
                         )
-                        val note = Note(
-                            id = generatedNoteId.value.toInt(),
-                            title = title.value,
-                            notebook = notebook,
-                            listOfBulletPointNotes = mutableListConverted,
-                            timeStamp = System.currentTimeMillis(),
-                            timeModified = System.currentTimeMillis()
-                        )
-                        viewModel.updateNote(note)
-                        Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.popBackStack()
+                        if (title.value.isNotEmpty() || (mutableListConverted.size != 1 || mutableListConverted[0].isNotEmpty())) {
+                            val note = Note(
+                                id = generatedNoteId.value.toInt(),
+                                title = title.value,
+                                notebook = notebook,
+                                listOfBulletPointNotes = mutableListConverted,
+                                timeStamp = System.currentTimeMillis(),
+                                timeModified = System.currentTimeMillis()
+                            )
+                            viewModel.updateNote(note)
+                            Toast.makeText(activity, "Note has been saved", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        } else {
+                            viewModel.deleteNoteById(generatedNoteId.value.toInt())
+                            Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigateUp()
+                        }
 
                     }) {
                         Icon(
