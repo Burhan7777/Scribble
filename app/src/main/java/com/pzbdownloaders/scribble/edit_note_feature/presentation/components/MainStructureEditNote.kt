@@ -741,7 +741,8 @@ fun MainStructureEditNote(
                         isUnderlineActivated = isUnderlineActivated,
                         isItalicActivated = isItalicActivated,
                         isOrderedListActivated = isOrderedListActivated,
-                        isUnOrderedListActivated = isUnOrderedListActivated
+                        isUnOrderedListActivated = isUnOrderedListActivated,
+                        mutableStateOf(false)
                     )
                 }
             }

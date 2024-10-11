@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -33,6 +34,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -138,7 +140,11 @@ fun SingleRowCheckBoxNotes(
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary
+                cursorColor = MaterialTheme.colors.onPrimary,
+                selectionColors = TextSelectionColors(
+                    handleColor = MaterialTheme.colors.onPrimary,
+                    backgroundColor = Color.Gray
+                )
             ),
             textStyle = LocalTextStyle.current.copy(
                 fontFamily = FontFamily.fontFamilyRegular

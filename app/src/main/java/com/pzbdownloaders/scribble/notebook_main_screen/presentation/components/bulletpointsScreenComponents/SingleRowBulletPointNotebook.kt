@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
@@ -87,7 +88,11 @@ fun SingleRowBulletPointNotebook(
                 unfocusedTextColor = MaterialTheme.colors.onPrimary,
                 unfocusedIndicatorColor = MaterialTheme.colors.primary,
                 focusedIndicatorColor = MaterialTheme.colors.primary,
-                cursorColor = MaterialTheme.colors.onPrimary
+                cursorColor = MaterialTheme.colors.onPrimary,
+                selectionColors = TextSelectionColors(
+                    handleColor = MaterialTheme.colors.onPrimary,
+                    backgroundColor = Color.Gray
+                )
             ),
             textStyle = LocalTextStyle.current.copy(
                 fontFamily = FontFamily.fontFamilyRegular

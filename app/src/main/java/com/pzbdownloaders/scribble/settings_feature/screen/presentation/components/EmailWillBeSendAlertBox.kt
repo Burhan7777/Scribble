@@ -36,7 +36,6 @@ import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 @Composable
 fun EmailWillBeSendAlertBox(

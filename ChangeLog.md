@@ -1,5 +1,12 @@
 -------------------------- CHANGE LOG------------------------
 
+
+v.1.0.0 - beta
+--------------------------------
+1) Locked notes can be unlocked from notebooks.
+2) Empty note discarded feature add.
+
+
 v 0.0.9 ALPHA
 ----------------------------
 1) About screen added.

@@ -2,6 +2,8 @@ package com.pzbdownloaders.scribble.main_screen.presentation.components
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +24,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -33,6 +36,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.main_screen.domain.usecase.cameraPermissionHandle
 import kotlinx.coroutines.launch
 
 
@@ -57,11 +61,22 @@ fun MainStructureMainScreen(
 
     var showOrderDialogBox = remember { mutableStateOf(false) }
 
+    var startCamera = remember { mutableStateOf(false) }
 
 
+    var launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
 
-
-
+        } else {
+            Toast.makeText(
+                activity,
+                "This permission is needed to scan the document",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 
 
@@ -270,6 +285,28 @@ fun MainStructureMainScreen(
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
+//                        IconButton(
+//                            onClick = {
+//                                var result = cameraPermissionHandle(activity)
+//                                if (result == "true") {
+//                                    startCamera.value = true
+//                                } else if (result == "Rationale shown") {
+//                                    Toast.makeText(
+//                                        activity,
+//                                        "We need this permission to scan the document",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else if (result == "false") {
+//                                    launcher.launch(android.Manifest.permission.CAMERA)
+//                                }
+//                            }
+//                        ) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Scanner,
+//                                contentDescription = "Scanner",
+//                                tint = MaterialTheme.colors.onPrimary
+//                            )
+//                        }
                     }
                 }
             },
@@ -323,6 +360,9 @@ fun MainStructureMainScreen(
                     SortNotesAlertBox(viewModel = viewModel, activity = activity) {
                         showOrderDialogBox.value = false
                     }
+                }
+                if(startCamera.value){
+                  //  CameraScreen()
                 }
                 Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)
             }

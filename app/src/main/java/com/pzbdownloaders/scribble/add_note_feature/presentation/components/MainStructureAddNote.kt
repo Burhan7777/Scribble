@@ -21,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -86,10 +87,13 @@ fun MainStructureAddNote(
     var isItalicActivated = remember { mutableStateOf(false) }
     var isOrderedListActivated = remember { mutableStateOf(false) }
     var isUnOrderedListActivated = remember { mutableStateOf(false) }
+    var isToggleSpanActivated = remember { mutableStateOf(false) }
     var showFontSize = remember { mutableStateOf(false) }
     var fontSize = remember { mutableStateOf("20") }
 
     if (richTextState.value.annotatedString.text == "") fontSize.value = "20"
+
+    richTextState.value.config.codeSpanBackgroundColor = Color.White
 
 
 //    DisposableEffect(Unit) {
@@ -361,7 +365,8 @@ fun MainStructureAddNote(
                         isUnderlineActivated = isUnderlineActivated,
                         isItalicActivated = isItalicActivated,
                         isOrderedListActivated = isOrderedListActivated,
-                        isUnOrderedListActivated = isUnOrderedListActivated
+                        isUnOrderedListActivated = isUnOrderedListActivated,
+                        isToggleSpanActivated = isToggleSpanActivated
                     )
                 }
             }

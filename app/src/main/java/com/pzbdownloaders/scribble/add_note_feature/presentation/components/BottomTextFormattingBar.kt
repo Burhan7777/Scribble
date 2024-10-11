@@ -19,6 +19,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.FormatAlignJustify
 import androidx.compose.material.icons.filled.FormatAlignLeft
@@ -37,6 +38,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -58,8 +60,10 @@ fun BottomTextFormattingBar(
     isItalicActivated: MutableState<Boolean>,
     isOrderedListActivated: MutableState<Boolean>,
     isUnOrderedListActivated: MutableState<Boolean>,
+    isToggleSpanActivated: MutableState<Boolean>
 ) {
     Column(modifier = Modifier.imePadding()) {
+
         if (showFontSize.value) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -248,6 +252,56 @@ fun BottomTextFormattingBar(
                     tint = if (isUnOrderedListActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
                 )
             }
+//            IconButton(
+//                onClick = {
+//                    richTextState.value.toggleCodeSpan()
+//                    isToggleSpanActivated.value = !isToggleSpanActivated.value
+//                },
+//                modifier = Modifier
+//                    .clip(
+//                        if (isToggleSpanActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
+//                            all = CornerSize(0.dp)
+//                        )
+//                    )
+//                    .background(if (isToggleSpanActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
+//                    .border(
+//                        width = 0.dp,
+//                        color = MaterialTheme.colors.primaryVariant,
+//                        shape = CircleShape
+//                    )
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.Code,
+//                    contentDescription = "Change text format",
+//                    tint = if (isToggleSpanActivated.value) MaterialTheme.colors.onSecondary else MaterialTheme.colors.onPrimary,
+//                )
+//            }
+
+            // ADD LINK
+
+//            IconButton(
+//                onClick = {
+//                    richTextState.value.addLink(text = "Google", url = "https://www/google.com/")
+//                },
+////                modifier = Modifier
+////                    .clip(
+////                        if (isUnOrderedListActivated.value) CircleShape else MaterialTheme.shapes.medium.copy(
+////                            all = CornerSize(0.dp)
+////                        )
+////                    )
+////                    .background(if (isUnOrderedListActivated.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.primaryVariant)
+////                    .border(
+////                        width = 0.dp,
+////                        color = MaterialTheme.colors.primaryVariant,
+////                        shape = CircleShape
+////                    )
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.FormatListBulleted,
+//                    contentDescription = "Change text format",
+//                    tint = MaterialTheme.colors.onPrimary,
+//                )
+//            }
             IconButton(onClick = {
                 richTextState.value.toggleParagraphStyle(
                     ParagraphStyle(
