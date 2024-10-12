@@ -34,7 +34,7 @@ fun AboutUsScreen(
         Image(painter = painterResource(id = R.drawable.ic_launcher), contentDescription = "logo")
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "v-0.0.9 ALPHA",
+            text = "v-1.0.0 - BETA",
             fontSize = 20.sp,
             fontFamily = FontFamily.fontFamilyBold,
             color = MaterialTheme.colors.onPrimary

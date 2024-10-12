@@ -1,7 +1,7 @@
 BUGS AND FEATURES BEFORE LAUNCH
 -------------------------------------------------------------
 
-1) Search sometimes returns same two notes:
+1) Search sometimes returns same two notes: DELAYED
 2) Feedback and report bugs section in settings: DONE
 3) Forget password in login screen:
 4) Privacy Policy:DONE
@@ -14,4 +14,4 @@ BUGS AND FEATURES BEFORE LAUNCH
 11) Add code bar to bottom formatting bar: CANCELLED
 12) Add undo and redo to button formatting bar:
 13) Add scanning of docs: DELAYED
-14) Remove Log In and shift it inside of app:
+14) Remove Log In and shift it inside of app: DONE

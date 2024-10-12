@@ -44,6 +44,7 @@ import com.pzbdownloaders.scribble.R
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
 import com.pzbdownloaders.scribble.login_and_signup_feature.presentation.components.AlertBoxWhyLogIn
+import com.pzbdownloaders.scribble.login_and_signup_feature.presentation.components.ForgotPasswordAlertBox
 import googleSignInButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,6 +85,8 @@ fun LoginScreen(
         var loginButtonClick by remember {
             mutableStateOf(false)
         }
+
+        var showForgotPasswordAlertBox = remember { mutableStateOf(false) }
 
 
         var context = LocalContext.current
@@ -308,22 +311,23 @@ fun LoginScreen(
                 fontFamily = FontFamily.fontFamilyLight
             )
         }*/
-//        Box(modifier = Modifier.fillMaxWidth()) {
-//            androidx.compose.material3.TextButton(
-//                modifier = Modifier.align(Alignment.CenterEnd),
-//                onClick = {
-//
-//                }) {
-//                Text(
-//                    "Forgot Password?",
-//                    fontFamily = FontFamily.fontFamilyBold,
-//                    fontStyle = FontStyle.Italic,
-//                    color = MaterialTheme.colors.onPrimary,
-//                    fontSize = 12.sp,
-//                    textDecoration = TextDecoration.Underline,
-//
-//                    )
-//            }
+        Box(modifier = Modifier.fillMaxWidth()) {
+            androidx.compose.material3.TextButton(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                onClick = {
+                    showForgotPasswordAlertBox.value = true
+                }) {
+                Text(
+                    "Forgot Password?",
+                    fontFamily = FontFamily.fontFamilyBold,
+                    fontStyle = FontStyle.Italic,
+                    color = MaterialTheme.colors.onPrimary,
+                    fontSize = 12.sp,
+                    textDecoration = TextDecoration.Underline,
+
+                    )
+            }
+        }
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -414,6 +418,11 @@ fun LoginScreen(
                             .height(15.dp),
                         color = MaterialTheme.colors.onSecondary
                     )
+                }
+                if(showForgotPasswordAlertBox.value){
+                    ForgotPasswordAlertBox {
+                        showForgotPasswordAlertBox.value = false
+                    }
                 }
             }
         }
