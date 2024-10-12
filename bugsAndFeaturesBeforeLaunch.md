@@ -14,3 +14,4 @@ BUGS AND FEATURES BEFORE LAUNCH
 11) Add code bar to bottom formatting bar: CANCELLED
 12) Add undo and redo to button formatting bar:
 13) Add scanning of docs: DELAYED
+14) Remove Log In and shift it inside of app:

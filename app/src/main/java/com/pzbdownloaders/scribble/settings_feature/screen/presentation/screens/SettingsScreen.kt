@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.chaquo.python.Python
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.pzbdownloaders.scribble.common.domain.utils.CheckInternet
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
@@ -65,6 +67,7 @@ import com.pzbdownloaders.scribble.settings_feature.screen.presentation.componen
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ShowChangePasswordThroughCodeAlertBox
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.ShowNotebooksAlertBox
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.VerificationCodeAlertBox
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 
 @Composable
 fun SettingsScreen(
@@ -83,6 +86,7 @@ fun SettingsScreen(
     var showVerificationCodeAlertBox = rememberSaveable { mutableStateOf(false) }
     var showLoadingDialogOfEmailWIllbeSend = rememberSaveable { mutableStateOf(false) }
     var showUpdatePasswordDialogBox = rememberSaveable { mutableStateOf(false) }
+    var showYouNeedToLoginFirstDialogBox = rememberSaveable { mutableStateOf(false) }
 
 
     Column(
@@ -122,20 +126,25 @@ fun SettingsScreen(
                 )
                 .clickable {
                     if (CheckInternet.isInternetAvailable(context)) {
-                        val result =
-                            checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
-                        result.observe(activity) {
-                            if (it == true) {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "Password has been already created",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                            } else {
-                                showPasswordDialog.value = true
+                        var user = Firebase.auth.currentUser
+                        if (user != null) {
+                            val result =
+                                checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
+                            result.observe(activity) {
+                                if (it == true) {
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Password has been already created",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                } else {
+                                    showPasswordDialog.value = true
+                                }
                             }
+                        } else {
+                            showYouNeedToLoginFirstDialogBox.value = true
                         }
                     } else {
                         Toast
@@ -269,20 +278,25 @@ fun SettingsScreen(
                 )
                 .clickable {
                     if (CheckInternet.isInternetAvailable(context)) {
-                        val result =
-                            checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
-                        result.observe(activity) {
-                            if (it == true) {
-                                showChangePasswordDialog.value = true
-                            } else {
-                                Toast
-                                    .makeText(
-                                        activity,
-                                        "Please setup the password first.",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                        var user = Firebase.auth.currentUser
+                        if (user != null) {
+                            val result =
+                                checkIfUserHasCreatedPassword() // This  file can be found in editNote -> domain
+                            result.observe(activity) {
+                                if (it == true) {
+                                    showChangePasswordDialog.value = true
+                                } else {
+                                    Toast
+                                        .makeText(
+                                            activity,
+                                            "Please setup the password first.",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                }
                             }
+                        } else {
+                            showYouNeedToLoginFirstDialogBox.value = true
                         }
                     } else {
                         Toast
@@ -351,7 +365,12 @@ fun SettingsScreen(
                 )
                 .clickable {
                     if (CheckInternet.isInternetAvailable(context)) {
-                        showEmailWillbeSendAlertBox.value = true
+                        var user = Firebase.auth.currentUser
+                        if (user != null) {
+                            showEmailWillbeSendAlertBox.value = true
+                        } else {
+                            showYouNeedToLoginFirstDialogBox.value = true
+                        }
                     } else {
                         Toast
                             .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
@@ -419,7 +438,12 @@ fun SettingsScreen(
                 )
                 .clickable {
                     if (CheckInternet.isInternetAvailable(context)) {
-                        navHostController.navigate(Screens.BackupAndRestoreScreen.route)
+                        var user = Firebase.auth.currentUser
+                        if (user != null) {
+                            navHostController.navigate(Screens.BackupAndRestoreScreen.route)
+                        } else {
+                            showYouNeedToLoginFirstDialogBox.value = true
+                        }
                     } else {
                         Toast
                             .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
@@ -760,6 +784,11 @@ fun SettingsScreen(
         if (showUpdatePasswordDialogBox.value) {
             ShowChangePasswordThroughCodeAlertBox(activity = activity) {
                 showUpdatePasswordDialogBox.value = false
+            }
+        }
+        if (showYouNeedToLoginFirstDialogBox.value) {
+            YouNeedToLoginFirst(navHostController) {
+                showYouNeedToLoginFirstDialogBox.value = false
             }
         }
     }

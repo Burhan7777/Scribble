@@ -29,6 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.pzbdownloaders.scribble.common.domain.utils.CheckInternet
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.domain.utils.NavigationItems
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
@@ -37,6 +40,7 @@ import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
 import com.pzbdownloaders.scribble.main_screen.domain.usecase.cameraPermissionHandle
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.launch
 
 
@@ -62,6 +66,8 @@ fun MainStructureMainScreen(
     var showOrderDialogBox = remember { mutableStateOf(false) }
 
     var startCamera = remember { mutableStateOf(false) }
+
+    var showYouNeedToLoginFirst = remember { mutableStateOf(false) }
 
 
     var launcher = rememberLauncherForActivityResult(
@@ -99,31 +105,31 @@ fun MainStructureMainScreen(
                         modifier = Modifier.padding(20.dp),
                         fontSize = 20.sp
                     )
-                    androidx.compose.material.OutlinedButton(
-                        onClick = {
-                            FirebaseAuth.getInstance().signOut()
-                            val sharedPreferences =
-                                activity.getSharedPreferences(
-                                    Constant.SHARED_PREP_NAME,
-                                    Context.MODE_PRIVATE
-                                )
-                            sharedPreferences.edit().apply {
-                                putString(Constant.USER_KEY, "LoggedOut")
-                            }.apply()
-
-                            navHostController.popBackStack()
-                            navHostController.navigate(Screens.LoginScreen.route)
-                        },
-                        border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
-                        shape = RoundedCornerShape(10.dp)
-                    ) {
-                        androidx.compose.material.Text(
-                            text = "Log out",
-                            color = MaterialTheme.colors.onPrimary,
-                            fontFamily = FontFamily.fontFamilyLight,
-                            fontSize = 10.sp,
-                        )
-                    }
+//                    androidx.compose.material.OutlinedButton(
+//                        onClick = {
+//                            FirebaseAuth.getInstance().signOut()
+//                            val sharedPreferences =
+//                                activity.getSharedPreferences(
+//                                    Constant.SHARED_PREP_NAME,
+//                                    Context.MODE_PRIVATE
+//                                )
+//                            sharedPreferences.edit().apply {
+//                                putString(Constant.USER_KEY, "LoggedOut")
+//                            }.apply()
+//
+//                            navHostController.popBackStack()
+//                            navHostController.navigate(Screens.LoginScreen.route)
+//                        },
+//                        border = BorderStroke(1.dp, MaterialTheme.colors.onPrimary),
+//                        shape = RoundedCornerShape(10.dp)
+//                    ) {
+//                        androidx.compose.material.Text(
+//                            text = "Log out",
+//                            color = MaterialTheme.colors.onPrimary,
+//                            fontFamily = FontFamily.fontFamilyLight,
+//                            fontSize = 10.sp,
+//                        )
+//                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 NavigationItems.navigationItems.forEachIndexed { indexed, item ->
@@ -152,17 +158,30 @@ fun MainStructureMainScreen(
                             } else if (selectedItem.value == 1) {
                                 navHostController.navigate(Screens.ArchiveScreen.route)
                             } else if (selectedItem.value == 2) {
-                                var result = checkIfUserHasCreatedPassword()
-                                result.observe(activity) {
-                                    if (it == true) {
-                                        showDialogToAccessLockedNotes.value = true
+                                if (CheckInternet.isInternetAvailable(activity)) {
+                                    val user = Firebase.auth.currentUser
+                                    if (user != null) {
+                                        var result = checkIfUserHasCreatedPassword()
+                                        result.observe(activity) {
+                                            if (it == true) {
+                                                showDialogToAccessLockedNotes.value = true
+                                            } else {
+                                                Toast.makeText(
+                                                    activity,
+                                                    "Please setup password in settings first",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
                                     } else {
-                                        Toast.makeText(
-                                            activity,
-                                            "Please setup password in settings first",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        showYouNeedToLoginFirst.value = true
                                     }
+                                } else {
+                                    Toast.makeText(
+                                        activity,
+                                        "This needs internet",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
                             } else if (selectedItem.value == 3) {
@@ -361,8 +380,13 @@ fun MainStructureMainScreen(
                         showOrderDialogBox.value = false
                     }
                 }
-                if(startCamera.value){
-                  //  CameraScreen()
+                if (startCamera.value) {
+                    //  CameraScreen()
+                }
+                if (showYouNeedToLoginFirst.value) {
+                    YouNeedToLoginFirst(navHostController) {
+                        showYouNeedToLoginFirst.value
+                    }
                 }
                 Notes(viewModel, activity, navHostController, viewModel.showGridOrLinearNotes)
             }

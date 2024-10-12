@@ -24,6 +24,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.pzbdownloaders.scribble.add_note_feature.presentation.components.BottomTextFormattingBar
 import com.pzbdownloaders.scribble.common.domain.utils.Constant
@@ -36,6 +38,7 @@ import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.ale
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxPassword
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
 import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.LoadingDialogBox
+import com.pzbdownloaders.scribble.settings_feature.screen.presentation.components.YouNeedToLoginFirst
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -141,6 +144,8 @@ fun MainStructureEditNote(
     var showMovingFromArchiveLoadingBox = remember { mutableStateOf(false) }
 
     var showDeletingNoteDialogBox = remember { mutableStateOf(false) }
+
+    var showYouNeedToLoginFIrst = rememberSaveable { mutableStateOf(false) }
 
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
@@ -604,22 +609,27 @@ fun MainStructureEditNote(
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
                             if (screen == Constant.HOME) {
-                                val result = checkIfUserHasCreatedPassword()
-                                result.observe(activity) {
-                                    if (it == false) {
-                                        passwordNotSetUpDialogBox.value = true
-                                    } else {
-                                        convertMutableStateIntoString(
-                                            mutableListOfCheckboxTexts,
-                                            converted
-                                        )
-                                        convertMutableStateIntoString(
-                                            mutableListOfBulletPoints,
-                                            convertedBulletPoints
-                                        )
-                                        enterPasswordToLockDialogBox.value = true
+                                val user = Firebase.auth.currentUser
+                                if (user != null) {
+                                    val result = checkIfUserHasCreatedPassword()
+                                    result.observe(activity) {
+                                        if (it == false) {
+                                            passwordNotSetUpDialogBox.value = true
+                                        } else {
+                                            convertMutableStateIntoString(
+                                                mutableListOfCheckboxTexts,
+                                                converted
+                                            )
+                                            convertMutableStateIntoString(
+                                                mutableListOfBulletPoints,
+                                                convertedBulletPoints
+                                            )
+                                            enterPasswordToLockDialogBox.value = true
 
+                                        }
                                     }
+                                } else {
+                                    showYouNeedToLoginFIrst.value = true
                                 }
                             } else if (screen == Constant.LOCKED_NOTE) {
                                 convertMutableStateIntoString(
@@ -809,6 +819,11 @@ fun MainStructureEditNote(
     if (showDeletingNoteDialogBox.value) {
         LoadingDialogBox(text = mutableStateOf("Moving to trash"))
     }
+    if (showYouNeedToLoginFIrst.value) {
+        YouNeedToLoginFirst(navController) {
+            showYouNeedToLoginFIrst.value = false
+        }
+    }
 }
 
 fun convertMutableStateIntoString(
@@ -911,7 +926,14 @@ fun unArchiveNote(
         var note1 = viewModel.getNoteById.value
         if (note1.archive) {
             println("NESTED TRIGGERED")
-            unArchiveNote(id, viewModel, activity, navController, scope, showMoveFromArchiveDialog)
+            unArchiveNote(
+                id,
+                viewModel,
+                activity,
+                navController,
+                scope,
+                showMoveFromArchiveDialog
+            )
         } else {
             // println("NOTE1:$note")
 
