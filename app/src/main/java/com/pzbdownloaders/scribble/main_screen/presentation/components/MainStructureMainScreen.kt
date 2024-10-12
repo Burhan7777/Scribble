@@ -1,6 +1,8 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -189,6 +191,12 @@ fun MainStructureMainScreen(
                             } else if (selectedItem.value == 4) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             } else if (selectedItem.value == 5) {
+                                var intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://play.google.com/store/apps/details?id=com.pzbdownloaders.scribble")
+                                )
+                                activity.startActivity(intent)
+                            }else if (selectedItem.value == 6){
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },

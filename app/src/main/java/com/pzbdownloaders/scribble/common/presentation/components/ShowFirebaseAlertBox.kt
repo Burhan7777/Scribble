@@ -1,5 +1,7 @@
 package com.pzbdownloaders.scribble.common.presentation.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Button
@@ -14,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
+import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.moveToTrash
 
 @Composable
@@ -21,6 +24,7 @@ fun ShowFirebaseDialogBox(
     title: String,
     body: String,
     confirmButtonText: String,
+    onClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -59,7 +63,7 @@ fun ShowFirebaseDialogBox(
         confirmButton = {
             Button(
                 onClick = {
-
+                    onClick()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.onPrimary,

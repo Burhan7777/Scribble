@@ -7,12 +7,14 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Note
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Note
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavigationItems(
@@ -46,6 +48,11 @@ data class NavigationItems(
                 label = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unSelectedIcon = Icons.Outlined.Settings
+            ),
+            NavigationItems(
+                label = "Rate the app",
+                selectedIcon = Icons.Filled.Star,
+                unSelectedIcon = Icons.Outlined.Star
             ),
             NavigationItems(
                 label = "About",

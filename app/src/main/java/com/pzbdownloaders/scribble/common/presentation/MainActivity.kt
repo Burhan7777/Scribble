@@ -1,8 +1,10 @@
 package com.pzbdownloaders.scribble.common.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -155,7 +157,14 @@ class MainActivity : ComponentActivity() {
                         ShowFirebaseDialogBox(
                             title = titleUpdate.value,
                             body = bodyUpdate.value,
-                            confirmButtonText = buttonNameUpdate.value
+                            confirmButtonText = buttonNameUpdate.value,
+                            onClick = {
+                                var intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://play.google.com/store/apps/details?id=com.pzbdownloaders.scribble")
+                                )
+                                startActivity(intent)
+                            }
                         ) {
                             showUpdateDialogBox.value = false
                         }
@@ -164,7 +173,8 @@ class MainActivity : ComponentActivity() {
                         ShowFirebaseDialogBox(
                             title = titleMaintenance.value,
                             body = bodyMaintenance.value,
-                            confirmButtonText = buttonNameMaintenance.value
+                            confirmButtonText = buttonNameMaintenance.value,
+                            onClick = {}
                         ) {
                             showMaintenanceDialogBox.value = false
                         }
@@ -173,7 +183,8 @@ class MainActivity : ComponentActivity() {
                         ShowFirebaseDialogBox(
                             title = titleOtherPurposes.value,
                             body = bodyOtherPurposes.value,
-                            confirmButtonText = buttonNameOtherPurposes.value
+                            confirmButtonText = buttonNameOtherPurposes.value,
+                            onClick = {}
                         ) {
                             showOtherPurposesDialogBox.value = false
                         }

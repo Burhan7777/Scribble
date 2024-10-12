@@ -3,7 +3,7 @@ BUGS AND FEATURES BEFORE LAUNCH
 
 1) Search sometimes returns same two notes: DELAYED
 2) Feedback and report bugs section in settings: DONE
-3) Forget password in login screen:
+3) Forget password in login screen: DONE
 4) Privacy Policy:DONE
 5) Phone call interrupts the notes:
 6) Selection color of content text field in both colors: DONE
@@ -15,3 +15,4 @@ BUGS AND FEATURES BEFORE LAUNCH
 12) Add undo and redo to button formatting bar:
 13) Add scanning of docs: DELAYED
 14) Remove Log In and shift it inside of app: DONE
+15) Rate app option:
