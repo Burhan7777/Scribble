@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CardDefaults
@@ -90,6 +91,13 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
+            IconButton(onClick = { navHostController.navigateUp() }) {
+                androidx.compose.material3.Icon(
+                    imageVector = Icons.Filled.ArrowBackIos,
+                    contentDescription = "Back to main screen",
+                    tint = androidx.compose.material.MaterialTheme.colors.onPrimary
+                )
+            }
             Text(
                 text = "Login",
                 fontSize = 55.sp,
