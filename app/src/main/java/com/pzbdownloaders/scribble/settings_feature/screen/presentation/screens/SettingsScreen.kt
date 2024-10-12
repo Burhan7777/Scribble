@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Looks
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.PrivacyTip
@@ -492,6 +493,84 @@ fun SettingsScreen(
                             .padding(top = 10.dp, end = 10.dp)
                             .align(Alignment.CenterEnd)
                     )
+                }
+            }
+        }
+        var user = Firebase.auth.currentUser
+        if (user != null) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(10.dp)
+                    .border(
+                        BorderStroke(
+                            1.dp,
+                            androidx.compose.material.MaterialTheme.colors.onPrimary
+                        ),
+                        androidx.compose.material.MaterialTheme.shapes.medium.copy(
+                            topStart = CornerSize(10.dp),
+                            topEnd = CornerSize(10.dp),
+                            bottomStart = CornerSize(10.dp),
+                            bottomEnd = CornerSize(10.dp),
+                        )
+                    )
+                    .clickable {
+                        if (CheckInternet.isInternetAvailable(context)) {
+                            Firebase.auth.signOut()
+                            Toast
+                                .makeText(context, "Successfully signed out", Toast.LENGTH_SHORT)
+                                .show()
+                            navHostController.navigate(Screens.LoginScreen.route)
+                        } else {
+                            Toast
+                                .makeText(context, "This needs internet", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                    },
+                shape = MaterialTheme.shapes.medium.copy(
+                    topStart = CornerSize(10.dp),
+                    topEnd = CornerSize(10.dp),
+                    bottomStart = CornerSize(10.dp),
+                    bottomEnd = CornerSize(10.dp),
+                ),
+                elevation = CardDefaults.cardElevation(15.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                    contentColor = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                    disabledContainerColor = androidx.compose.material.MaterialTheme.colors.primary,
+                    disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
+                )
+            ) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Login,
+                        contentDescription = "Backup notes icon",
+                        modifier = Modifier.padding(top = 12.dp, start = 10.dp)
+                    )
+                    Text(
+                        text = "Sign in With Other Account",
+                        modifier = Modifier.padding(top = 12.dp, start = 10.dp),
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.fontFamilyRegular,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForwardIos,
+                            contentDescription = "Arrow Forward",
+                            tint = androidx.compose.material.MaterialTheme.colors.onPrimary,
+                            modifier = Modifier
+                                .padding(top = 10.dp, end = 10.dp)
+                                .align(Alignment.CenterEnd)
+                        )
+                    }
                 }
             }
         }
