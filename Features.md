@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (80/83) // MAIN - (46/47)
+FEATURES THAT NEED TO BE ADDED (81/83) // MAIN - (47/47)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -43,7 +43,7 @@ FEATURES THAT NEED TO BE ADDED (80/83) // MAIN - (46/47)
 40) Can add notes in locked screen(Main): DONE
 41) Can add notes in notebooks(Main): DONE
 42) Remove Splash screen(Main):DONE
-43) Add Firebase events to everything(Main):
+43) Add Firebase events to everything(Main): DONE
 44) Keep track of total words written for the achievements(Main): DELAYED
 45) How long notes survive in trash in settings (Main):  CANCELLED(14 days it is)
 46) Change title of all to richtextstate(Main): CANCELLED

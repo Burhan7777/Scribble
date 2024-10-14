@@ -193,6 +193,10 @@ fun MainStructureMainScreen(
                             } else if (selectedItem.value == 4) {
                                 navHostController.navigate(Screens.SettingsScreen.route)
                             } else if (selectedItem.value == 5) {
+                                var analytics = Firebase.analytics
+                                var bundle = Bundle()
+                                bundle.putString("rate_app_pressed", "rate_app_pressed")
+                                analytics.logEvent("rate_app_pressed", bundle)
                                 var intent = Intent(
                                     Intent.ACTION_VIEW,
                                     Uri.parse("https://play.google.com/store/apps/details?id=com.pzbdownloaders.scribble")
