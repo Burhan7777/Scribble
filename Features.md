@@ -1,4 +1,4 @@
-FEATURES THAT NEED TO BE ADDED (79/83) // MAIN - (46/47)
+FEATURES THAT NEED TO BE ADDED (80/83) // MAIN - (46/47)
 =====================================
 
 1) Archive notes to be added: DONE
@@ -26,7 +26,7 @@ FEATURES THAT NEED TO BE ADDED (79/83) // MAIN - (46/47)
 23) Animations in lazy-column when note is deleted:DELAYED
 24) Transitions between screens:DELAYED
 25) "No Notes found" animation in main screen and notebooks screen:  DONE
-26) Rate app option while using app: DELAYED
+26) Rate app option while using app: DONE
 27) Update app option: DELAYED
 28) Firebase fix dialog boxes like in Instabuddy : DONE
 29) Don't forget to save password of locked notes on the cloud: DONE

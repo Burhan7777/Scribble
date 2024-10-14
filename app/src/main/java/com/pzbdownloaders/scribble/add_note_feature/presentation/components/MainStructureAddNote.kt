@@ -1,5 +1,6 @@
 package com.pzbdownloaders.scribble.add_note_feature.presentation.components
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
@@ -207,6 +210,10 @@ fun MainStructureAddNote(
     }
 
     BackHandler {
+        var analytics = Firebase.analytics
+        var bundle = Bundle()
+        bundle.putString("back_handler_triggered_add_notes", "back_handler_triggered_add_notes")
+        analytics.logEvent("back_handler_triggered_add_notes", bundle)
         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
             val updatedNote = Note(
                 id = generatedNoteId.value.toInt(),
@@ -235,6 +242,10 @@ fun MainStructureAddNote(
                 title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString("back_pressed_in_add_note_screen", "back_pressed_in_add_note_screen")
+                        analytics.logEvent("back_pressed_in_add_note_screen", bundle)
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             var note2 = Note(
                                 id = generatedNoteId.value.toInt(),
@@ -264,6 +275,10 @@ fun MainStructureAddNote(
                 },
                 actions = {
                     IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString("clear_pressed_in_add_note_screen", "clear_pressed_in_add_note_screen")
+                        analytics.logEvent("clear_pressed_in_add_note_screen", bundle)
                         showDiscardNoteAlertBox.value = true
                     }) {
                         Icon(
@@ -273,6 +288,10 @@ fun MainStructureAddNote(
                         )
                     }
                     IconButton(onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString("save_pressed_in_add_note_screen", "save_pressed_in_add_note_screen")
+                        analytics.logEvent("save_pressed_in_add_note_screen", bundle)
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             var note2 = Note(
                                 id = generatedNoteId.value.toInt(),

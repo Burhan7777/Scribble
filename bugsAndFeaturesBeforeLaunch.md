@@ -15,4 +15,6 @@ BUGS AND FEATURES BEFORE LAUNCH
 12) Add undo and redo to button formatting bar:
 13) Add scanning of docs: DELAYED
 14) Remove Log In and shift it inside of app: DONE
-15) Rate app option:
+15) Rate app option: DONE
+16) 7 inch and 10 inch screenshots in playstore:
+17) screenshots bigger font and bold font:

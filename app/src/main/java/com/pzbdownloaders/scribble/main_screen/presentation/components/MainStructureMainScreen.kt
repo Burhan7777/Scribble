@@ -3,6 +3,7 @@ package com.pzbdownloaders.scribble.main_screen.presentation.components
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -298,14 +300,24 @@ fun MainStructureMainScreen(
             bottomBar = {
                 BottomAppBar {
                     BottomAppBar() {
-                        IconButton(onClick = { navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
+                        IconButton(onClick = {
+                            var analytics = Firebase.analytics
+                            var bundle = Bundle()
+                            bundle.putString("add_checkbox_button_pressed", "add_checkbox_button_pressed")
+                            analytics.logEvent("add_checkbox_button_pressed", bundle)
+                            navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
                             Icon(
                                 imageVector = Icons.Outlined.CheckBox,
                                 contentDescription = "CheckBox",
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
-                        IconButton(onClick = { navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                        IconButton(onClick = {
+                            var analytics = Firebase.analytics
+                            var bundle = Bundle()
+                            bundle.putString("add_bullet_point_button_pressed", "add_bullet_point_button_pressed")
+                            analytics.logEvent("add_bullet_point_button_pressed", bundle)
+                            navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
                             Icon(
                                 imageVector = Icons.Filled.FormatListBulleted,
                                 contentDescription = "Bullet point list",
@@ -343,6 +355,10 @@ fun MainStructureMainScreen(
                 FloatingActionButton(
                     backgroundColor = MaterialTheme.colors.primaryVariant,
                     onClick = {
+                        var analytics = Firebase.analytics
+                        var bundle = Bundle()
+                        bundle.putString("add_note_button_pressed", "add_note_button_pressed")
+                        analytics.logEvent("add_note_button_pressed", bundle)
                         navHostController.navigate(Screens.AddNoteScreen.route)
                     },
                     shape = MaterialTheme.shapes.medium.copy(
