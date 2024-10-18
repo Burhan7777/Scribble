@@ -111,13 +111,13 @@ fun TopSearchBar(
                         tint = MaterialTheme.colors.onPrimary
                     )
                 }
-//                IconButton(onClick = { showOrderDialogBox.value = true }) {
-//                    Icon(
-//                        imageVector = Icons.Filled.Sort,
-//                        contentDescription = "Menu",
-//                        tint = MaterialTheme.colors.onPrimary
-//                    )
-//                }
+                IconButton(onClick = { showOrderDialogBox.value = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.Sort,
+                        contentDescription = "Menu",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
             }
         },
         placeholder = {

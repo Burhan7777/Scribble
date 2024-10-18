@@ -19,7 +19,5 @@ class InsertNoteRepository @Inject constructor(private val noteDatabase: NoteDat
         return noteDatabase.getDao().getAllNoteBooks()
     }
 
-    fun addNoteToCloud(note: Note) {
 
-    }
 }

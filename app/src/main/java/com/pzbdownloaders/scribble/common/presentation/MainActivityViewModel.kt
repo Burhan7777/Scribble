@@ -85,6 +85,8 @@ class MainActivityViewModel @Inject constructor(
     var listOfNotesByNotebook = mutableStateListOf<Note>()
         private set
 
+    var listOfNotesByDataModified = MutableLiveData<ArrayList<Note>>()
+
     var listOfNotesByNotebookLiveData = MutableLiveData<ArrayList<Note>>()
 
     var listOfNoteBooks = mutableStateListOf<NoteBook>()
@@ -172,10 +174,9 @@ class MainActivityViewModel @Inject constructor(
 
     var showGridOrLinearNotes = mutableStateOf(name)
 
-    var dateCreatedNewestFirst = mutableStateOf(false)
     var dateCreatedOldestFirst = mutableStateOf(false)
     var dateModifiedNewestFirst = mutableStateOf(false)
-    var dataModifiedOldestFirst = mutableStateOf(false)
+
     fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             generatedNoteId.postValue(insertNoteRepository.insertNote(note))
@@ -190,6 +191,13 @@ class MainActivityViewModel @Inject constructor(
             listOfNotesLiveData.postValue(noteRepository.getAllNotes().toCollection(ArrayList()))
             _listOfNotesFlow.value = noteRepository.getAllNotes().toCollection(ArrayList())
 
+        }
+    }
+
+    fun getAllNotesByDateModified() {
+        viewModelScope.launch(Dispatchers.IO) {
+            listOfNotesByDataModified.postValue(
+                noteRepository.getAllNotesByDateModified().toCollection(ArrayList()))
         }
     }
 

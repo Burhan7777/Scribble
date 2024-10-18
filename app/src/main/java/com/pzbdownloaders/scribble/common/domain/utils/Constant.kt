@@ -28,5 +28,9 @@ object Constant {
     const val LIGHT_THEME = "light_theme"
     const val AUTO_SAVE_PREF = "auto_save_pref"
     const val AUTO_SAVE_KEY = "auto_save_key"
+    const val SORT_ORDER = "sort_order"
+    const val SORT_ORDER_KEY = "sort_order_key"
+    const val SORT_ORDER_VALUE_1 = "created date"
+    const val SORT_ORDER_VALUE_2 = "modified date"
 
 }

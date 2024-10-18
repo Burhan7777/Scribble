@@ -16,6 +16,9 @@ interface Dao {
     @Query("SELECT * from notes ORDER BY timeStamp DESC")
     fun getAllNotes(): List<Note>
 
+    @Query("SELECT * from notes ORDER BY timeModified DESC")
+    fun getAllNotesByDateModified():List<Note>
+
     @Delete
     fun deleteAllNotes(list: List<Note>)
 

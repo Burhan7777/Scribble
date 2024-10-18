@@ -1,5 +1,7 @@
 package com.pzbdownloaders.scribble.main_screen.presentation.components
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,10 +10,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,17 +20,14 @@ import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import com.pzbdownloaders.scribble.R
+import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.MainActivity
 import com.pzbdownloaders.scribble.common.presentation.MainActivityViewModel
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+
 
 @Composable
 fun Notes(
@@ -50,13 +47,28 @@ fun Notes(
     var scope = rememberCoroutineScope()
     var listOfNotesFromDB = remember { mutableStateListOf<Note>() }
     var listOfPinnedNotes = SnapshotStateList<Note>()
-    viewModel.getAllNotes()
-    viewModel.listOfNotesLiveData.observe(activity) {
-        listOfPinnedNotes.clear()
-        listOfNotesFromDB = it.toMutableStateList()
-        for (i in it) {
-            if (i.notePinned) {
-                listOfPinnedNotes.add(i)
+    val prefs: SharedPreferences = activity.getSharedPreferences(Constant.SORT_ORDER, MODE_PRIVATE)
+    val name = prefs.getString(Constant.SORT_ORDER_KEY, Constant.SORT_ORDER_VALUE_1)
+    if (name == Constant.SORT_ORDER_VALUE_1) {
+        viewModel.getAllNotes()
+        viewModel.listOfNotesLiveData.observe(activity) {
+            listOfPinnedNotes.clear()
+            listOfNotesFromDB = it.toMutableStateList()
+            for (i in it) {
+                if (i.notePinned) {
+                    listOfPinnedNotes.add(i)
+                }
+            }
+        }
+    } else if (name == Constant.SORT_ORDER_VALUE_2) {
+        viewModel.getAllNotesByDateModified()
+        viewModel.listOfNotesByDataModified.observe(activity) {
+            listOfPinnedNotes.clear()
+            listOfNotesFromDB = it.toMutableStateList()
+            for (i in it) {
+                if (i.notePinned) {
+                    listOfPinnedNotes.add(i)
+                }
             }
         }
     }

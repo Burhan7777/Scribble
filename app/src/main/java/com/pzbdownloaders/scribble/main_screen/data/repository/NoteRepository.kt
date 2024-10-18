@@ -7,8 +7,12 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(private val noteDatabase: NoteDatabase) {
-     suspend fun getAllNotes(): List<Note> {
+    suspend fun getAllNotes(): List<Note> {
         return noteDatabase.getDao().getAllNotes()
+    }
+
+    fun getAllNotesByDateModified(): List<Note> {
+        return noteDatabase.getDao().getAllNotesByDateModified()
     }
 
     suspend fun getNotesByNoteBook(notebook: String): List<Note> {
