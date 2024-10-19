@@ -20,8 +20,10 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,11 +46,14 @@ import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.common.presentation.Screens
 import com.pzbdownloaders.scribble.main_screen.domain.model.Note
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
 
+    val scope = rememberCoroutineScope()
     var richTextState = rememberRichTextState()
     var contentText = richTextState.setHtml(note.content).annotatedString.text
     if (!note.archive && !note.locked && !note.deletedNote && note.listOfCheckedNotes.size == 0 && note.listOfBulletPointNotes.size == 0) {
@@ -143,7 +148,7 @@ fun SingleItemNoteList(note: Note, navHostController: NavHostController) {
                 disabledContentColor = androidx.compose.material.MaterialTheme.colors.onPrimary
             )
         ) {
-        //    println("MUTABLELIST2:${note.listOfCheckedBoxes}")
+            //    println("MUTABLELIST2:${note.listOfCheckedBoxes}")
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = note.title,

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.di.AppModule
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.exportAndShareDocx
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.sharePlainText
 import exportAndSharePDF
 import java.io.File
 import java.io.FileInputStream
@@ -113,7 +114,7 @@ fun AlertBoxShareNote(title: String, content: String, onDismiss: () -> Unit) {
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-
+                                    sharePlainText(context, title, content)
                                 },
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(
