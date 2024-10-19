@@ -430,8 +430,6 @@ fun MainStructureEditNote(
                 )
                 viewModel.updateNote(note)
             }
-
-            delay(800)
             navController.navigateUp()
         }
     }

@@ -267,7 +267,7 @@ fun MainStructureAddNoteLockedScreen(
                 locked = true
             )
             viewModel.updateNote(updatedNote)
-            navController.popBackStack()
+            navController.navigateUp()
         } else {
             viewModel.deleteNoteById(generatedNoteId.value.toInt())
             Toast.makeText(context, "Empty note discarded", Toast.LENGTH_SHORT).show()

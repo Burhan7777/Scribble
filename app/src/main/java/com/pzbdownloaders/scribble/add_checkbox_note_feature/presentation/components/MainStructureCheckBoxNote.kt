@@ -162,7 +162,6 @@ fun MainStructureCheckBoxNote(
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
             count.value++
-            delay(500)
             navController.navigateUp()
         }
     }

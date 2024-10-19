@@ -151,7 +151,6 @@ fun MainStructureBulletPointsLockedNotes(
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
             count.value++
-            delay(800)
             navController.popBackStack()
         }
     }
