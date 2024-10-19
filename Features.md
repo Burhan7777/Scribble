@@ -13,7 +13,7 @@ FEATURES THAT NEED TO BE ADDED (81/83) // MAIN - (47/47)
 10) CheckBox list(Main): DONE :D
 11) Colors to the background(Main): CANCELLED
 12) Pin Note(Main): DONE
-13) Arrange notes by date created etc: DELAYED
+13) Arrange notes by date created etc: DONE
 14) Add 30 days trial login through google: DONE
 15) Get premium bar at the top of the screen: DONE
 16) Days remaining in the premium bar: DONE

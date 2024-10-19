@@ -78,7 +78,7 @@ fun MainStructureMainScreen(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-
+            startCamera.value = true
         } else {
             Toast.makeText(
                 activity,
@@ -202,7 +202,7 @@ fun MainStructureMainScreen(
                                     Uri.parse("https://play.google.com/store/apps/details?id=com.pzbdownloaders.scribble")
                                 )
                                 activity.startActivity(intent)
-                            }else if (selectedItem.value == 6){
+                            } else if (selectedItem.value == 6) {
                                 navHostController.navigate(Screens.AboutUsScreen.route)
                             }
                         },
@@ -307,9 +307,13 @@ fun MainStructureMainScreen(
                         IconButton(onClick = {
                             var analytics = Firebase.analytics
                             var bundle = Bundle()
-                            bundle.putString("add_checkbox_button_pressed", "add_checkbox_button_pressed")
+                            bundle.putString(
+                                "add_checkbox_button_pressed",
+                                "add_checkbox_button_pressed"
+                            )
                             analytics.logEvent("add_checkbox_button_pressed", bundle)
-                            navHostController.navigate(Screens.CheckboxMainScreen.route) }) {
+                            navHostController.navigate(Screens.CheckboxMainScreen.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Outlined.CheckBox,
                                 contentDescription = "CheckBox",
@@ -319,37 +323,41 @@ fun MainStructureMainScreen(
                         IconButton(onClick = {
                             var analytics = Firebase.analytics
                             var bundle = Bundle()
-                            bundle.putString("add_bullet_point_button_pressed", "add_bullet_point_button_pressed")
+                            bundle.putString(
+                                "add_bullet_point_button_pressed",
+                                "add_bullet_point_button_pressed"
+                            )
                             analytics.logEvent("add_bullet_point_button_pressed", bundle)
-                            navHostController.navigate(Screens.BulletPointMainScreen.route) }) {
+                            navHostController.navigate(Screens.BulletPointMainScreen.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Filled.FormatListBulleted,
                                 contentDescription = "Bullet point list",
                                 tint = MaterialTheme.colors.onPrimary
                             )
                         }
-//                        IconButton(
-//                            onClick = {
-//                                var result = cameraPermissionHandle(activity)
-//                                if (result == "true") {
-//                                    startCamera.value = true
-//                                } else if (result == "Rationale shown") {
-//                                    Toast.makeText(
-//                                        activity,
-//                                        "We need this permission to scan the document",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (result == "false") {
-//                                    launcher.launch(android.Manifest.permission.CAMERA)
-//                                }
-//                            }
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Filled.Scanner,
-//                                contentDescription = "Scanner",
-//                                tint = MaterialTheme.colors.onPrimary
-//                            )
-//                        }
+                        IconButton(
+                            onClick = {
+                                var result = cameraPermissionHandle(activity)
+                                if (result == "true") {
+                                    startCamera.value = true
+                                } else if (result == "Rationale shown") {
+                                    Toast.makeText(
+                                        activity,
+                                        "We need this permission to scan the document",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else if (result == "false") {
+                                    launcher.launch(android.Manifest.permission.CAMERA)
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Scanner,
+                                contentDescription = "Scanner",
+                                tint = MaterialTheme.colors.onPrimary
+                            )
+                        }
                     }
                 }
             },
@@ -409,7 +417,7 @@ fun MainStructureMainScreen(
                     }
                 }
                 if (startCamera.value) {
-                    //  CameraScreen()
+                      CameraScreen(navHostController)
                 }
                 if (showYouNeedToLoginFirst.value) {
                     YouNeedToLoginFirst(navHostController) {

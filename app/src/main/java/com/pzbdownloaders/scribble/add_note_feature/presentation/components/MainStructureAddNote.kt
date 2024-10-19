@@ -243,7 +243,10 @@ fun MainStructureAddNote(
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("back_pressed_in_add_note_screen", "back_pressed_in_add_note_screen")
+                        bundle.putString(
+                            "back_pressed_in_add_note_screen",
+                            "back_pressed_in_add_note_screen"
+                        )
                         analytics.logEvent("back_pressed_in_add_note_screen", bundle)
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             var note2 = Note(
@@ -276,7 +279,10 @@ fun MainStructureAddNote(
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("clear_pressed_in_add_note_screen", "clear_pressed_in_add_note_screen")
+                        bundle.putString(
+                            "clear_pressed_in_add_note_screen",
+                            "clear_pressed_in_add_note_screen"
+                        )
                         analytics.logEvent("clear_pressed_in_add_note_screen", bundle)
                         showDiscardNoteAlertBox.value = true
                     }) {
@@ -289,7 +295,10 @@ fun MainStructureAddNote(
                     IconButton(onClick = {
                         var analytics = Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("save_pressed_in_add_note_screen", "save_pressed_in_add_note_screen")
+                        bundle.putString(
+                            "save_pressed_in_add_note_screen",
+                            "save_pressed_in_add_note_screen"
+                        )
                         analytics.logEvent("save_pressed_in_add_note_screen", bundle)
                         if (title.value.isNotEmpty() || richTextState.value.annotatedString.text.isNotEmpty()) {
                             var note2 = Note(
@@ -335,7 +344,10 @@ fun MainStructureAddNote(
 //        }
 
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Column(modifier = Modifier.padding(it)) {
                 if (showDiscardNoteAlertBox.value) {
                     DiscardNoteAlertBox(

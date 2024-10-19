@@ -34,6 +34,7 @@ import com.pzbdownloaders.scribble.common.domain.utils.Constant
 import com.pzbdownloaders.scribble.common.presentation.*
 import com.pzbdownloaders.scribble.common.presentation.components.AlertDialogBoxTrialEnded
 import com.pzbdownloaders.scribble.edit_note_feature.domain.usecase.checkIfUserHasCreatedPassword
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertBoxShareNote
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxDelete
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPassword
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.alertBoxes.AlertDialogBoxEnterPasswordToUnlock
@@ -148,6 +149,8 @@ fun MainStructureEditNote(
     var showDeletingNoteDialogBox = remember { mutableStateOf(false) }
 
     var showYouNeedToLoginFIrst = rememberSaveable { mutableStateOf(false) }
+
+    var showShareDialogBox = remember { mutableStateOf(false) }
 
     var pinnedOrNot = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
@@ -522,7 +525,10 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("back_button_pressed_edit_notes", "back_button_pressed_edit_notes")
+                        bundle.putString(
+                            "back_button_pressed_edit_notes",
+                            "back_button_pressed_edit_notes"
+                        )
                         analytics.logEvent("back_button_pressed_edit_notes", bundle)
                         println("MUTABLESTATE:$mutableListOfCheckBoxes")
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
@@ -567,7 +573,10 @@ fun MainStructureEditNote(
                     IconButton(onClick = {
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("save_button_pressed_edit_notes", "save_button_pressed_edit_notes")
+                        bundle.putString(
+                            "save_button_pressed_edit_notes",
+                            "save_button_pressed_edit_notes"
+                        )
                         analytics.logEvent("save_button_pressed_edit_notes", bundle)
 
                         convertMutableStateIntoString(mutableListOfCheckboxTexts, converted)
@@ -608,11 +617,19 @@ fun MainStructureEditNote(
                     }) {
                         Icon(imageVector = Icons.Filled.Check, contentDescription = "Save")
                     }
+                    IconButton(onClick = {
+                        showShareDialogBox.value = true
+                    }) {
+                        Icon(imageVector = Icons.Filled.Share, contentDescription = "Share")
+                    }
                     if (screen == Constant.HOME || screen == Constant.LOCKED_NOTE) {
                         IconButton(onClick = {
                             var analytics = com.google.firebase.ktx.Firebase.analytics
                             var bundle = Bundle()
-                            bundle.putString("pinned_button_pressed_edit_notes", "pinned_button_pressed_edit_notes")
+                            bundle.putString(
+                                "pinned_button_pressed_edit_notes",
+                                "pinned_button_pressed_edit_notes"
+                            )
                             analytics.logEvent("pinned_button_pressed_edit_notes", bundle)
                             pinOrUnpinNote(viewModel, id, scope, navController)
 
@@ -629,7 +646,10 @@ fun MainStructureEditNote(
                             if (screen == Constant.HOME) {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
-                                bundle.putString("lock_button_pressed_edit_notes", "lock_button_pressed_edit_notes")
+                                bundle.putString(
+                                    "lock_button_pressed_edit_notes",
+                                    "lock_button_pressed_edit_notes"
+                                )
                                 analytics.logEvent("lock_button_pressed_edit_notes", bundle)
                                 val user = Firebase.auth.currentUser
                                 if (user != null) {
@@ -656,7 +676,10 @@ fun MainStructureEditNote(
                             } else if (screen == Constant.LOCKED_NOTE) {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
-                                bundle.putString("unlock_button_pressed_edit_notes", "unlock_button_pressed_edit_notes")
+                                bundle.putString(
+                                    "unlock_button_pressed_edit_notes",
+                                    "unlock_button_pressed_edit_notes"
+                                )
                                 analytics.logEvent("unlock_button_pressed_edit_notes", bundle)
                                 convertMutableStateIntoString(
                                     mutableListOfCheckboxTexts,
@@ -683,7 +706,10 @@ fun MainStructureEditNote(
                             if (screen == Constant.HOME) {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
-                                bundle.putString("archive_button_pressed_edit_notes", "archive_button_pressed_edit_notes")
+                                bundle.putString(
+                                    "archive_button_pressed_edit_notes",
+                                    "archive_button_pressed_edit_notes"
+                                )
                                 analytics.logEvent("archive_button_pressed_edit_notes", bundle)
 
                                 showMovingToArchiveLoadingBox.value = true
@@ -701,7 +727,10 @@ fun MainStructureEditNote(
                             } else if (screen == Constant.ARCHIVE) {
                                 var analytics = com.google.firebase.ktx.Firebase.analytics
                                 var bundle = Bundle()
-                                bundle.putString("unarchive_button_pressed_edit_notes", "unarchive_button_pressed_edit_notes")
+                                bundle.putString(
+                                    "unarchive_button_pressed_edit_notes",
+                                    "unarchive_button_pressed_edit_notes"
+                                )
                                 analytics.logEvent("unarchive_button_pressed_edit_notes", bundle)
 
                                 showMovingFromArchiveLoadingBox.value = true
@@ -727,7 +756,10 @@ fun MainStructureEditNote(
                         // viewModel.deleteNoteById(id)
                         var analytics = com.google.firebase.ktx.Firebase.analytics
                         var bundle = Bundle()
-                        bundle.putString("delete_button_pressed_edit_notes", "delete_button_pressed_edit_notes")
+                        bundle.putString(
+                            "delete_button_pressed_edit_notes",
+                            "delete_button_pressed_edit_notes"
+                        )
                         analytics.logEvent("delete_button_pressed_edit_notes", bundle)
                         dialogOpen.value = true
 
@@ -860,6 +892,11 @@ fun MainStructureEditNote(
     if (showYouNeedToLoginFIrst.value) {
         YouNeedToLoginFirst(navController) {
             showYouNeedToLoginFIrst.value = false
+        }
+    }
+    if (showShareDialogBox.value) {
+        AlertBoxShareNote(title,richStateText.value.annotatedString.text) {
+            showShareDialogBox.value = false
         }
     }
 }
