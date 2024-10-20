@@ -898,7 +898,9 @@ fun MainStructureEditNote(
             richStateText.value.annotatedString.text,
             mutableListOfCheckBoxes,
             mutableListOfCheckboxTexts,
-            converted
+            converted,
+            mutableListOfBulletPoints,
+            convertedBulletPoints
         ) {
             showShareDialogBox.value = false
         }

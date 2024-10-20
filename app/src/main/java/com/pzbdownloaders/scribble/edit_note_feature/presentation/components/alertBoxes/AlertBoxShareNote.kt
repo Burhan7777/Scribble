@@ -31,10 +31,13 @@ import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.di.AppModule
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.convertMutableStateIntoString
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.bulletpoints.exportBulletPointsToDocx
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.bulletpoints.shareBulletPointsAsText
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.checkboxes.exportToDocxCheckBoxes
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.checkboxes.exportToTextCheckBoxes
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.exportAndShareDocx
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.sharePlainText
+import exportAndShareBulletPointsPdf
 import exportAndSharePDF
 import exportAndSharePdfCheckBox
 import java.io.File
@@ -49,6 +52,8 @@ fun AlertBoxShareNote(
     checkboxes: MutableState<ArrayList<Boolean>>,
     checkboxesText: SnapshotStateList<MutableState<String>>,
     converted: ArrayList<String>,
+    listOfBulletPoints: SnapshotStateList<MutableState<String>>,
+    convertedBulletPoints: ArrayList<String>,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -78,15 +83,25 @@ fun AlertBoxShareNote(
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    if (checkboxes.value.size == 0) {
+                                    if (checkboxes.value.size == 0 && listOfBulletPoints.size == 0) {
                                         exportAndSharePDF(context, title, content)
-                                    } else {
+                                    } else if (listOfBulletPoints.size == 0) {
                                         convertMutableStateIntoString(checkboxesText, converted)
                                         exportAndSharePdfCheckBox(
                                             context,
                                             title,
                                             checkboxes.value,
                                             converted
+                                        )
+                                    } else {
+                                        convertMutableStateIntoString(
+                                            listOfBulletPoints,
+                                            convertedBulletPoints
+                                        )
+                                        exportAndShareBulletPointsPdf(
+                                            context,
+                                            title,
+                                            convertedBulletPoints
                                         )
                                     }
                                 },
@@ -113,15 +128,25 @@ fun AlertBoxShareNote(
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    if (checkboxes.value.size == 0) {
+                                    if (checkboxes.value.size == 0 && listOfBulletPoints.size == 0) {
                                         exportAndShareDocx(context, title, content)
-                                    } else {
+                                    } else if (listOfBulletPoints.size == 0) {
                                         convertMutableStateIntoString(checkboxesText, converted)
                                         exportToDocxCheckBoxes(
                                             context,
                                             title,
                                             checkboxes.value,
                                             converted
+                                        )
+                                    } else {
+                                        convertMutableStateIntoString(
+                                            listOfBulletPoints,
+                                            convertedBulletPoints
+                                        )
+                                        exportBulletPointsToDocx(
+                                            context,
+                                            title,
+                                            convertedBulletPoints
                                         )
                                     }
                                 },
@@ -147,15 +172,25 @@ fun AlertBoxShareNote(
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    if (checkboxes.value.size == 0) {
+                                    if (checkboxes.value.size == 0 && listOfBulletPoints.size == 0) {
                                         sharePlainText(context, title, content)
-                                    } else {
+                                    } else if (listOfBulletPoints.size == 0 ) {
                                         convertMutableStateIntoString(checkboxesText, converted)
                                         exportToTextCheckBoxes(
                                             context,
                                             title,
                                             checkboxes.value,
                                             converted
+                                        )
+                                    } else {
+                                        convertMutableStateIntoString(
+                                            listOfBulletPoints,
+                                            convertedBulletPoints
+                                        )
+                                        shareBulletPointsAsText(
+                                            context,
+                                            title,
+                                            convertedBulletPoints
                                         )
                                     }
                                 },
