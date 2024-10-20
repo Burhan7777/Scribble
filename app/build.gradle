@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace 'com.pzbdownloaders.scribble'
+    namespace 'com.pzbapps.squiggly'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.pzbdownloaders.scribble"
+        applicationId "com.pzbapps.squiggly"
         minSdk 21
         targetSdk 34
         versionCode 2

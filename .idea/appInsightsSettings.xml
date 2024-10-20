@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.pzbdownloaders.scribble" />
-                  <option name="mobileSdkAppId" value="1:48757666456:android:c3e6efcdd7d2030f7816ed" />
-                  <option name="projectId" value="scribble-74f28" />
-                  <option name="projectNumber" value="48757666456" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

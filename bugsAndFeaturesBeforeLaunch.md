@@ -12,11 +12,12 @@ BUGS AND FEATURES BEFORE LAUNCH
 9) Empty note discard in all checkboxes , bullet points and notes(Checkbox and bullet points of locked notes and notesbooks pending): DONE
 10) Add links to bottom formatting bar: CANCELLED
 11) Add code bar to bottom formatting bar: CANCELLED
-12) Add undo and redo to button formatting bar:
+12) Add undo and redo to button formatting bar: CANCELLED
 13) Add scanning of docs: DELAYED
 14) Remove Log In and shift it inside of app: DONE
 15) Rate app option: DONE
 16) 7 inch and 10 inch screenshots in playstore:
 17) screenshots bigger font and bold font: DONE:
-18) Main Screen should only show little bit of note if note is huge:
+18) Main Screen should only show little bit of note if note is huge: CANCELLED
 19) Share the note:DONE
+20) Fix the bug of log in dialog box not cancelling on locked screen:
