@@ -33,7 +33,7 @@ FEATURES THAT NEED TO BE ADDED (81/83) // MAIN - (47/47)
 30) Save note on back button also auto-save function(Main): DONE (FINALLY AFTER 3 FREAKING DAYS PHEW!!!)
 31) Text formatting features(Main): DONE
 32) Buy App Bar should not be visible to users who bought app: CANCELLED
-33) Export to PDF and other documents: DELAYED
+33) Export to PDF and other documents: DONE
 34) Reminder for notes: DELAYED
 35) Pomodoro for checkboxes: DELAYED
 36) Change drop down menu in add note to text view like in edit note: DONE

@@ -1,4 +1,4 @@
-package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles
+package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.notes
 
 import android.content.Context
 import android.content.Intent

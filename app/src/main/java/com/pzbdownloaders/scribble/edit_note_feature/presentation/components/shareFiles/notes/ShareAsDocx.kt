@@ -1,11 +1,9 @@
-package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles
+package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.notes
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.runtime.MutableState
 import androidx.core.content.FileProvider
-import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import java.io.File
 import java.util.UUID
