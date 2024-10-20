@@ -158,7 +158,7 @@ fun MainStructureCheckBoxNotebook(
         // keyboardController?.hide()
         remember.launch(Dispatchers.Main) {
             count.value++
-            navController.popBackStack()
+            navController.navigateUp()
         }
     }
 

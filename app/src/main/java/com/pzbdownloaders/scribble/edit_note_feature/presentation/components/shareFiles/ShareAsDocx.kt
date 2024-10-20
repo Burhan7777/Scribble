@@ -3,13 +3,18 @@ package com.pzbdownloaders.scribble.edit_note_feature.presentation.components.sh
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.runtime.MutableState
 import androidx.core.content.FileProvider
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import java.io.File
 import java.util.UUID
 
-fun exportAndShareDocx(context: Context, title: String, content: String) {
+fun exportAndShareDocx(
+    context: Context,
+    title: String,
+    content: String
+) {
     var fileName = UUID.randomUUID()
     val docxFile = File(context.cacheDir, "$fileName.docx")
 

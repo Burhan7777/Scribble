@@ -893,7 +893,13 @@ fun MainStructureEditNote(
         }
     }
     if (showShareDialogBox.value) {
-        AlertBoxShareNote(title,richStateText.value.annotatedString.text) {
+        AlertBoxShareNote(
+            title,
+            richStateText.value.annotatedString.text,
+            mutableListOfCheckBoxes,
+            mutableListOfCheckboxTexts,
+            converted
+        ) {
             showShareDialogBox.value = false
         }
     }

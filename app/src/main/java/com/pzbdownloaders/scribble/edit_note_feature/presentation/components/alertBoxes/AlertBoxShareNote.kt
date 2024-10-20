@@ -20,6 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,16 +30,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pzbdownloaders.scribble.common.presentation.FontFamily
 import com.pzbdownloaders.scribble.di.AppModule
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.convertMutableStateIntoString
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.checkboxes.exportToDocxCheckBoxes
+import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.checkboxes.exportToTextCheckBoxes
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.exportAndShareDocx
 import com.pzbdownloaders.scribble.edit_note_feature.presentation.components.shareFiles.sharePlainText
 import exportAndSharePDF
+import exportAndSharePdfCheckBox
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlertBoxShareNote(title: String, content: String, onDismiss: () -> Unit) {
+fun AlertBoxShareNote(
+    title: String,
+    content: String,
+    checkboxes: MutableState<ArrayList<Boolean>>,
+    checkboxesText: SnapshotStateList<MutableState<String>>,
+    converted: ArrayList<String>,
+    onDismiss: () -> Unit
+) {
     val context = LocalContext.current
     androidx.compose.material3.AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -65,7 +78,17 @@ fun AlertBoxShareNote(title: String, content: String, onDismiss: () -> Unit) {
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    exportAndSharePDF(context, title, content)
+                                    if (checkboxes.value.size == 0) {
+                                        exportAndSharePDF(context, title, content)
+                                    } else {
+                                        convertMutableStateIntoString(checkboxesText, converted)
+                                        exportAndSharePdfCheckBox(
+                                            context,
+                                            title,
+                                            checkboxes.value,
+                                            converted
+                                        )
+                                    }
                                 },
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(
@@ -90,7 +113,17 @@ fun AlertBoxShareNote(title: String, content: String, onDismiss: () -> Unit) {
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    exportAndShareDocx(context, title, content)
+                                    if (checkboxes.value.size == 0) {
+                                        exportAndShareDocx(context, title, content)
+                                    } else {
+                                        convertMutableStateIntoString(checkboxesText, converted)
+                                        exportToDocxCheckBoxes(
+                                            context,
+                                            title,
+                                            checkboxes.value,
+                                            converted
+                                        )
+                                    }
                                 },
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(
@@ -114,7 +147,17 @@ fun AlertBoxShareNote(title: String, content: String, onDismiss: () -> Unit) {
                                 .padding(5.dp)
                                 .height(50.dp)
                                 .clickable {
-                                    sharePlainText(context, title, content)
+                                    if (checkboxes.value.size == 0) {
+                                        sharePlainText(context, title, content)
+                                    } else {
+                                        convertMutableStateIntoString(checkboxesText, converted)
+                                        exportToTextCheckBoxes(
+                                            context,
+                                            title,
+                                            checkboxes.value,
+                                            converted
+                                        )
+                                    }
                                 },
                             shape = RoundedCornerShape(10.dp),
                             colors = CardDefaults.cardColors(
